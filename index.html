@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Renda Detalhado</title>
+    <style>
+        :root {
+            --primary-color: #2F5597;
+            --accent-color: #D9E1F2;
+            --text-color: #333;
+            --bg-color: #f4f7f9;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        .grid-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+            background: var(--accent-color);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .summary-box {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin-bottom: 30px;
+            border: 2px solid var(--primary-color);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .summary-item {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .summary-item span {
+            display: block;
+            font-weight: bold;
+            font-size: 1.2em;
+            color: var(--primary-color);
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px;
+            text-align: center;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .btn-calc {
+            grid-column: 1 / -1;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+        }
+
+        .btn-calc:hover {
+            background-color: #1e3a6d;
+        }
+    </style>
+
+    <link rel="manifest" href="manifest.json">
+    <script>
+      if('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js');
+      }
+    </script>
+	
+</head>
+<body>
+
+<div class="container">
+    <h1>Simulador de Renda Detalhado</h1>
+    
+    <div class="grid-inputs">
+        <div class="input-group">
+            <label>Valor Inicial (R$)</label>
+            <input type="number" id="valorInicial" value="1000" step="0.01">
+        </div>
+        <div class="input-group">
+            <label>Aporte Mensal (R$)</label>
+            <input type="number" id="aporteMensal" value="100" step="0.01">
+        </div>
+        <div class="input-group">
+            <label>Retirada Mensal (R$)</label>
+            <input type="number" id="retiradaMensal" value="0" step="0.01">
+        </div>
+        <div class="input-group">
+            <label>Taxa de Juros Anual (%)</label>
+            <input type="number" id="taxaAnual" value="14.5" step="0.01">
+        </div>
+        <div class="input-group">
+            <label>Período (Meses)</label>
+            <input type="number" id="periodoMeses" value="120">
+        </div>
+        <div class="input-group">
+            <label>Alíquota de IR (%)</label>
+            <input type="number" id="aliquotaIR" value="15" step="0.1">
+        </div>
+        <button class="btn-calc" onclick="calcular()">Calcular Resultados</button>
+    </div>
+
+    <div class="summary-box" id="resumo">
+        <div class="summary-item">Total Investido<span id="resTotalInvestido">R$ 0,00</span></div>
+        <div class="summary-item">Montante Bruto<span id="resMontanteBruto">R$ 0,00</span></div>
+        <div class="summary-item">Rendimento Bruto<span id="resRendimentoBruto">R$ 0,00</span></div>
+        <div class="summary-item">Imposto de Renda<span id="resIR">R$ 0,00</span></div>
+        <div class="summary-item">Rendimento Líquido<span id="resRendimentoLiquido">R$ 0,00</span></div>
+        <div class="summary-item">Montante Líquido<span id="resMontanteLiquido">R$ 0,00</span></div>
+    </div>
+
+    <div class="table-container">
+        <table id="tabelaEvolucao">
+            <thead>
+                <tr>
+                    <th>Mês</th>
+                    <th>Aporte</th>
+                    <th>Retirada</th>
+                    <th>Juros (Bruto)</th>
+                    <th>Total Acumulado</th>
+                </tr>
+            </thead>
+            <tbody>
+                </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function formatarMoeda(valor) {
+        return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function calcular() {
+        // Obter valores
+        const vInicial = parseFloat(document.getElementById('valorInicial').value) || 0;
+        const aporte = parseFloat(document.getElementById('aporteMensal').value) || 0;
+        const retirada = parseFloat(document.getElementById('retiradaMensal').value) || 0;
+        const taxaAnual = parseFloat(document.getElementById('taxaAnual').value) || 0;
+        const meses = parseInt(document.getElementById('periodoMeses').value) || 0;
+        const aliquota = parseFloat(document.getElementById('aliquotaIR').value) || 0;
+
+        // Taxa mensal equivalente
+        const taxaMensal = Math.pow(1 + (taxaAnual / 100), 1/12) - 1;
+
+        let saldo = vInicial;
+        let htmlTabela = "";
+        
+        for (let i = 1; i <= Math.min(meses, 360); i++) {
+            let baseCalculo = saldo + aporte - retirada;
+            let jurosMes = baseCalculo * taxaMensal;
+            saldo = baseCalculo + jurosMes;
+
+            htmlTabela += `<tr>
+                <td>${i}</td>
+                <td>${formatarMoeda(aporte)}</td>
+                <td>${formatarMoeda(retirada)}</td>
+                <td>${formatarMoeda(jurosMes)}</td>
+                <td>${formatarMoeda(saldo)}</td>
+            </tr>`;
+        }
+
+        document.querySelector("#tabelaEvolucao tbody").innerHTML = htmlTabela;
+
+        // Resumo final
+        const totalInvestido = vInicial + (aporte * meses);
+        const montanteBruto = saldo;
+        const rendimentoBruto = Math.max(0, montanteBruto - totalInvestido);
+        const imposto = rendimentoBruto * (aliquota / 100);
+        const rendimentoLiquido = rendimentoBruto - imposto;
+        const montanteLiquido = montanteBruto - imposto;
+
+        document.getElementById('resTotalInvestido').innerText = formatarMoeda(totalInvestido);
+        document.getElementById('resMontanteBruto').innerText = formatarMoeda(montanteBruto);
+        document.getElementById('resRendimentoBruto').innerText = formatarMoeda(rendimentoBruto);
+        document.getElementById('resIR').innerText = formatarMoeda(imposto);
+        document.getElementById('resRendimentoLiquido').innerText = formatarMoeda(rendimentoLiquido);
+        document.getElementById('resMontanteLiquido').innerText = formatarMoeda(montanteLiquido);
+    }
+
+    // Calcular ao carregar a página
+    window.onload = calcular;
+</script>
+
+</body>
+</html>
