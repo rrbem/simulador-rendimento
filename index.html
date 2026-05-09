@@ -59,6 +59,7 @@
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            font-size: 1em;
         }
 
         .taxa-info {
@@ -131,17 +132,9 @@
         .btn-calc:hover {
             background-color: #1e3a6d;
         }
-
-        .loading {
-            font-size: 0.9em;
-            color: #666;
-            margin-top: 3px;
-        }
     </style>
 
     <link rel="manifest" href="manifest.json">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script>
       if('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./sw.js');
@@ -157,28 +150,28 @@
     <div class="grid-inputs">
         <div class="input-group">
             <label>Valor Inicial (R$)</label>
-            <input type="text" id="valorInicial" placeholder="0,00" oninput="calcular()">
+            <input type="text" id="valorInicial" placeholder="0,00" data-type="moeda">
         </div>
         <div class="input-group">
             <label>Aporte Mensal (R$)</label>
-            <input type="text" id="aporteMensal" placeholder="0,00" oninput="calcular()">
+            <input type="text" id="aporteMensal" placeholder="0,00" data-type="moeda">
         </div>
         <div class="input-group">
             <label>Retirada Mensal (R$)</label>
-            <input type="text" id="retiradaMensal" placeholder="0,00" oninput="calcular()">
+            <input type="text" id="retiradaMensal" placeholder="0,00" data-type="moeda">
         </div>
         <div class="input-group">
             <label>Taxa de Juros Anual (%)</label>
-            <input type="text" id="taxaAnual" placeholder="0,00%" oninput="calcular()">
+            <input type="text" id="taxaAnual" placeholder="0,00%" data-type="percentual">
             <div class="taxa-info" id="taxaInfo">Buscando taxa do governo...</div>
         </div>
         <div class="input-group">
             <label>Período (Meses)</label>
-            <input type="text" id="periodoMeses" placeholder="1" oninput="calcular()">
+            <input type="text" id="periodoMeses" placeholder="1" data-type="numero">
         </div>
         <div class="input-group">
             <label>Alíquota de IR (%)</label>
-            <input type="text" id="aliquotaIR" placeholder="0,00%" oninput="calcular()">
+            <input type="text" id="aliquotaIR" placeholder="0,00%" data-type="percentual">
         </div>
         <button class="btn-calc" onclick="calcular()">Calcular Resultados</button>
     </div>
@@ -220,18 +213,63 @@
     }
 
     function formatarMoedaInput(valor) {
-        // Formata número para padrão brasileiro: 1.234,56
-        const num = parseFloat(valor);
-        if (isNaN(num)) return '0,00';
-        return num.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        // Remove caracteres não numéricos
+        let num = valor.replace(/[^\d]/g, '');
+        if (!num) return '';
+        
+        // Converte para número com 2 casas decimais
+        num = (parseInt(num) / 100).toFixed(2);
+        
+        // Formata com separadores brasileiros
+        return num.replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
 
-    function formatarPercentual(valor) {
-        // Formata número para percentual: 1,5%
-        const num = parseFloat(valor);
-        if (isNaN(num)) return '0,00%';
-        return num.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+    function formatarPercentualInput(valor) {
+        // Remove caracteres não numéricos
+        let num = valor.replace(/[^\d]/g, '');
+        if (!num) return '';
+        
+        // Limita a 5 dígitos (ex: 99,99%)
+        if (num.length > 4) num = num.slice(0, 4);
+        
+        // Formata com vírgula
+        if (num.length <= 2) {
+            return num;
+        } else {
+            return num.slice(0, -2) + ',' + num.slice(-2);
+        }
     }
+
+    function formatarNumeroInput(valor) {
+        // Remove caracteres não numéricos
+        return valor.replace(/[^\d]/g, '').slice(0, 3);
+    }
+
+    // Aplicar máscaras aos campos
+    document.addEventListener('DOMContentLoaded', function() {
+        const campos = document.querySelectorAll('input[data-type]');
+        
+        campos.forEach(campo => {
+            campo.addEventListener('input', function() {
+                const tipo = this.getAttribute('data-type');
+                let valor = this.value;
+                
+                if (tipo === 'moeda') {
+                    this.value = formatarMoedaInput(valor);
+                } else if (tipo === 'percentual') {
+                    this.value = formatarPercentualInput(valor);
+                } else if (tipo === 'numero') {
+                    this.value = formatarNumeroInput(valor);
+                }
+                
+                // Calcular após formatação
+                calcular();
+            });
+        });
+        
+        // Carregar taxa ao carregar a página
+        carregarTaxaDoGoverno();
+    });
 
     async function carregarTaxaDoGoverno() {
         try {
@@ -243,8 +281,9 @@
                 const taxaSelic = parseFloat(data[0].valor);
                 const taxaCDI = taxaSelic - 0.1;
                 
-                document.getElementById('taxaAnual').value = formatarPercentual(taxaCDI);
-                document.getElementById('taxaInfo').textContent = `SELIC: ${formatarPercentual(taxaSelic)} | CDI: ${formatarPercentual(taxaCDI)}`;
+                // Formata o CDI para o campo
+                document.getElementById('taxaAnual').value = taxaCDI.toFixed(2).replace('.', ',');
+                document.getElementById('taxaInfo').textContent = `SELIC: ${taxaSelic.toFixed(2).replace('.', ',')}% a.a. | CDI: ${taxaCDI.toFixed(2).replace('.', ',')}% a.a.`;
                 calcular();
                 return taxaCDI;
             }
@@ -252,8 +291,8 @@
             console.log('Erro ao buscar taxa do governo, usando valor padrão');
             // Fallback para taxa padrão se houver erro
             const taxaPadrao = 11.15; // 11.25 - 0.1
-            document.getElementById('taxaAnual').value = formatarPercentual(taxaPadrao);
-            document.getElementById('taxaInfo').textContent = `Taxa padrão CDI: ${formatarPercentual(taxaPadrao)} (Erro ao buscar taxa do governo)`;
+            document.getElementById('taxaAnual').value = taxaPadrao.toFixed(2).replace('.', ',');
+            document.getElementById('taxaInfo').textContent = `Taxa padrão CDI: ${taxaPadrao.toFixed(2).replace('.', ',')}% a.a. (Erro ao buscar taxa do governo)`;
             calcular();
         }
     }
@@ -264,7 +303,7 @@
         const aporte = obterValorNumerico(document.getElementById('aporteMensal').value) || 0;
         const retirada = obterValorNumerico(document.getElementById('retiradaMensal').value) || 0;
         const taxaAnual = obterValorNumerico(document.getElementById('taxaAnual').value) || 0;
-        const meses = parseInt(document.getElementById('periodoMeses').value) || 0;
+        const meses = parseInt(document.getElementById('periodoMeses').value.replace(/\D/g, '')) || 0;
         const aliquota = obterValorNumerico(document.getElementById('aliquotaIR').value) || 0;
 
         // Taxa mensal equivalente
@@ -304,24 +343,6 @@
         document.getElementById('resRendimentoLiquido').innerText = formatarMoeda(rendimentoLiquido);
         document.getElementById('resMontanteLiquido').innerText = formatarMoeda(montanteLiquido);
     }
-
-    // Aplicar máscaras aos campos
-    document.addEventListener('DOMContentLoaded', function() {
-        // Máscaras para valores monetários
-        $('#valorInicial').mask('#.##0,00', {reverse: true});
-        $('#aporteMensal').mask('#.##0,00', {reverse: true});
-        $('#retiradaMensal').mask('#.##0,00', {reverse: true});
-        
-        // Máscaras para percentuais
-        $('#taxaAnual').mask('00,00%');
-        $('#aliquotaIR').mask('00,00%');
-        
-        // Máscara para período (apenas números)
-        $('#periodoMeses').mask('000');
-        
-        // Carregar taxa ao carregar a página
-        carregarTaxaDoGoverno();
-    });
 </script>
 
 </body>
