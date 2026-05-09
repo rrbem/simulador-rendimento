@@ -1,7 +1,7 @@
 {
   "name": "Simulador de Renda",
   "short_name": "Simulador",
-  "start_url": "simulador.html",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#2F5597",
