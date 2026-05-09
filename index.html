@@ -61,11 +61,6 @@
             border-radius: 4px;
         }
 
-        input:disabled {
-            background-color: #f0f0f0;
-            cursor: not-allowed;
-        }
-
         .taxa-info {
             font-size: 0.8em;
             color: #666;
@@ -172,16 +167,16 @@
         </div>
         <div class="input-group">
             <label>Taxa de Juros Anual (%)</label>
-            <input type="number" id="taxaAnual" value="0" step="0.01" disabled>
+            <input type="number" id="taxaAnual" value="0" step="0.01" oninput="calcular()">
             <div class="taxa-info" id="taxaInfo">Buscando taxa do governo...</div>
         </div>
         <div class="input-group">
             <label>Período (Meses)</label>
-            <input type="number" id="periodoMeses" value="1">
+            <input type="number" id="periodoMeses" value="1" oninput="calcular()">
         </div>
         <div class="input-group">
             <label>Alíquota de IR (%)</label>
-            <input type="number" id="aliquotaIR" value="22" step="0.1">
+            <input type="number" id="aliquotaIR" value="22" step="0.1" oninput="calcular()">
         </div>
         <button class="btn-calc" onclick="calcular()">Calcular Resultados</button>
     </div>
@@ -224,17 +219,20 @@
             const data = await response.json();
             
             if (data && data[0]) {
-                const taxa = parseFloat(data[0].valor);
-                document.getElementById('taxaAnual').value = taxa.toFixed(2);
-                document.getElementById('taxaInfo').textContent = `Taxa SELIC: ${taxa.toFixed(2)}% a.a.`;
+                const taxaSelic = parseFloat(data[0].valor);
+                const taxaCDI = taxaSelic - 0.1;
+                
+                document.getElementById('taxaAnual').value = taxaCDI.toFixed(2);
+                document.getElementById('taxaInfo').textContent = `SELIC: ${taxaSelic.toFixed(2)}% a.a. | CDI: ${taxaCDI.toFixed(2)}% a.a.`;
                 calcular();
-                return taxa;
+                return taxaCDI;
             }
         } catch (error) {
             console.log('Erro ao buscar taxa do governo, usando valor padrão');
             // Fallback para taxa padrão se houver erro
-            document.getElementById('taxaAnual').value = '11.25';
-            document.getElementById('taxaInfo').textContent = 'Taxa padrão: 11.25% a.a. (Erro ao buscar taxa do governo)';
+            const taxaPadrao = 11.15; // 11.25 - 0.1
+            document.getElementById('taxaAnual').value = taxaPadrao.toFixed(2);
+            document.getElementById('taxaInfo').textContent = `Taxa padrão CDI: ${taxaPadrao.toFixed(2)}% a.a. (Erro ao buscar taxa do governo)`;
             calcular();
         }
     }
