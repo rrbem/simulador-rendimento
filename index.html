@@ -150,15 +150,15 @@
     <div class="grid-inputs">
         <div class="input-group">
             <label>Valor Inicial (R$)</label>
-            <input type="text" id="valorInicial" placeholder="0,00" data-type="moeda">
+            <input type="text" id="valorInicial" placeholder="0,00" data-type="moeda" value="1.000,00">
         </div>
         <div class="input-group">
             <label>Aporte Mensal (R$)</label>
-            <input type="text" id="aporteMensal" placeholder="0,00" data-type="moeda">
+            <input type="text" id="aporteMensal" placeholder="0,00" data-type="moeda" value="100,00">
         </div>
         <div class="input-group">
             <label>Retirada Mensal (R$)</label>
-            <input type="text" id="retiradaMensal" placeholder="0,00" data-type="moeda">
+            <input type="text" id="retiradaMensal" placeholder="0,00" data-type="moeda" value="0,00">
         </div>
         <div class="input-group">
             <label>Taxa de Juros Anual (%)</label>
@@ -167,11 +167,11 @@
         </div>
         <div class="input-group">
             <label>Período (Meses)</label>
-            <input type="text" id="periodoMeses" placeholder="1" data-type="numero">
+            <input type="text" id="periodoMeses" placeholder="1" data-type="numero" value="1">
         </div>
         <div class="input-group">
             <label>Alíquota de IR (%)</label>
-            <input type="text" id="aliquotaIR" placeholder="0,00%" data-type="percentual">
+            <input type="text" id="aliquotaIR" placeholder="0,00%" data-type="percentual" value="22,00">
         </div>
         <button class="btn-calc" onclick="calcular()">Calcular Resultados</button>
     </div>
@@ -290,7 +290,7 @@
         } catch (error) {
             console.log('Erro ao buscar taxa do governo, usando valor padrão');
             // Fallback para taxa padrão se houver erro
-            const taxaPadrao = 11.15; // 11.25 - 0.1
+            const taxaPadrao = 14.40; // Valor padrão CDI
             document.getElementById('taxaAnual').value = taxaPadrao.toFixed(2).replace('.', ',');
             document.getElementById('taxaInfo').textContent = `Taxa padrão CDI: ${taxaPadrao.toFixed(2).replace('.', ',')}% a.a. (Erro ao buscar taxa do governo)`;
             calcular();
