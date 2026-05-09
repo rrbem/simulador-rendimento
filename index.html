@@ -68,6 +68,58 @@
             margin-top: 3px;
         }
 
+        .buttons-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn-calc {
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+        }
+
+        .btn-calc:hover {
+            background-color: #1e3a6d;
+        }
+
+        .btn-export {
+            padding: 10px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .btn-export:hover {
+            background-color: #229954;
+        }
+
+        .btn-pdf {
+            padding: 10px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .btn-pdf:hover {
+            background-color: #c0392b;
+        }
+
         .summary-box {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -116,25 +168,10 @@
         tr:nth-child(even) {
             background-color: #f9f9f9;
         }
-
-        .btn-calc {
-            grid-column: 1 / -1;
-            padding: 12px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1em;
-        }
-
-        .btn-calc:hover {
-            background-color: #1e3a6d;
-        }
     </style>
 
     <link rel="manifest" href="manifest.json">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
       if('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./sw.js');
@@ -173,7 +210,12 @@
             <label>Alíquota de IR (%)</label>
             <input type="text" id="aliquotaIR" placeholder="0,00%" data-type="percentual" value="22,00">
         </div>
+    </div>
+
+    <div class="buttons-group">
         <button class="btn-calc" onclick="calcular()">Calcular Resultados</button>
+        <button class="btn-export" onclick="exportarExcel()">📊 Exportar Excel</button>
+        <button class="btn-pdf" onclick="exportarPDF()">📄 Gerar PDF</button>
     </div>
 
     <div class="summary-box" id="resumo">
@@ -208,31 +250,20 @@
     }
 
     function obterValorNumerico(valor) {
-        // Remove formatação e converte para número
         return parseFloat(valor.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
     }
 
     function formatarMoedaInput(valor) {
-        // Remove caracteres não numéricos
         let num = valor.replace(/[^\d]/g, '');
         if (!num) return '';
-        
-        // Converte para número com 2 casas decimais
         num = (parseInt(num) / 100).toFixed(2);
-        
-        // Formata com separadores brasileiros
         return num.replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
 
     function formatarPercentualInput(valor) {
-        // Remove caracteres não numéricos
         let num = valor.replace(/[^\d]/g, '');
         if (!num) return '';
-        
-        // Limita a 5 dígitos (ex: 99,99%)
         if (num.length > 4) num = num.slice(0, 4);
-        
-        // Formata com vírgula
         if (num.length <= 2) {
             return num;
         } else {
@@ -241,19 +272,15 @@
     }
 
     function formatarNumeroInput(valor) {
-        // Remove caracteres não numéricos
         return valor.replace(/[^\d]/g, '').slice(0, 3);
     }
 
-    // Aplicar máscaras aos campos
     document.addEventListener('DOMContentLoaded', function() {
         const campos = document.querySelectorAll('input[data-type]');
-        
         campos.forEach(campo => {
             campo.addEventListener('input', function() {
                 const tipo = this.getAttribute('data-type');
                 let valor = this.value;
-                
                 if (tipo === 'moeda') {
                     this.value = formatarMoedaInput(valor);
                 } else if (tipo === 'percentual') {
@@ -261,19 +288,14 @@
                 } else if (tipo === 'numero') {
                     this.value = formatarNumeroInput(valor);
                 }
-                
-                // Calcular após formatação
                 calcular();
             });
         });
-        
-        // Carregar taxa ao carregar a página
         carregarTaxaDoGoverno();
     });
 
     async function carregarTaxaDoGoverno() {
         try {
-            // Busca a taxa SELIC do Banco Central do Brasil
             const response = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados/ultimos/1?formato=json');
             const data = await response.json();
             
@@ -281,16 +303,12 @@
                 const taxaSelic = parseFloat(data[0].valor);
                 const taxaCDI = taxaSelic - 0.1;
                 
-                // Formata o CDI para o campo
                 document.getElementById('taxaAnual').value = taxaCDI.toFixed(2).replace('.', ',');
                 document.getElementById('taxaInfo').textContent = `SELIC: ${taxaSelic.toFixed(2).replace('.', ',')}% a.a. | CDI: ${taxaCDI.toFixed(2).replace('.', ',')}% a.a.`;
                 calcular();
-                return taxaCDI;
             }
         } catch (error) {
-            console.log('Erro ao buscar taxa do governo, usando valor padrão');
-            // Fallback para taxa padrão se houver erro
-            const taxaPadrao = 14.40; // Valor padrão CDI
+            const taxaPadrao = 14.40;
             document.getElementById('taxaAnual').value = taxaPadrao.toFixed(2).replace('.', ',');
             document.getElementById('taxaInfo').textContent = `Taxa padrão CDI: ${taxaPadrao.toFixed(2).replace('.', ',')}% a.a. (Erro ao buscar taxa do governo)`;
             calcular();
@@ -298,7 +316,6 @@
     }
 
     function calcular() {
-        // Obter valores com conversão de formatação
         const vInicial = obterValorNumerico(document.getElementById('valorInicial').value) || 0;
         const aporte = obterValorNumerico(document.getElementById('aporteMensal').value) || 0;
         const retirada = obterValorNumerico(document.getElementById('retiradaMensal').value) || 0;
@@ -306,7 +323,6 @@
         const meses = parseInt(document.getElementById('periodoMeses').value.replace(/\D/g, '')) || 0;
         const aliquota = obterValorNumerico(document.getElementById('aliquotaIR').value) || 0;
 
-        // Taxa mensal equivalente
         const taxaMensal = Math.pow(1 + (taxaAnual / 100), 1/12) - 1;
 
         let saldo = vInicial;
@@ -328,7 +344,6 @@
 
         document.querySelector("#tabelaEvolucao tbody").innerHTML = htmlTabela;
 
-        // Resumo final
         const totalInvestido = vInicial + (aporte * meses);
         const montanteBruto = saldo;
         const rendimentoBruto = Math.max(0, montanteBruto - totalInvestido);
@@ -342,6 +357,129 @@
         document.getElementById('resIR').innerText = formatarMoeda(imposto);
         document.getElementById('resRendimentoLiquido').innerText = formatarMoeda(rendimentoLiquido);
         document.getElementById('resMontanteLiquido').innerText = formatarMoeda(montanteLiquido);
+    }
+
+    function exportarExcel() {
+        const vInicial = obterValorNumerico(document.getElementById('valorInicial').value) || 0;
+        const aporte = obterValorNumerico(document.getElementById('aporteMensal').value) || 0;
+        const retirada = obterValorNumerico(document.getElementById('retiradaMensal').value) || 0;
+        const taxaAnual = obterValorNumerico(document.getElementById('taxaAnual').value) || 0;
+        const meses = parseInt(document.getElementById('periodoMeses').value.replace(/\D/g, '')) || 0;
+        const aliquota = obterValorNumerico(document.getElementById('aliquotaIR').value) || 0;
+
+        let csv = 'SIMULADOR DE RENDA DETALHADO\n';
+        csv += 'Data: ' + new Date().toLocaleDateString('pt-BR') + '\n\n';
+        
+        csv += 'PARÂMETROS DA SIMULAÇÃO\n';
+        csv += 'Valor Inicial (R$),' + vInicial.toFixed(2) + '\n';
+        csv += 'Aporte Mensal (R$),' + aporte.toFixed(2) + '\n';
+        csv += 'Retirada Mensal (R$),' + retirada.toFixed(2) + '\n';
+        csv += 'Taxa de Juros Anual (%),' + taxaAnual.toFixed(2) + '\n';
+        csv += 'Período (Meses),' + meses + '\n';
+        csv += 'Alíquota de IR (%),' + aliquota.toFixed(2) + '\n\n';
+
+        csv += 'RESUMO FINAL\n';
+        csv += 'Total Investido,' + document.getElementById('resTotalInvestido').innerText.replace('R$ ', '').replace('.', '').replace(',', '.') + '\n';
+        csv += 'Montante Bruto,' + document.getElementById('resMontanteBruto').innerText.replace('R$ ', '').replace('.', '').replace(',', '.') + '\n';
+        csv += 'Rendimento Bruto,' + document.getElementById('resRendimentoBruto').innerText.replace('R$ ', '').replace('.', '').replace(',', '.') + '\n';
+        csv += 'Imposto de Renda,' + document.getElementById('resIR').innerText.replace('R$ ', '').replace('.', '').replace(',', '.') + '\n';
+        csv += 'Rendimento Líquido,' + document.getElementById('resRendimentoLiquido').innerText.replace('R$ ', '').replace('.', '').replace(',', '.') + '\n';
+        csv += 'Montante Líquido,' + document.getElementById('resMontanteLiquido').innerText.replace('R$ ', '').replace('.', '').replace(',', '.') + '\n\n';
+
+        csv += 'EVOLUÇÃO MÊS A MÊS\n';
+        csv += 'Mês,Aporte,Retirada,Juros (Bruto),Total Acumulado\n';
+        
+        const tabela = document.querySelector('#tabelaEvolucao tbody');
+        for (let row of tabela.rows) {
+            let linha = '';
+            for (let cell of row.cells) {
+                let valor = cell.innerText.replace('R$ ', '').replace('.', '').replace(',', '.');
+                linha += valor + ',';
+            }
+            csv += linha.slice(0, -1) + '\n';
+        }
+
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'simulador_renda_' + new Date().toLocaleDateString('pt-BR').replace(/\//g, '-') + '.csv';
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
+
+    function exportarPDF() {
+        const vInicial = obterValorNumerico(document.getElementById('valorInicial').value) || 0;
+        const aporte = obterValorNumerico(document.getElementById('aporteMensal').value) || 0;
+        const retirada = obterValorNumerico(document.getElementById('retiradaMensal').value) || 0;
+        const taxaAnual = obterValorNumerico(document.getElementById('taxaAnual').value) || 0;
+        const meses = parseInt(document.getElementById('periodoMeses').value.replace(/\D/g, '')) || 0;
+        const aliquota = obterValorNumerico(document.getElementById('aliquotaIR').value) || 0;
+
+        let html = `
+            <html>
+            <head>
+                <meta charset="utf-8">
+                <title>Simulador de Renda</title>
+                <style>
+                    body { font-family: Arial, sans-serif; margin: 20px; color: #333; }
+                    h1 { color: #2F5597; border-bottom: 2px solid #2F5597; padding-bottom: 10px; }
+                    h2 { color: #2F5597; margin-top: 20px; font-size: 14px; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                    th { background-color: #2F5597; color: white; padding: 8px; text-align: left; font-size: 12px; }
+                    td { padding: 8px; border-bottom: 1px solid #ddd; font-size: 12px; }
+                    tr:nth-child(even) { background-color: #f9f9f9; }
+                    .summary { margin: 15px 0; padding: 10px; background-color: #D9E1F2; border-radius: 4px; }
+                    .summary-row { display: flex; justify-content: space-between; margin: 5px 0; font-weight: bold; }
+                    .data { font-size: 11px; color: #666; margin-bottom: 10px; }
+                </style>
+            </head>
+            <body>
+                <h1>Simulador de Renda Detalhado</h1>
+                <div class="data">Data: ${new Date().toLocaleDateString('pt-BR')} - Hora: ${new Date().toLocaleTimeString('pt-BR')}</div>
+
+                <h2>PARÂMETROS DA SIMULAÇÃO</h2>
+                <table>
+                    <tr><td>Valor Inicial (R$)</td><td>${formatarMoeda(vInicial)}</td></tr>
+                    <tr><td>Aporte Mensal (R$)</td><td>${formatarMoeda(aporte)}</td></tr>
+                    <tr><td>Retirada Mensal (R$)</td><td>${formatarMoeda(retirada)}</td></tr>
+                    <tr><td>Taxa de Juros Anual (%)</td><td>${taxaAnual.toFixed(2)}</td></tr>
+                    <tr><td>Período (Meses)</td><td>${meses}</td></tr>
+                    <tr><td>Alíquota de IR (%)</td><td>${aliquota.toFixed(2)}</td></tr>
+                </table>
+
+                <h2>RESUMO FINAL</h2>
+                <div class="summary">
+                    <div class="summary-row"><span>Total Investido:</span><span>${document.getElementById('resTotalInvestido').innerText}</span></div>
+                    <div class="summary-row"><span>Montante Bruto:</span><span>${document.getElementById('resMontanteBruto').innerText}</span></div>
+                    <div class="summary-row"><span>Rendimento Bruto:</span><span>${document.getElementById('resRendimentoBruto').innerText}</span></div>
+                    <div class="summary-row"><span>Imposto de Renda:</span><span>${document.getElementById('resIR').innerText}</span></div>
+                    <div class="summary-row"><span>Rendimento Líquido:</span><span>${document.getElementById('resRendimentoLiquido').innerText}</span></div>
+                    <div class="summary-row"><span>Montante Líquido:</span><span>${document.getElementById('resMontanteLiquido').innerText}</span></div>
+                </div>
+
+                <h2>EVOLUÇÃO MÊS A MÊS</h2>
+                <table>
+                    <thead>
+                        <tr><th>Mês</th><th>Aporte</th><th>Retirada</th><th>Juros (Bruto)</th><th>Total Acumulado</th></tr>
+                    </thead>
+                    <tbody>
+                        ${document.querySelector('#tabelaEvolucao tbody').innerHTML}
+                    </tbody>
+                </table>
+            </body>
+            </html>
+        `;
+
+        const opt = {
+            margin: 10,
+            filename: 'simulador_renda_' + new Date().toLocaleDateString('pt-BR').replace(/\//g, '-') + '.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
+        };
+
+        html2pdf().set(opt).fromString(html).save();
     }
 </script>
 
