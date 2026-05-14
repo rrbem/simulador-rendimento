@@ -482,7 +482,25 @@
             jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
         };
 
-        html2pdf().set(opt).fromString(html).save();
+        // --- Fix: html2pdf does not support fromString reliably in all bundles.
+        // Create a hidden container, append the HTML, pass the element to html2pdf, then remove it.
+        const container = document.createElement('div');
+        container.style.position = 'fixed';
+        container.style.left = '-9999px';
+        container.style.top = '0';
+        container.innerHTML = html;
+        document.body.appendChild(container);
+
+        // Use from(container) which is the supported API
+        html2pdf().set(opt).from(container).save().then(() => {
+            // cleanup
+            document.body.removeChild(container);
+        }).catch((err) => {
+            console.error('Erro ao gerar PDF:', err);
+            // ensure cleanup on error
+            if (document.body.contains(container)) document.body.removeChild(container);
+            alert('Erro ao gerar PDF. Veja o console para mais detalhes.');
+        });
     }
 </script>
 
