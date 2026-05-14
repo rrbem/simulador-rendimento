@@ -105,21 +105,6 @@
             background-color: #229954;
         }
 
-        .btn-pdf {
-            padding: 10px;
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.9em;
-        }
-
-        .btn-pdf:hover {
-            background-color: #c0392b;
-        }
-
         .summary-box {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -171,7 +156,6 @@
     </style>
 
     <link rel="manifest" href="manifest.json">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
       if('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./sw.js');
@@ -215,7 +199,6 @@
     <div class="buttons-group">
         <button class="btn-calc" onclick="calcular()">Calcular Resultados</button>
         <button class="btn-export" onclick="exportarExcel()">📊 Exportar Excel</button>
-        <button class="btn-pdf" onclick="exportarPDF()">📄 Gerar PDF</button>
     </div>
 
     <div class="summary-box" id="resumo">
@@ -409,98 +392,6 @@
         a.download = 'simulador_renda_' + new Date().toLocaleDateString('pt-BR').replace(/\//g, '-') + '.csv';
         a.click();
         window.URL.revokeObjectURL(url);
-    }
-
-    function exportarPDF() {
-        const vInicial = obterValorNumerico(document.getElementById('valorInicial').value) || 0;
-        const aporte = obterValorNumerico(document.getElementById('aporteMensal').value) || 0;
-        const retirada = obterValorNumerico(document.getElementById('retiradaMensal').value) || 0;
-        const taxaAnual = obterValorNumerico(document.getElementById('taxaAnual').value) || 0;
-        const meses = parseInt(document.getElementById('periodoMeses').value.replace(/\D/g, '')) || 0;
-        const aliquota = obterValorNumerico(document.getElementById('aliquotaIR').value) || 0;
-
-        let html = `
-            <html>
-            <head>
-                <meta charset="utf-8">
-                <title>Simulador de Renda</title>
-                <style>
-                    body { font-family: Arial, sans-serif; margin: 20px; color: #333; }
-                    h1 { color: #2F5597; border-bottom: 2px solid #2F5597; padding-bottom: 10px; }
-                    h2 { color: #2F5597; margin-top: 20px; font-size: 14px; }
-                    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-                    th { background-color: #2F5597; color: white; padding: 8px; text-align: left; font-size: 12px; }
-                    td { padding: 8px; border-bottom: 1px solid #ddd; font-size: 12px; }
-                    tr:nth-child(even) { background-color: #f9f9f9; }
-                    .summary { margin: 15px 0; padding: 10px; background-color: #D9E1F2; border-radius: 4px; }
-                    .summary-row { display: flex; justify-content: space-between; margin: 5px 0; font-weight: bold; }
-                    .data { font-size: 11px; color: #666; margin-bottom: 10px; }
-                </style>
-            </head>
-            <body>
-                <h1>Simulador de Renda Detalhado</h1>
-                <div class="data">Data: ${new Date().toLocaleDateString('pt-BR')} - Hora: ${new Date().toLocaleTimeString('pt-BR')}</div>
-
-                <h2>PARÂMETROS DA SIMULAÇÃO</h2>
-                <table>
-                    <tr><td>Valor Inicial (R$)</td><td>${formatarMoeda(vInicial)}</td></tr>
-                    <tr><td>Aporte Mensal (R$)</td><td>${formatarMoeda(aporte)}</td></tr>
-                    <tr><td>Retirada Mensal (R$)</td><td>${formatarMoeda(retirada)}</td></tr>
-                    <tr><td>Taxa de Juros Anual (%)</td><td>${taxaAnual.toFixed(2)}</td></tr>
-                    <tr><td>Período (Meses)</td><td>${meses}</td></tr>
-                    <tr><td>Alíquota de IR (%)</td><td>${aliquota.toFixed(2)}</td></tr>
-                </table>
-
-                <h2>RESUMO FINAL</h2>
-                <div class="summary">
-                    <div class="summary-row"><span>Total Investido:</span><span>${document.getElementById('resTotalInvestido').innerText}</span></div>
-                    <div class="summary-row"><span>Montante Bruto:</span><span>${document.getElementById('resMontanteBruto').innerText}</span></div>
-                    <div class="summary-row"><span>Rendimento Bruto:</span><span>${document.getElementById('resRendimentoBruto').innerText}</span></div>
-                    <div class="summary-row"><span>Imposto de Renda:</span><span>${document.getElementById('resIR').innerText}</span></div>
-                    <div class="summary-row"><span>Rendimento Líquido:</span><span>${document.getElementById('resRendimentoLiquido').innerText}</span></div>
-                    <div class="summary-row"><span>Montante Líquido:</span><span>${document.getElementById('resMontanteLiquido').innerText}</span></div>
-                </div>
-
-                <h2>EVOLUÇÃO MÊS A MÊS</h2>
-                <table>
-                    <thead>
-                        <tr><th>Mês</th><th>Aporte</th><th>Retirada</th><th>Juros (Bruto)</th><th>Juros (Líquido)</th><th>Total Acumulado</th><th>Total Líquido</th></tr>
-                    </thead>
-                    <tbody>
-                        ${document.querySelector('#tabelaEvolucao tbody').innerHTML}
-                    </tbody>
-                </table>
-            </body>
-            </html>
-        `;
-
-        const opt = {
-            margin: 10,
-            filename: 'simulador_renda_' + new Date().toLocaleDateString('pt-BR').replace(/\//g, '-') + '.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
-        };
-
-        // --- Fix: html2pdf does not support fromString reliably in all bundles.
-        // Create a hidden container, append the HTML, pass the element to html2pdf, then remove it.
-        const container = document.createElement('div');
-        container.style.position = 'fixed';
-        container.style.left = '-9999px';
-        container.style.top = '0';
-        container.innerHTML = html;
-        document.body.appendChild(container);
-
-        // Use from(container) which is the supported API
-        html2pdf().set(opt).from(container).save().then(() => {
-            // cleanup
-            document.body.removeChild(container);
-        }).catch((err) => {
-            console.error('Erro ao gerar PDF:', err);
-            // ensure cleanup on error
-            if (document.body.contains(container)) document.body.removeChild(container);
-            alert('Erro ao gerar PDF. Veja o console para mais detalhes.');
-        });
     }
 </script>
 
