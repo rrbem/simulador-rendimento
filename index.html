@@ -235,7 +235,9 @@
                     <th>Aporte</th>
                     <th>Retirada</th>
                     <th>Juros (Bruto)</th>
+                    <th>Juros (Líquido)</th>
                     <th>Total Acumulado</th>
+                    <th>Total Líquido</th>
                 </tr>
             </thead>
             <tbody>
@@ -326,6 +328,7 @@
         const taxaMensal = Math.pow(1 + (taxaAnual / 100), 1/12) - 1;
 
         let saldo = vInicial;
+        let totalLiquidoTabela = vInicial; // saldo líquido acumulado para a tabela
         let htmlTabela = "";
         
         for (let i = 1; i <= Math.min(meses, 360); i++) {
@@ -333,13 +336,13 @@
             let jurosMes = baseCalculo * taxaMensal;
             saldo = baseCalculo + jurosMes;
 
-            htmlTabela += `<tr>
-                <td>${i}</td>
-                <td>${formatarMoeda(aporte)}</td>
-                <td>${formatarMoeda(retirada)}</td>
-                <td>${formatarMoeda(jurosMes)}</td>
-                <td>${formatarMoeda(saldo)}</td>
-            </tr>`;
+            // Juros líquido do mês (após IR proporcional ao mês)
+            const jurosMesLiquido = jurosMes * (1 - (aliquota / 100));
+
+            // Total líquido acumulado (considerando aportes/retiradas e juros líquidos)
+            totalLiquidoTabela = totalLiquidoTabela + aporte - retirada + jurosMesLiquido;
+
+            htmlTabela += `<tr>\n                <td>${i}</td>\n                <td>${formatarMoeda(aporte)}</td>\n                <td>${formatarMoeda(retirada)}</td>\n                <td>${formatarMoeda(jurosMes)}</td>\n                <td>${formatarMoeda(jurosMesLiquido)}</td>\n                <td>${formatarMoeda(saldo)}</td>\n                <td>${formatarMoeda(totalLiquidoTabela)}</td>\n            </tr>`;
         }
 
         document.querySelector("#tabelaEvolucao tbody").innerHTML = htmlTabela;
@@ -387,13 +390,13 @@
         csv += 'Montante Líquido,' + document.getElementById('resMontanteLiquido').innerText.replace('R$ ', '').replace('.', '').replace(',', '.') + '\n\n';
 
         csv += 'EVOLUÇÃO MÊS A MÊS\n';
-        csv += 'Mês,Aporte,Retirada,Juros (Bruto),Total Acumulado\n';
+        csv += 'Mês,Aporte,Retirada,Juros (Bruto),Juros (Líquido),Total Acumulado,Total Líquido\n';
         
         const tabela = document.querySelector('#tabelaEvolucao tbody');
         for (let row of tabela.rows) {
             let linha = '';
             for (let cell of row.cells) {
-                let valor = cell.innerText.replace('R$ ', '').replace('.', '').replace(',', '.');
+                let valor = cell.innerText.replace('R$ ', '').replace(/\./g, '').replace(',', '.');
                 linha += valor + ',';
             }
             csv += linha.slice(0, -1) + '\n';
@@ -461,7 +464,7 @@
                 <h2>EVOLUÇÃO MÊS A MÊS</h2>
                 <table>
                     <thead>
-                        <tr><th>Mês</th><th>Aporte</th><th>Retirada</th><th>Juros (Bruto)</th><th>Total Acumulado</th></tr>
+                        <tr><th>Mês</th><th>Aporte</th><th>Retirada</th><th>Juros (Bruto)</th><th>Juros (Líquido)</th><th>Total Acumulado</th><th>Total Líquido</th></tr>
                     </thead>
                     <tbody>
                         ${document.querySelector('#tabelaEvolucao tbody').innerHTML}
