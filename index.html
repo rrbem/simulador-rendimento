@@ -199,6 +199,30 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Estilos para as Abas */
+        .tabs-nav {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--accent-color);
+        }
+        .tab-btn {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-weight: bold;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: 0.3s;
+        }
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
     </style>
 
     <link rel="manifest" href="manifest.json">
@@ -217,71 +241,79 @@
         <img src="icon-192.png" alt="Ícone Financeiro">
         <h1 id="main-title">Simulador de Renda Detalhado</h1>
     </header>
+
+    <nav class="tabs-nav">
+        <button class="tab-btn active" onclick="alternarAba(event, 'aba-simulador')">Simulador</button>
+        <button class="tab-btn" onclick="alternarAba(event, 'aba-info')">Informações e Taxas</button>
+    </nav>
     
-    <div class="grid-inputs">
-        <div class="input-group">
-            <label>Valor Inicial (R$)</label>
-            <input type="text" id="valorInicial" placeholder="0,00" data-type="moeda" value="1.000,00">
+    <div id="aba-simulador" class="tab-content active">
+        <div class="grid-inputs">
+            <div class="input-group">
+                <label>Valor Inicial (R$)</label>
+                <input type="text" id="valorInicial" placeholder="0,00" data-type="moeda" value="1.000,00">
+            </div>
+            <div class="input-group">
+                <label>Aporte Mensal (R$)</label>
+                <input type="text" id="aporteMensal" placeholder="0,00" data-type="moeda" value="0,00">
+            </div>
+            <div class="input-group">
+                <label>Retirada Mensal (R$)</label>
+                <input type="text" id="retiradaMensal" placeholder="0,00" data-type="moeda" value="0,00">
+            </div>
+            <div class="input-group">
+                <label>Taxa de Juros Anual (%)</label>
+                <input type="text" id="taxaAnual" placeholder="0,00%" data-type="percentual">
+                <div class="taxa-info" id="taxaInfo">Buscando taxa do governo...</div>
+            </div>
+            <div class="input-group">
+                <label>Período (Meses)</label>
+                <input type="text" id="periodoMeses" placeholder="1" data-type="numero" value="1">
+            </div>
+            <div class="input-group">
+                <label>Alíquota de IR (% ou "0" para Regressiva)</label>
+                <input type="text" id="aliquotaIR" placeholder="22,50%" data-type="percentual" value="0,00">
+            </div>
         </div>
-        <div class="input-group">
-            <label>Aporte Mensal (R$)</label>
-            <input type="text" id="aporteMensal" placeholder="0,00" data-type="moeda" value="0,00">
+
+        <div class="buttons-group">
+            <button class="btn-calc" onclick="calcular()">Calcular Resultados</button>
+            <button class="btn-reset" onclick="resetarCampos()">Limpar Campos</button>
+            <button class="btn-export" onclick="exportarExcel()">📊 Exportar Excel</button>
         </div>
-        <div class="input-group">
-            <label>Retirada Mensal (R$)</label>
-            <input type="text" id="retiradaMensal" placeholder="0,00" data-type="moeda" value="0,00">
+
+        <div class="summary-box" id="resumo">
+            <div class="summary-item">Total Investido<span id="resTotalInvestido">R$ 0,00</span></div>
+            <div class="summary-item">Montante Bruto<span id="resMontanteBruto">R$ 0,00</span></div>
+            <div class="summary-item">Rendimento Bruto<span id="resRendimentoBruto">R$ 0,00</span></div>
+            <div class="summary-item">Imposto de Renda<span id="resIR">R$ 0,00</span></div>
+            <div class="summary-item">Rendimento Líquido<span id="resRendimentoLiquido">R$ 0,00</span></div>
+            <div class="summary-item">Montante Líquido<span id="resMontanteLiquido">R$ 0,00</span></div>
         </div>
-        <div class="input-group">
-            <label>Taxa de Juros Anual (%)</label>
-            <input type="text" id="taxaAnual" placeholder="0,00%" data-type="percentual">
-            <div class="taxa-info" id="taxaInfo">Buscando taxa do governo...</div>
+
+        <div class="chart-container">
+            <canvas id="graficoEvolucao"></canvas>
         </div>
-        <div class="input-group">
-            <label>Período (Meses)</label>
-            <input type="text" id="periodoMeses" placeholder="1" data-type="numero" value="1">
-        </div>
-        <div class="input-group">
-            <label>Alíquota de IR (% ou "0" para Regressiva)</label>
-            <input type="text" id="aliquotaIR" placeholder="22,50%" data-type="percentual" value="0,00">
+
+        <div class="table-container">
+            <table id="tabelaEvolucao">
+                <thead>
+                    <tr>
+                        <th>Mês</th>
+                        <th>Aporte</th>
+                        <th>Retirada</th>
+                        <th>Juros (Bruto)</th>
+                        <th>Juros (Líquido)</th>
+                        <th>Total Acumulado</th>
+                        <th>Total Líquido</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
     </div>
 
-    <div class="buttons-group">
-        <button class="btn-calc" onclick="calcular()">Calcular Resultados</button>
-        <button class="btn-reset" onclick="resetarCampos()">Limpar Campos</button>
-        <button class="btn-export" onclick="exportarExcel()">📊 Exportar Excel</button>
-    </div>
-
-    <div class="summary-box" id="resumo">
-        <div class="summary-item">Total Investido<span id="resTotalInvestido">R$ 0,00</span></div>
-        <div class="summary-item">Montante Bruto<span id="resMontanteBruto">R$ 0,00</span></div>
-        <div class="summary-item">Rendimento Bruto<span id="resRendimentoBruto">R$ 0,00</span></div>
-        <div class="summary-item">Imposto de Renda<span id="resIR">R$ 0,00</span></div>
-        <div class="summary-item">Rendimento Líquido<span id="resRendimentoLiquido">R$ 0,00</span></div>
-        <div class="summary-item">Montante Líquido<span id="resMontanteLiquido">R$ 0,00</span></div>
-    </div>
-
-    <div class="chart-container">
-        <canvas id="graficoEvolucao"></canvas>
-    </div>
-
-    <div class="table-container">
-        <table id="tabelaEvolucao">
-            <thead>
-                <tr>
-                    <th>Mês</th>
-                    <th>Aporte</th>
-                    <th>Retirada</th>
-                    <th>Juros (Bruto)</th>
-                    <th>Juros (Líquido)</th>
-                    <th>Total Acumulado</th>
-                    <th>Total Líquido</th>
-                </tr>
-            </thead>
-            <tbody>
-                </tbody>
-        </table>
-    </div>
+    <div id="aba-info" class="tab-content"></div>
 </div>
 
 <script>
@@ -289,6 +321,30 @@
 
     function formatarMoeda(valor) {
         return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    async function alternarAba(evt, nomeAba) {
+        const contents = document.getElementsByClassName("tab-content");
+        for (let content of contents) content.classList.remove("active");
+
+        const buttons = document.getElementsByClassName("tab-btn");
+        for (let btn of buttons) btn.classList.remove("active");
+
+        const targetAba = document.getElementById(nomeAba);
+        
+        // Carrega o conteúdo dinamicamente se for a aba de info e estiver vazia
+        if (nomeAba === 'aba-info' && targetAba.innerHTML.trim() === "") {
+            try {
+                const response = await fetch('info.html');
+                const html = await response.text();
+                targetAba.innerHTML = html;
+            } catch (error) {
+                targetAba.innerHTML = "<p>Erro ao carregar as informações. Certifique-se de estar usando um servidor local (Live Server).</p>";
+            }
+        }
+
+        targetAba.classList.add("active");
+        evt.currentTarget.classList.add("active");
     }
 
     function obterValorNumerico(valor) {
@@ -531,46 +587,43 @@
     }
 
     function exportarExcel() {
-        const vInicial = obterValorNumerico(document.getElementById('valorInicial').value) || 0;
-        const aporte = obterValorNumerico(document.getElementById('aporteMensal').value) || 0;
-        const retirada = obterValorNumerico(document.getElementById('retiradaMensal').value) || 0;
-        const taxaAnual = obterValorNumerico(document.getElementById('taxaAnual').value) || 0;
-        const meses = parseInt(document.getElementById('periodoMeses').value.replace(/\D/g, '')) || 0;
-        const aliquota = obterValorNumerico(document.getElementById('aliquotaIR').value) || 0;
-
-        let csv = 'SIMULADOR DE RENDA DETALHADO\n';
+        const sep = ';'; // Separador ideal para Excel em português (Brasil)
+        let csv = '\ufeff'; // Adiciona o BOM para garantir suporte a UTF-8 (acentos e R$) no Excel
+        
+        csv += 'SIMULADOR DE RENDA DETALHADO\n';
         csv += 'Data: ' + new Date().toLocaleDateString('pt-BR') + '\n\n';
         
         csv += 'PARÂMETROS DA SIMULAÇÃO\n';
-        csv += 'Valor Inicial (R$),' + vInicial.toFixed(2) + '\n';
-        csv += 'Aporte Mensal (R$),' + aporte.toFixed(2) + '\n';
-        csv += 'Retirada Mensal (R$),' + retirada.toFixed(2) + '\n';
-        csv += 'Taxa de Juros Anual (%),' + taxaAnual.toFixed(2) + '\n';
-        csv += 'Período (Meses),' + meses + '\n';
-        csv += 'Alíquota de IR (%),' + aliquota.toFixed(2) + '\n\n';
+        csv += 'Valor Inicial (R$)' + sep + document.getElementById('valorInicial').value + '\n';
+        csv += 'Aporte Mensal (R$)' + sep + document.getElementById('aporteMensal').value + '\n';
+        csv += 'Retirada Mensal (R$)' + sep + document.getElementById('retiradaMensal').value + '\n';
+        csv += 'Taxa de Juros Anual (%)' + sep + document.getElementById('taxaAnual').value + '\n';
+        csv += 'Período (Meses)' + sep + document.getElementById('periodoMeses').value + '\n';
+        csv += 'Alíquota de IR (%)' + sep + document.getElementById('aliquotaIR').value + '\n\n';
 
         csv += 'RESUMO FINAL\n';
-        csv += 'Total Investido,' + document.getElementById('resTotalInvestido').innerText.replace('R$ ', '').replace('.', '').replace(',', '.') + '\n';
-        csv += 'Montante Bruto,' + document.getElementById('resMontanteBruto').innerText.replace('R$ ', '').replace('.', '').replace(',', '.') + '\n';
-        csv += 'Rendimento Bruto,' + document.getElementById('resRendimentoBruto').innerText.replace('R$ ', '').replace('.', '').replace(',', '.') + '\n';
-        csv += 'Imposto de Renda,' + document.getElementById('resIR').innerText.replace('R$ ', '').replace('.', '').replace(',', '.') + '\n';
-        csv += 'Rendimento Líquido,' + document.getElementById('resRendimentoLiquido').innerText.replace('R$ ', '').replace('.', '').replace(',', '.') + '\n';
-        csv += 'Montante Líquido,' + document.getElementById('resMontanteLiquido').innerText.replace('R$ ', '').replace('.', '').replace(',', '.') + '\n\n';
+        csv += 'Total Investido' + sep + document.getElementById('resTotalInvestido').innerText.replace('R$', '').trim() + '\n';
+        csv += 'Montante Bruto' + sep + document.getElementById('resMontanteBruto').innerText.replace('R$', '').trim() + '\n';
+        csv += 'Rendimento Bruto' + sep + document.getElementById('resRendimentoBruto').innerText.replace('R$', '').trim() + '\n';
+        csv += 'Imposto de Renda' + sep + document.getElementById('resIR').innerText.replace('R$', '').trim() + '\n';
+        csv += 'Rendimento Líquido' + sep + document.getElementById('resRendimentoLiquido').innerText.replace('R$', '').trim() + '\n';
+        csv += 'Montante Líquido' + sep + document.getElementById('resMontanteLiquido').innerText.replace('R$', '').trim() + '\n\n';
 
         csv += 'EVOLUÇÃO MÊS A MÊS\n';
-        csv += 'Mês,Aporte,Retirada,Juros (Bruto),Juros (Líquido),Total Acumulado,Total Líquido\n';
+        csv += ['Mês', 'Aporte', 'Retirada', 'Juros (Bruto)', 'Juros (Líquido)', 'Total Acumulado', 'Total Líquido'].join(sep) + '\n';
         
         const tabela = document.querySelector('#tabelaEvolucao tbody');
         for (let row of tabela.rows) {
-            let linha = '';
+            let colunas = [];
             for (let cell of row.cells) {
-                let valor = cell.innerText.replace('R$ ', '').replace(/\./g, '').replace(',', '.');
-                linha += valor + ',';
+                // Remove o R$ e mantém a formatação pt-BR (vírgula como decimal) para compatibilidade com Excel
+                let valor = cell.innerText.replace('R$', '').trim();
+                colunas.push(valor);
             }
-            csv += linha.slice(0, -1) + '\n';
+            csv += colunas.join(sep) + '\n';
         }
 
-        const blob = new Blob([csv], { type: 'text/csv' });
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
