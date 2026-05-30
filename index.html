@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador de Renda Detalhado - RRB</title>
+    <title>Simulador de Renda Detalhado</title>
     <style>
         :root {
             --primary-color: #2F5597;
@@ -28,10 +28,25 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        h1 {
-            color: var(--primary-color);
+        .header-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
             border-bottom: 2px solid var(--primary-color);
             padding-bottom: 10px;
+            margin-bottom: 25px;
+        }
+
+        .header-container img {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 1.8em;
         }
 
         .grid-inputs {
@@ -92,6 +107,21 @@
 
         .btn-calc:hover {
             background-color: #1e3a6d;
+        }
+
+        .btn-reset {
+            padding: 12px;
+            background-color: #e67e22;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+        }
+
+        .btn-reset:hover {
+            background-color: #d35400;
         }
 
         .btn-export {
@@ -183,7 +213,10 @@
 <body>
 
 <div class="container">
-    <h1>Simulador de Renda Detalhado - RRB</h1>
+    <header class="header-container">
+        <img src="icon-192.png" alt="Ícone Financeiro">
+        <h1 id="main-title">Simulador de Renda Detalhado</h1>
+    </header>
     
     <div class="grid-inputs">
         <div class="input-group">
@@ -192,7 +225,7 @@
         </div>
         <div class="input-group">
             <label>Aporte Mensal (R$)</label>
-            <input type="text" id="aporteMensal" placeholder="0,00" data-type="moeda" value="100,00">
+            <input type="text" id="aporteMensal" placeholder="0,00" data-type="moeda" value="0,00">
         </div>
         <div class="input-group">
             <label>Retirada Mensal (R$)</label>
@@ -205,7 +238,7 @@
         </div>
         <div class="input-group">
             <label>Período (Meses)</label>
-            <input type="text" id="periodoMeses" placeholder="1" data-type="numero" value="12">
+            <input type="text" id="periodoMeses" placeholder="1" data-type="numero" value="1">
         </div>
         <div class="input-group">
             <label>Alíquota de IR (% ou "0" para Regressiva)</label>
@@ -215,6 +248,7 @@
 
     <div class="buttons-group">
         <button class="btn-calc" onclick="calcular()">Calcular Resultados</button>
+        <button class="btn-reset" onclick="resetarCampos()">Limpar Campos</button>
         <button class="btn-export" onclick="exportarExcel()">📊 Exportar Excel</button>
     </div>
 
@@ -284,6 +318,41 @@
         return valor.replace(/[^\d]/g, '').slice(0, 3);
     }
 
+    function resetarCampos() {
+        if (confirm('Deseja realmente limpar todos os campos e voltar aos valores originais?')) {
+            localStorage.removeItem('simulador_dados');
+            
+            document.getElementById('valorInicial').value = '1.000,00';
+            document.getElementById('aporteMensal').value = '0,00';
+            document.getElementById('retiradaMensal').value = '0,00';
+            document.getElementById('taxaAnual').value = ''; 
+            document.getElementById('periodoMeses').value = '1';
+            document.getElementById('aliquotaIR').value = '0,00';
+            
+            carregarTaxaDoGoverno();
+        }
+    }
+
+    function salvarDadosLocal() {
+        const campos = ['valorInicial', 'aporteMensal', 'retiradaMensal', 'taxaAnual', 'periodoMeses', 'aliquotaIR'];
+        const dados = {};
+        campos.forEach(id => {
+            dados[id] = document.getElementById(id).value;
+        });
+        localStorage.setItem('simulador_dados', JSON.stringify(dados));
+    }
+
+    function carregarDadosLocal() {
+        const dadosStr = localStorage.getItem('simulador_dados');
+        if (dadosStr) {
+            const dados = JSON.parse(dadosStr);
+            Object.keys(dados).forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = dados[id];
+            });
+        }
+    }
+
     function calcularAliquotaRegressiva(meses) {
         if (meses <= 6) return 22.5;
         if (meses <= 12) return 20.0;
@@ -292,6 +361,13 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
+        const hoje = new Date().toLocaleDateString('pt-BR');
+        const novoTitulo = `Simulador de Renda Detalhado - ${hoje}`;
+        document.title = novoTitulo;
+        document.getElementById('main-title').innerText = novoTitulo;
+
+        carregarDadosLocal();
+
         const campos = document.querySelectorAll('input[data-type]');
         campos.forEach(campo => {
             campo.addEventListener('input', function() {
@@ -304,6 +380,7 @@
                 } else if (tipo === 'numero') {
                     this.value = formatarNumeroInput(valor);
                 }
+                salvarDadosLocal();
                 calcular();
             });
         });
@@ -320,14 +397,18 @@
                 window.taxaSelicAtual = taxaSelic;
                 const taxaCDI = taxaSelic - 0.1;
                 
-                document.getElementById('taxaAnual').value = taxaCDI.toFixed(2).replace('.', ',');
+                if (!document.getElementById('taxaAnual').value) {
+                    document.getElementById('taxaAnual').value = taxaCDI.toFixed(2).replace('.', ',');
+                }
                 document.getElementById('taxaInfo').textContent = `SELIC: ${taxaSelic.toFixed(2).replace('.', ',')}% a.a. | CDI: ${taxaCDI.toFixed(2).replace('.', ',')}% a.a.`;
                 calcular();
             }
         } catch (error) {
             const taxaPadrao = 14.40;
             window.taxaSelicAtual = taxaPadrao;
-            document.getElementById('taxaAnual').value = taxaPadrao.toFixed(2).replace('.', ',');
+            if (!document.getElementById('taxaAnual').value) {
+                document.getElementById('taxaAnual').value = taxaPadrao.toFixed(2).replace('.', ',');
+            }
             document.getElementById('taxaInfo').textContent = `Taxa padrão CDI: ${taxaPadrao.toFixed(2).replace('.', ',')}% a.a. (Erro ao buscar taxa do governo)`;
             calcular();
         }
@@ -360,9 +441,14 @@
         let labels = ["Início"];
         
         for (let i = 1; i <= meses; i++) {
-            let baseCalculo = saldoBruto + aporte - retirada;
-            let basePoupanca = saldoPoupanca + aporte - retirada;
-            totalInvestidoAcumulado += (aporte - retirada);
+            // Validação: Não permite que a retirada exceda o saldo disponível
+            const retiradaReal = Math.min(retirada, saldoBruto + aporte);
+            const retiradaPoupancaReal = Math.min(retirada, saldoPoupanca + aporte);
+
+            let baseCalculo = saldoBruto + aporte - retiradaReal;
+            let basePoupanca = saldoPoupanca + aporte - retiradaPoupancaReal;
+            
+            totalInvestidoAcumulado += (aporte - retiradaReal);
             
             let jurosMesBruto = baseCalculo * taxaMensal;
             saldoBruto = baseCalculo + jurosMesBruto;
@@ -374,12 +460,12 @@
             const saldoLiquido = saldoBruto - impostoTeorico;
             
             // Juros líquido é a variação do saldo líquido descontando aportes/retiradas
-            const jurosMesLiquido = saldoLiquido - lastSaldoLiquido - (aporte - retirada);
+            const jurosMesLiquido = saldoLiquido - lastSaldoLiquido - (aporte - retiradaReal);
 
             // Evolução Poupança (Isenta de IR)
             saldoPoupanca = basePoupanca * (1 + taxaPoupancaMensal);
 
-            htmlTabela += `<tr>\n                <td>${i}</td>\n                <td>${formatarMoeda(aporte)}</td>\n                <td>${formatarMoeda(retirada)}</td>\n                <td>${formatarMoeda(jurosMesBruto)}</td>\n                <td>${formatarMoeda(jurosMesLiquido)}</td>\n                <td>${formatarMoeda(saldoBruto)}</td>\n                <td>${formatarMoeda(saldoLiquido)}</td>\n            </tr>`;
+            htmlTabela += `<tr>\n                <td>${i}</td>\n                <td>${formatarMoeda(aporte)}</td>\n                <td>${formatarMoeda(retiradaReal)}</td>\n                <td>${formatarMoeda(jurosMesBruto)}</td>\n                <td>${formatarMoeda(jurosMesLiquido)}</td>\n                <td>${formatarMoeda(saldoBruto)}</td>\n                <td>${formatarMoeda(saldoLiquido)}</td>\n            </tr>`;
             
             dadosBrutos.push(saldoBruto);
             dadosLiquidos.push(saldoLiquido);

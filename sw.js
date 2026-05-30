@@ -1,5 +1,12 @@
 const cacheName = 'simulador-v1';
-const assets = ['./index.html', './manifest.json'];
+const assets = [
+  './',
+  './index.html',
+  './manifest.json',
+  './icon-192.png',
+  './icon-512.png',
+  'https://cdn.jsdelivr.net/npm/chart.js'
+];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(cacheName).then(cache => cache.addAll(assets)));
