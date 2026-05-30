@@ -1,8 +1,9 @@
-const cacheName = 'simulador-v2';
+const cacheName = 'simulador-v5';
 const assets = [
   './',
   './index.html',
   './info.html',
+  './info.js',
   './manifest.json',
   './icon-192.png',
   './icon-512.png',
@@ -10,7 +11,18 @@ const assets = [
 ];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(cacheName).then(cache => cache.addAll(assets)));
+  e.waitUntil(
+    caches.open(cacheName).then(cache => cache.addAll(assets))
+      .then(() => self.skipWaiting()) // Força o novo SW a se tornar ativo
+  );
+});
+
+self.addEventListener('activate', e => {
+  e.waitUntil(
+    caches.keys().then(keys => {
+      return Promise.all(keys.filter(key => key !== cacheName).map(key => caches.delete(key)));
+    })
+  );
 });
 
 self.addEventListener('fetch', e => {

@@ -8,3 +8,17 @@
     <li>De 361 a 720 dias: 17,5%</li>
     <li>Acima de 720 dias: 15%</li>
 </ul>
+
+<div id="cotacoes" style="margin-top: 20px; padding: 15px; background: #f0f4f8; border-left: 4px solid var(--primary-color); border-radius: 4px;">
+    <h3 style="margin-top: 0;">Cotações em Tempo Real (BRL)</h3>
+    <p style="margin: 5px 0;">💵 <strong>Dólar:</strong> <span id="usd-val">Carregando...</span></p>
+    <p style="margin: 5px 0;">₿ <strong>Bitcoin:</strong> <span id="btc-val">Carregando...</span></p>
+    <small style="color: #666;">Fonte: AwesomeAPI</small>
+</div>
+
+<div style="margin-top: 25px;">
+    <h3 style="font-size: 1.1em; color: var(--primary-color); margin-bottom: 10px;">Variação do Dólar (Últimos 7 dias)</h3>
+    <div style="height: 220px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #eee;">
+        <canvas id="graficoDolarHist"></canvas>
+    </div>
+</div>
