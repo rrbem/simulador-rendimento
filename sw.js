@@ -1,4 +1,4 @@
-const cacheName = 'simulador-v5';
+const cacheName = 'simulador-v8';
 const assets = [
   './',
   './index.html',

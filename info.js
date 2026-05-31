@@ -1,4 +1,20 @@
+// Escuta o evento de ativação da aba para carregar os dados
+// Usamos delegação de evento no documento para garantir que funcione após o fetch do HTML
+document.addEventListener('abaAtivada', (e) => {
+    if (e.target.id === 'aba-info') {
+        carregarCotacoes();
+    }
+});
+
 async function carregarCotacoes() {
+    // Atualiza SELIC e CDI com os valores já obtidos pelo simulador (window.taxaSelicAtual)
+    const infoSelic = document.getElementById('info-selic');
+    const infoCdi = document.getElementById('info-cdi');
+    if (window.taxaSelicAtual && infoSelic && infoCdi) {
+        infoSelic.innerText = window.taxaSelicAtual.toFixed(2).replace('.', ',') + '% a.a.';
+        infoCdi.innerText = (window.taxaSelicAtual - 0.1).toFixed(2).replace('.', ',') + '% a.a.';
+    }
+
     try {
         // Cotação Atual
         const resAtual = await fetch('https://economia.awesomeapi.com.br/last/USD-BRL,BTC-BRL');

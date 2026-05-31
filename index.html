@@ -336,19 +336,23 @@
 
         const targetAba = document.getElementById(nomeAba);
         
-        // Carrega o conteúdo dinamicamente se for a aba de info e estiver vazia
-        if (nomeAba === 'aba-info' && targetAba.innerHTML.trim() === "") {
+        // Lógica de carregamento sob demanda para abas externas
+        if (nomeAba === 'aba-info') {
+            if (targetAba.innerHTML.trim() === "") {
             try {
                 const response = await fetch('info.html');
+                    if (!response.ok) throw new Error('Falha ao carregar arquivo');
                 const html = await response.text();
                 targetAba.innerHTML = html;
-                carregarCotacoes();
             } catch (error) {
-                targetAba.innerHTML = "<p>Erro ao carregar as informações. Certifique-se de estar usando um servidor local (Live Server).</p>";
+                    targetAba.innerHTML = "<p>Erro ao carregar as informações. Use um servidor local (Live Server).</p>";
+                    return;
+                }
             }
-        }
-        else if (nomeAba === 'aba-info') {
-            carregarCotacoes();
+            
+            // Dispara um evento customizado informando que a aba está pronta/ativa
+            // Isso permite que o info.js execute sem o index.html chamá-lo diretamente
+            targetAba.dispatchEvent(new CustomEvent('abaAtivada', { bubbles: true }));
         }
 
         targetAba.classList.add("active");
