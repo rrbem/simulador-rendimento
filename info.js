@@ -6,13 +6,31 @@ document.addEventListener('abaAtivada', (e) => {
     }
 });
 
-async function carregarCotacoes() {
+async function carregarCotacoes(dias = 7) {
+    // Atualiza estado visual dos botões de período
+    const botoes = document.querySelectorAll('.btn-periodo');
+    botoes.forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.getAttribute('data-dias')) === dias);
+    });
+
     // Atualiza SELIC e CDI com os valores já obtidos pelo simulador (window.taxaSelicAtual)
     const infoSelic = document.getElementById('info-selic');
     const infoCdi = document.getElementById('info-cdi');
     if (window.taxaSelicAtual && infoSelic && infoCdi) {
         infoSelic.innerText = window.taxaSelicAtual.toFixed(2).replace('.', ',') + '% a.a.';
         infoCdi.innerText = (window.taxaSelicAtual - 0.1).toFixed(2).replace('.', ',') + '% a.a.';
+    }
+
+    // Busca IPCA acumulado 12 meses (SGS 13522)
+    try {
+        const resIpca = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.13522/dados/ultimos/1?formato=json');
+        const dataIpca = await resIpca.json();
+        const infoIpca = document.getElementById('info-ipca');
+        if (dataIpca && dataIpca[0] && infoIpca) {
+            infoIpca.innerText = parseFloat(dataIpca[0].valor).toFixed(2).replace('.', ',') + '% (12m)';
+        }
+    } catch (error) {
+        console.error("Erro ao buscar IPCA:", error);
     }
 
     try {
@@ -30,12 +48,16 @@ async function carregarCotacoes() {
         // Histórico de 7 dias para o gráfico
         const canvasHist = document.getElementById('graficoDolarHist');
         if (canvasHist) {
-            const resHist = await fetch('https://economia.awesomeapi.com.br/json/daily/USD-BRL/7');
+            const resHist = await fetch(`https://economia.awesomeapi.com.br/json/daily/USD-BRL/${dias}`);
             const dataHist = await resHist.json();
 
             const labels = dataHist.map(item => {
                 const d = new Date(item.timestamp * 1000);
-                return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+                return d.toLocaleDateString('pt-BR', { 
+                    day: '2-digit', 
+                    month: '2-digit',
+                    year: dias > 30 ? '2-digit' : undefined 
+                });
             }).reverse();
 
             const valores = dataHist.map(item => parseFloat(item.bid)).reverse();

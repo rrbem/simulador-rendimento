@@ -1,6 +1,7 @@
 <h2>Sobre os Indicadores</h2>
 <p><strong>SELIC (<span id="info-selic">Carregando...</span>):</strong> É a taxa básica de juros da economia brasileira. Ela influencia todas as outras taxas de juros do país.</p>
 <p><strong>CDI (<span id="info-cdi">Carregando...</span>):</strong> O Certificado de Depósito Interbancário é uma taxa que os bancos usam para emprestar dinheiro entre si. Geralmente caminha muito próxima à Selic.</p>
+<p><strong>IPCA (<span id="info-ipca">Carregando...</span>):</strong> É o índice oficial de inflação do Brasil. Mede a variação de preços de um conjunto de produtos e serviços consumidos pelas famílias.</p>
 <p><strong>IR Regressivo:</strong> Para investimentos de renda fixa, a alíquota de imposto diminui conforme o tempo passa:</p>
 <ul>
     <li>Até 180 dias: 22,5%</li>
@@ -17,7 +18,16 @@
 </div>
 
 <div style="margin-top: 25px;">
-    <h3 style="font-size: 1.1em; color: var(--primary-color); margin-bottom: 10px;">Variação do Dólar (Últimos 7 dias)</h3>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <h3 style="font-size: 1.1em; color: var(--primary-color); margin: 0;">Variação do Dólar</h3>
+        <div class="periodo-selector">
+            <button class="btn-periodo active" data-dias="7" onclick="carregarCotacoes(7)">7D</button>
+            <button class="btn-periodo" data-dias="15" onclick="carregarCotacoes(15)">15D</button>
+            <button class="btn-periodo" data-dias="30" onclick="carregarCotacoes(30)">30D</button>
+            <button class="btn-periodo" data-dias="180" onclick="carregarCotacoes(180)">6M</button>
+            <button class="btn-periodo" data-dias="365" onclick="carregarCotacoes(365)">1A</button>
+        </div>
+    </div>
     <div style="height: 220px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #eee;">
         <canvas id="graficoDolarHist"></canvas>
     </div>

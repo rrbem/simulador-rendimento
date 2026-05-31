@@ -226,6 +226,26 @@
         }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
+
+        /* Seletores de Período no Gráfico */
+        .periodo-selector {
+            display: flex;
+            gap: 5px;
+        }
+        .btn-periodo {
+            padding: 4px 8px;
+            font-size: 0.75em;
+            border: 1px solid var(--primary-color);
+            background: white;
+            color: var(--primary-color);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-periodo.active {
+            background: var(--primary-color);
+            color: white;
+        }
     </style>
 
     <link rel="manifest" href="manifest.json">
