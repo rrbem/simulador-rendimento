@@ -7,6 +7,39 @@ document.addEventListener('abaAtivada', (e) => {
     if (e.target.id === 'aba-acoes') {
         carregarDadosAcoes();
     }
+    if (e.target.id === 'aba-economia') {
+        const elGasto = document.getElementById('fire-gasto');
+        const elRenda = document.getElementById('fire-renda');
+        const elValorAtual = document.getElementById('fire-valor-atual');
+
+        // Adiciona listeners de máscara para os campos de moeda carregados via fetch
+        [elGasto, elRenda, elValorAtual].forEach(el => {
+            if (el && !el.dataset.hookedMask) {
+                el.addEventListener('input', function() {
+                    this.value = formatarMoedaInput(this.value);
+                });
+                el.dataset.hookedMask = "true";
+            }
+        });
+
+        // População automática com Salário Mínimo se disponível e não editado manualmente
+        if (window.salarioMinimoAtual) {
+            [elGasto, elRenda, elValorAtual].forEach(el => {
+                if (el && !el.dataset.manual) {
+                    // Formata o salário mínimo para o padrão de máscara do input
+                    el.value = formatarMoedaInput((window.salarioMinimoAtual * 100).toFixed(0));
+                    if (!el.dataset.hooked) {
+                        el.addEventListener('input', () => el.dataset.manual = "true");
+                        el.dataset.hooked = "true";
+                    }
+                }
+            });
+        }
+
+        initFireChart();
+        calcularFIRE();
+        calcularAlocacao();
+    }
 });
 
 async function carregarDadosAcoes() {
@@ -93,7 +126,8 @@ async function carregarCotacoes(dias = 7) {
         const dataIpca = await resIpca.json();
         const infoIpca = document.getElementById('info-ipca');
         if (dataIpca && dataIpca[0] && infoIpca) {
-            infoIpca.innerText = parseFloat(dataIpca[0].valor).toFixed(2).replace('.', ',') + '% (12m)';
+            window.ipcaAtual = parseFloat(dataIpca[0].valor);
+            infoIpca.innerText = window.ipcaAtual.toFixed(2).replace('.', ',') + '% (12m)';
         }
     } catch (error) {
         console.error("Erro ao buscar IPCA:", error);
@@ -219,4 +253,82 @@ async function carregarCotacoes(dias = 7) {
     } catch (error) {
         console.error("Erro ao buscar cotações:", error);
     }
+}
+
+/**
+ * Lógica da Aba Economia Criativa (FIRE)
+ */
+function calcularFIRE() {
+    const elGasto = document.getElementById('fire-gasto');
+    const elInflacao = document.getElementById('fire-inflacao');
+    const elAnos = document.getElementById('fire-anos');
+    const elValorAtual = document.getElementById('fire-valor-atual');
+
+    // Se temos o IPCA global e o usuário ainda não mexeu no campo, atualiza automaticamente
+    if (elInflacao && window.ipcaAtual && !elInflacao.dataset.manual) {
+        elInflacao.value = window.ipcaAtual.toFixed(2);
+        // Se o usuário digitar manualmente, marcamos como manual para não sobrescrever mais
+        if (!elInflacao.dataset.hooked) {
+            elInflacao.addEventListener('input', () => elInflacao.dataset.manual = "true");
+            elInflacao.dataset.hooked = "true";
+        }
+    }
+
+    if (elGasto) {
+        const gastoMensal = obterValorNumerico(elGasto.value) || 0;
+        const fireNumero = (gastoMensal * 12) * 25;
+        document.getElementById('fire-resultado').innerText = fireNumero.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    if (elInflacao && elAnos && elValorAtual) {
+        const inflacaoAnual = parseFloat(elInflacao.value) || 0;
+        const anos = parseFloat(elAnos.value) || 0;
+        const valorPresente = obterValorNumerico(elValorAtual.value) || 0;
+        const valorFuturo = valorPresente / Math.pow(1 + (inflacaoAnual / 100), anos);
+        document.getElementById('inflacao-resultado').innerText = valorFuturo.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+}
+
+function calcularAlocacao() {
+    const elRenda = document.getElementById('fire-renda');
+    if (!elRenda) return;
+
+    const renda = obterValorNumerico(elRenda.value) || 0;
+    const v50 = renda * 0.5;
+    const v30 = renda * 0.3;
+    const v20 = renda * 0.2;
+
+    const fmt = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+    const el50 = document.getElementById('aloc-50');
+    const el30 = document.getElementById('aloc-30');
+    const el20 = document.getElementById('aloc-20');
+
+    if (el50) el50.innerText = fmt(v50);
+    if (el30) el30.innerText = fmt(v30);
+    if (el20) el20.innerText = fmt(v20);
+}
+
+function initFireChart() {
+    const canvas = document.getElementById('firePieChart');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    if (window.fireChartObj) window.fireChartObj.destroy();
+    
+    window.fireChartObj = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Necessidades', 'Desejos', 'Investimento'],
+            datasets: [{
+                data: [50, 30, 20],
+                backgroundColor: ['#2F5597', '#94a3b8', '#10b981'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: false,
+            plugins: { legend: { display: false } }
+        }
+    });
 }

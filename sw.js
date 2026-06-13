@@ -1,10 +1,11 @@
 // IMPORTANTE: Mude o número da versão sempre que subir um novo ajuste
-const cacheName = 'simulador-v26';
+const cacheName = 'simulador-v33';
 const assets = [
   './',
   './index.html',
   './info.html',
   './acoes.html',
+  './economia-criativa.html',
   './info.js',
   './manifest.json',
   './icon-192.png',
