@@ -1,0 +1,91 @@
+<style>
+    .acoes-container {
+        margin-top: 10px;
+    }
+    .data-atualizacao {
+        background: #f1f5f9;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 0.85em;
+        color: #475569;
+        margin-bottom: 20px;
+        display: inline-block;
+        border: 1px solid #e2e8f0;
+    }
+    .tabela-acoes {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9em;
+    }
+    .tabela-acoes th {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 12px 8px;
+        text-align: left;
+    }
+    .tabela-acoes td {
+        padding: 10px 8px;
+        border-bottom: 1px solid #eee;
+    }
+    .tabela-acoes tr:hover {
+        background-color: #f8fafc;
+    }
+    .badge-variacao {
+        padding: 3px 6px;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 0.85em;
+    }
+    .subida { background: #dcfce7; color: #166534; }
+    .descida { background: #fee2e2; color: #991b1b; }
+    
+    .btn-refresh-data {
+        background: #fff;
+        border: 1px solid var(--primary-color);
+        color: var(--primary-color);
+        padding: 6px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.85em;
+        font-weight: 600;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .btn-refresh-data:hover { background: var(--primary-color); color: white; }
+    .btn-refresh-data:disabled { opacity: 0.6; cursor: not-allowed; }
+    .loading-row { text-align: center; padding: 20px; color: #64748b; font-style: italic; }
+</style>
+
+<div class="acoes-container">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 5px;">
+        <h2 style="margin: 0;">Ações em Destaque (Teste Ilimitado)</h2>
+        <button class="btn-refresh-data" onclick="recarregarAbaAcoes()">
+            <span>🔄</span> Buscar Ajustes e Dados
+        </button>
+    </div>
+    <div class="data-atualizacao">
+        📅 <strong>Última atualização:</strong> <span id="data-acoes-update">---</span>
+    </div>
+
+    <div class="table-container">
+        <table class="tabela-acoes">
+            <thead>
+                <tr>
+                    <th>Ticker</th>
+                    <th>Preço Atual</th>
+                    <th>Variação (%)</th>
+                    <th>Variação (R$)</th>
+                    <th>Volume Diário</th>
+                </tr>
+            </thead>
+            <tbody id="acoes-table-body">
+                <tr><td colspan="5" class="loading-row">Buscando cotações em tempo real...</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <p style="font-size: 0.8em; color: #666; margin-top: 15px;">
+        * Dados fornecidos via Brapi (PETR4, MGLU3, VALE3, ITUB4).
+    </p>
+</div>

@@ -4,7 +4,73 @@ document.addEventListener('abaAtivada', (e) => {
     if (e.target.id === 'aba-info') {
         carregarCotacoes();
     }
+    if (e.target.id === 'aba-acoes') {
+        carregarDadosAcoes();
+    }
 });
+
+async function carregarDadosAcoes() {
+    const corpoTabela = document.getElementById('acoes-table-body');
+    const spanData = document.getElementById('data-acoes-update');
+    const btn = document.querySelector('.btn-refresh-data');
+    
+    if (!corpoTabela) return;
+
+    try {
+        if (btn) { btn.disabled = true; btn.innerHTML = '<span>⌛</span> Carregando...'; }
+        corpoTabela.innerHTML = '<tr><td colspan="5" class="loading-row">Buscando dados do mercado...</td></tr>';
+
+        // Brapi.dev - PETR4, MGLU3, VALE3 e ITUB4
+        const response = await fetch(`https://brapi.dev/api/quote/PETR4,MGLU3,VALE3,ITUB4`); 
+
+        if (!response.ok) throw new Error(`Erro na API: ${response.status}`);
+
+        const data = await response.json();
+
+        if (!data || !data.results || data.results.length === 0) {
+            throw new Error('Nenhum dado retornado.');
+        }
+
+        let html = '';
+        data.results.forEach(acao => {
+            const preco = acao.regularMarketPrice || 0;
+            const variacaoPct = acao.regularMarketChangePercent || 0;
+            const variacaoReal = acao.regularMarketChange || 0;
+            const volume = acao.regularMarketVolume || 0;
+            const classeVar = variacaoPct >= 0 ? 'subida' : 'descida';
+            const nomeEmpresa = acao.longName || acao.shortName || '';
+
+            html += `
+                <tr>
+                    <td>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <img src="${acao.logourl}" width="24" height="24" style="border-radius:4px;" onerror="this.style.display='none'">
+                            <div style="display:flex; flex-direction:column;">
+                                <strong>${acao.symbol}</strong>
+                                <small style="font-size:0.75em; color:#64748b;" class="hide-mobile">${nomeEmpresa}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td>R$ ${preco.toFixed(2)}</td>
+                    <td><span class="badge-variacao ${classeVar}">${(variacaoPct > 0 ? '+' : '') + variacaoPct.toFixed(2)}%</span></td>
+                    <td class="${classeVar}">${(variacaoReal > 0 ? '+' : '') + variacaoReal.toFixed(2)}</td>
+                    <td>${(volume / 1000000).toFixed(1)}M</td>
+                </tr>
+            `;
+        });
+
+        corpoTabela.innerHTML = html;
+        spanData.innerText = new Date().toLocaleString('pt-BR');
+
+    } catch (error) {
+        console.error("Erro Ações API:", error);
+        let mensagemErro = "Erro ao conectar com a API.";
+        
+        corpoTabela.innerHTML = `<tr><td colspan="5" class="loading-row" style="color:red">${mensagemErro}</td></tr>`;
+    } finally {
+        if (btn) { btn.disabled = false; btn.innerHTML = '<span>🔄</span> Atualizar Ações'; }
+    }
+}
 
 async function carregarCotacoes(dias = 7) {
     // Atualiza estado visual dos botões de período

@@ -371,6 +371,7 @@
     <nav class="tabs-nav">
         <button class="tab-btn active" onclick="alternarAba(event, 'aba-simulador')">Simulador</button>
         <button class="tab-btn" onclick="alternarAba(event, 'aba-info')">Informações e Taxas</button>
+        <button class="tab-btn" onclick="alternarAba(event, 'aba-acoes')">Ações (Teste)</button>
     </nav>
     
     <div id="aba-simulador" class="tab-content active">
@@ -440,6 +441,7 @@
     </div>
 
     <div id="aba-info" class="tab-content"></div>
+    <div id="aba-acoes" class="tab-content"></div>
 </div>
 
 <script>
@@ -459,10 +461,10 @@
         const targetAba = document.getElementById(nomeAba);
         
         // Lógica de carregamento sob demanda para abas externas
-        if (nomeAba === 'aba-info') {
+        if (nomeAba === 'aba-info' || nomeAba === 'aba-acoes') {
             if (targetAba.innerHTML.trim() === "") {
             try {
-                const response = await fetch('info.html');
+                const response = await fetch(nomeAba === 'aba-info' ? 'info.html' : 'acoes.html');
                     if (!response.ok) throw new Error('Falha ao carregar arquivo');
                 const html = await response.text();
                 targetAba.innerHTML = html;
@@ -479,6 +481,23 @@
 
         targetAba.classList.add("active");
         evt.currentTarget.classList.add("active");
+    }
+
+    async function recarregarAbaAcoes() {
+        try {
+            // Recarrega o template HTML forçando a busca no servidor (cache bust)
+            const response = await fetch(`acoes.html?t=${Date.now()}`);
+            if (!response.ok) throw new Error('Falha ao buscar template');
+            const html = await response.text();
+            document.getElementById('aba-acoes').innerHTML = html;
+            
+            // Popula os dados da API logo em seguida
+            if (typeof carregarDadosAcoes === 'function') {
+                carregarDadosAcoes();
+            }
+        } catch (e) {
+            console.error("Erro ao atualizar aba de ações:", e);
+        }
     }
 
     function obterValorNumerico(valor) {

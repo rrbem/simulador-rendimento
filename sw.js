@@ -1,9 +1,10 @@
-// IMPORTANTE: Mude o número da versão (v15 -> v16) sempre que subir um novo ajuste
-const cacheName = 'simulador-v16';
+// IMPORTANTE: Mude o número da versão sempre que subir um novo ajuste
+const cacheName = 'simulador-v21';
 const assets = [
   './',
   './index.html',
   './info.html',
+  './acoes.html',
   './info.js',
   './manifest.json',
   './icon-192.png',
