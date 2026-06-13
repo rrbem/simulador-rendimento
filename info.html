@@ -2,6 +2,15 @@
 <p><strong>SELIC (<span id="info-selic">Carregando...</span>):</strong> É a taxa básica de juros da economia brasileira. Ela influencia todas as outras taxas de juros do país.</p>
 <p><strong>CDI (<span id="info-cdi">Carregando...</span>):</strong> O Certificado de Depósito Interbancário é uma taxa que os bancos usam para emprestar dinheiro entre si. Geralmente caminha muito próxima à Selic.</p>
 <p><strong>IPCA (<span id="info-ipca">Carregando...</span>):</strong> É o índice oficial de inflação do Brasil. Mede a variação de preços de um conjunto de produtos e serviços consumidos pelas famílias.</p>
+<p><strong>IGP-M (<span id="info-igpm">Carregando...</span>):</strong> Conhecido como a "inflação do aluguel", mede a variação de preços no atacado e varejo, sendo muito utilizado para reajuste de contratos imobiliários.</p>
+
+<div id="container-exemplo-igpm" style="display: none; margin: 15px 0 25px 20px; padding: 15px; background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 4px; font-size: 0.9em; border: 1px solid #fef3c7;">
+    <strong style="color: #92400e; display: block; margin-bottom: 5px;">💡 Exemplo Prático de Reajuste:</strong>
+    Se o seu aluguel hoje é de <strong>R$ 2.000,00</strong> e o IGP-M acumulado é de <strong id="ex-igpm-taxa">...</strong>:<br>
+    <span style="color: #666;">Cálculo: R$ 2.000,00 × (1 + <span id="ex-igpm-fator">...</span>)</span><br>
+    <strong style="font-size: 1.05em;">Novo valor do aluguel: <span id="ex-igpm-resultado" style="color: #b45309;">...</span></strong>
+</div>
+
 <p><strong>IR Regressivo:</strong> Para investimentos de renda fixa, a alíquota de imposto diminui conforme o tempo passa:</p>
 <ul>
     <li>Até 180 dias: 22,5%</li>
@@ -9,17 +18,82 @@
     <li>De 361 a 720 dias: 17,5%</li>
     <li>Acima de 720 dias: 15%</li>
 </ul>
+<style>
+    .cotacoes-container {
+        margin-top: 25px;
+        padding: 20px;
+        background: #f8fafc;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+    }
+    .cotacoes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 15px;
+        margin-top: 15px;
+    }
+    .cotacao-card {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid #edf2f7;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: transform 0.2s;
+    }
+    .cotacao-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+    .cotacao-label {
+        font-size: 0.85em;
+        color: #64748b;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+    .cotacao-valor {
+        font-size: 1.25em;
+        color: var(--primary-color);
+        font-weight: 800;
+    }
+    .cotacao-variacao {
+        font-size: 0.75em;
+        margin-top: 4px;
+        font-weight: 600;
+    }
+    .subida { color: #10b981; }
+    .descida { color: #ef4444; }
+</style>
 
-<div id="cotacoes" style="margin-top: 20px; padding: 15px; background: #f0f4f8; border-left: 4px solid var(--primary-color); border-radius: 4px;">
-    <h3 style="margin-top: 0;">Cotações em Tempo Real (BRL)</h3>
-    <p style="margin: 5px 0;">💵 <strong>Dólar:</strong> <span id="usd-val">Carregando...</span></p>
-    <p style="margin: 5px 0;">₿ <strong>Bitcoin:</strong> <span id="btc-val">Carregando...</span></p>
-    <small style="color: #666;">Fonte: AwesomeAPI</small>
+<div class="cotacoes-container">
+    <h3 style="margin-top: 0; font-size: 1.1em; color: var(--text-color);">Cotações em Tempo Real (BRL)</h3>
+    <div class="cotacoes-grid">
+        <div class="cotacao-card">
+            <span class="cotacao-label">💵 Dólar (USD)</span>
+            <span id="usd-val" class="cotacao-valor">...</span>
+            <span id="usd-pct" class="cotacao-variacao">...</span>
+        </div>
+        <div class="cotacao-card">
+            <span class="cotacao-label">💶 Euro (EUR)</span>
+            <span id="eur-val" class="cotacao-valor">...</span>
+            <span id="eur-pct" class="cotacao-variacao">...</span>
+        </div>
+        <div class="cotacao-card">
+            <span class="cotacao-label">₿ Bitcoin (BTC)</span>
+            <span id="btc-val" class="cotacao-valor" style="font-size: 1.1em;">...</span>
+            <span id="btc-pct" class="cotacao-variacao">...</span>
+        </div>
+    </div>
+    <div style="margin-top: 15px; text-align: right;">
+        <small style="color: #94a3b8;">Fonte: AwesomeAPI</small>
+    </div>
 </div>
 
 <div style="margin-top: 25px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-        <h3 style="font-size: 1.1em; color: var(--primary-color); margin: 0;">Variação do Dólar</h3>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <h3 style="font-size: 1.1em; color: var(--primary-color); margin: 0;">Histórico de Câmbio</h3>
         <div class="periodo-selector">
             <button class="btn-periodo active" data-dias="7" onclick="carregarCotacoes(7)">7D</button>
             <button class="btn-periodo" data-dias="15" onclick="carregarCotacoes(15)">15D</button>
@@ -28,7 +102,14 @@
             <button class="btn-periodo" data-dias="365" onclick="carregarCotacoes(365)">1A</button>
         </div>
     </div>
-    <div style="height: 220px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #eee;">
-        <canvas id="graficoDolarHist"></canvas>
+    
+    <h4 style="font-size: 0.9em; color: #64748b; margin-bottom: 8px;">Dólar Americano (USD/BRL)</h4>
+    <div style="height: 180px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #eee; margin-bottom: 20px;">
+        <canvas id="graficoUSDHist"></canvas>
+    </div>
+
+    <h4 style="font-size: 0.9em; color: #64748b; margin-bottom: 8px;">Euro (EUR/BRL)</h4>
+    <div style="height: 180px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #eee;">
+        <canvas id="graficoEURHist"></canvas>
     </div>
 </div>

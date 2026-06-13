@@ -399,7 +399,11 @@
     }
 
     function obterValorNumerico(valor) {
-        return parseFloat(valor.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+        if (!valor) return 0;
+        // Remove pontos de milhar, substitui vírgula por ponto
+        const limpo = valor.replace(/\./g, '').replace(',', '.');
+        const num = parseFloat(limpo);
+        return isNaN(num) ? 0 : num;
     }
 
     function formatarMoedaInput(valor) {
@@ -415,7 +419,7 @@
         // Permite até 4 dígitos (ex: 2250 -> 22,50)
         num = num.slice(0, 4);
         if (num.length <= 1) return num;
-        if (num.length === 2) return num;
+        if (num.length === 2) return num; // Caso o usuário digite apenas dois números
         let inteiros = num.slice(0, -2);
         let decimais = num.slice(-2);
         return inteiros + ',' + decimais;
@@ -455,7 +459,9 @@
             const dados = JSON.parse(dadosStr);
             Object.keys(dados).forEach(id => {
                 const el = document.getElementById(id);
-                if (el) el.value = dados[id];
+                if (el && dados[id] !== undefined) {
+                    el.value = dados[id];
+                }
             });
         }
     }
