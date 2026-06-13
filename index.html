@@ -265,13 +265,74 @@
             background: var(--primary-color);
             color: white;
         }
+
+        /* Estilo para Notificação de Atualização */
+        #update-notification {
+            display: none;
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            color: #0369a1;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 0.9em;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            animation: slideDown 0.4s ease-out;
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .btn-update {
+            background-color: #0ea5e9;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .btn-update:hover { background-color: #0284c7; }
     </style>
 
     <link rel="manifest" href="manifest.json">
     <script>
-      if('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js');
-      }
+        let registrationWaiting;
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js').then(reg => {
+                // Verifica se já existe um worker esperando (ex: refresh manual)
+                if (reg.waiting) {
+                    registrationWaiting = reg.waiting;
+                    document.getElementById('update-notification').style.display = 'block';
+                }
+                // Escuta por novas atualizações encontradas
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            registrationWaiting = newWorker;
+                            document.getElementById('update-notification').style.display = 'block';
+                        }
+                    });
+                });
+            });
+            // Recarrega a página automaticamente quando o novo service worker assumir o controle
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                window.location.reload();
+            });
+        }
+
+        function handleUpdate() {
+            if (registrationWaiting) {
+                registrationWaiting.postMessage({ type: 'SKIP_WAITING' });
+            } else {
+                window.location.reload();
+            }
+        }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="info.js" defer></script>
@@ -280,6 +341,11 @@
 <body>
 
 <div class="container">
+    <div id="update-notification">
+        🚀 Uma nova versão está disponível!
+        <button class="btn-update" onclick="handleUpdate()">Atualizar agora</button>
+    </div>
+
     <header class="header-container">
         <img src="icon-192.png" alt="Ícone Financeiro">
         <h1 id="main-title">Simulador de Renda Detalhado</h1>
