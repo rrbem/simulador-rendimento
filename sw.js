@@ -1,4 +1,5 @@
-const cacheName = 'simulador-v15';
+// IMPORTANTE: Mude o número da versão (v15 -> v16) sempre que subir um novo ajuste
+const cacheName = 'simulador-v16';
 const assets = [
   './',
   './index.html',
@@ -13,7 +14,6 @@ const assets = [
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(cacheName).then(cache => cache.addAll(assets))
-      .then(() => self.skipWaiting()) // Força o novo SW a se tornar ativo
   );
 });
 
@@ -27,4 +27,11 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   e.respondWith(caches.match(e.request).then(res => res || fetch(e.request)));
+});
+
+// Escuta o comando 'SKIP_WAITING' enviado pelo botão de atualizar na página
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
