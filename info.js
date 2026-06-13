@@ -1,13 +1,13 @@
 // Escuta o evento de ativação da aba para carregar os dados
 // Usamos delegação de evento no documento para garantir que funcione após o fetch do HTML
 document.addEventListener('abaAtivada', (e) => {
-    if (e.target.id === 'aba-info') {
+    if (e && e.target && e.target.id === 'aba-info') {
         carregarCotacoes();
     }
-    if (e.target.id === 'aba-acoes') {
+    if (e && e.target && e.target.id === 'aba-acoes') {
         carregarDadosAcoes();
     }
-    if (e.target.id === 'aba-economia') {
+    if (e && e.target && e.target.id === 'aba-economia') {
         const elGasto = document.getElementById('fire-gasto');
         const elRenda = document.getElementById('fire-renda');
         const elValorAtual = document.getElementById('fire-valor-atual');
@@ -16,7 +16,9 @@ document.addEventListener('abaAtivada', (e) => {
         [elGasto, elRenda, elValorAtual].forEach(el => {
             if (el && !el.dataset.hookedMask) {
                 el.addEventListener('input', function() {
-                    this.value = formatarMoedaInput(this.value);
+                    if (typeof formatarMoedaInput === 'function') {
+                        this.value = formatarMoedaInput(this.value);
+                    }
                 });
                 el.dataset.hookedMask = "true";
             }
@@ -26,8 +28,9 @@ document.addEventListener('abaAtivada', (e) => {
         if (window.salarioMinimoAtual) {
             [elGasto, elRenda, elValorAtual].forEach(el => {
                 if (el && !el.dataset.manual) {
-                    // Formata o salário mínimo para o padrão de máscara do input
-                    el.value = formatarMoedaInput((window.salarioMinimoAtual * 100).toFixed(0));
+                    if (typeof formatarMoedaInput === 'function') {
+                        el.value = formatarMoedaInput((window.salarioMinimoAtual * 100).toFixed(0));
+                    }
                     if (!el.dataset.hooked) {
                         el.addEventListener('input', () => el.dataset.manual = "true");
                         el.dataset.hooked = "true";
@@ -36,7 +39,9 @@ document.addEventListener('abaAtivada', (e) => {
             });
         }
 
-        initFireChart();
+        if (typeof Chart !== 'undefined') {
+            initFireChart();
+        }
         calcularFIRE();
         calcularAlocacao();
     }
@@ -258,14 +263,14 @@ async function carregarCotacoes(dias = 7) {
 /**
  * Lógica da Aba Economia Criativa (FIRE)
  */
-function calcularFIRE() {
+window.calcularFIRE = function() {
     const elGasto = document.getElementById('fire-gasto');
     const elInflacao = document.getElementById('fire-inflacao');
     const elAnos = document.getElementById('fire-anos');
     const elValorAtual = document.getElementById('fire-valor-atual');
 
     // Se temos o IPCA global e o usuário ainda não mexeu no campo, atualiza automaticamente
-    if (elInflacao && window.ipcaAtual && !elInflacao.dataset.manual) {
+    if (elInflacao && window.ipcaAtual !== undefined && !elInflacao.dataset.manual) {
         elInflacao.value = window.ipcaAtual.toFixed(2);
         // Se o usuário digitar manualmente, marcamos como manual para não sobrescrever mais
         if (!elInflacao.dataset.hooked) {
@@ -275,7 +280,7 @@ function calcularFIRE() {
     }
 
     if (elGasto) {
-        const gastoMensal = obterValorNumerico(elGasto.value) || 0;
+        const gastoMensal = typeof obterValorNumerico === 'function' ? obterValorNumerico(elGasto.value) : 0;
         const fireNumero = (gastoMensal * 12) * 25;
         document.getElementById('fire-resultado').innerText = fireNumero.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
@@ -283,17 +288,17 @@ function calcularFIRE() {
     if (elInflacao && elAnos && elValorAtual) {
         const inflacaoAnual = parseFloat(elInflacao.value) || 0;
         const anos = parseFloat(elAnos.value) || 0;
-        const valorPresente = obterValorNumerico(elValorAtual.value) || 0;
+        const valorPresente = typeof obterValorNumerico === 'function' ? obterValorNumerico(elValorAtual.value) : 0;
         const valorFuturo = valorPresente / Math.pow(1 + (inflacaoAnual / 100), anos);
         document.getElementById('inflacao-resultado').innerText = valorFuturo.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 }
 
-function calcularAlocacao() {
+window.calcularAlocacao = function() {
     const elRenda = document.getElementById('fire-renda');
     if (!elRenda) return;
 
-    const renda = obterValorNumerico(elRenda.value) || 0;
+    const renda = typeof obterValorNumerico === 'function' ? obterValorNumerico(elRenda.value) : 0;
     const v50 = renda * 0.5;
     const v30 = renda * 0.3;
     const v20 = renda * 0.2;
@@ -309,9 +314,9 @@ function calcularAlocacao() {
     if (el20) el20.innerText = fmt(v20);
 }
 
-function initFireChart() {
+window.initFireChart = function() {
     const canvas = document.getElementById('firePieChart');
-    if (!canvas) return;
+    if (!canvas || typeof Chart === 'undefined') return;
     
     const ctx = canvas.getContext('2d');
     if (window.fireChartObj) window.fireChartObj.destroy();
