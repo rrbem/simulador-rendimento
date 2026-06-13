@@ -394,8 +394,15 @@
                 <div class="taxa-info" id="taxaInfo">Buscando taxa do governo...</div>
             </div>
             <div class="input-group">
-                <label>Período (Meses)</label>
-                <input type="text" id="periodoMeses" placeholder="1" data-type="numero" value="1">
+                <label>Período</label>
+                <div style="display: flex; gap: 5px;">
+                    <input type="text" id="periodoMeses" placeholder="1" data-type="numero" value="1" style="flex: 1;">
+                    <select id="periodoUnidade" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em; cursor: pointer; background: white;">
+                        <option value="dias">Dias</option>
+                        <option value="meses" selected>Meses</option>
+                        <option value="anos">Anos</option>
+                    </select>
+                </div>
             </div>
             <div class="input-group">
                 <label>Alíquota de IR (% ou "0" para Regressiva)</label>
@@ -528,7 +535,7 @@
     }
 
     function formatarNumeroInput(valor) {
-        return valor.replace(/[^\d]/g, '').slice(0, 3);
+        return valor.replace(/[^\d]/g, '').slice(0, 5);
     }
 
     function resetarCampos() {
@@ -540,6 +547,7 @@
             document.getElementById('retiradaMensal').value = '0,00';
             document.getElementById('taxaAnual').value = ''; 
             document.getElementById('periodoMeses').value = '1';
+            document.getElementById('periodoUnidade').value = 'meses';
             document.getElementById('aliquotaIR').value = '0,00';
             
             carregarTaxaDoGoverno();
@@ -547,10 +555,11 @@
     }
 
     function salvarDadosLocal() {
-        const campos = ['valorInicial', 'aporteMensal', 'retiradaMensal', 'taxaAnual', 'periodoMeses', 'aliquotaIR'];
+        const campos = ['valorInicial', 'aporteMensal', 'retiradaMensal', 'taxaAnual', 'periodoMeses', 'aliquotaIR', 'periodoUnidade'];
         const dados = {};
         campos.forEach(id => {
-            dados[id] = document.getElementById(id).value;
+            const el = document.getElementById(id);
+            dados[id] = el.value;
         });
         localStorage.setItem('simulador_dados', JSON.stringify(dados));
     }
@@ -600,6 +609,12 @@
             });
         });
         carregarTaxaDoGoverno();
+
+        // Listener para recalcular se mudar de Meses para Anos
+        const selUnidade = document.getElementById('periodoUnidade');
+        if (selUnidade) {
+            selUnidade.addEventListener('change', () => { salvarDadosLocal(); calcular(); });
+        }
     });
 
     async function carregarTaxaDoGoverno() {
@@ -635,7 +650,14 @@
         const retirada = obterValorNumerico(document.getElementById('retiradaMensal').value) || 0;
         const taxaAnual = obterValorNumerico(document.getElementById('taxaAnual').value) || 0;
         const mesesRaw = parseInt(document.getElementById('periodoMeses').value.replace(/\D/g, '')) || 0;
-        const meses = Math.min(mesesRaw, 480); // Limite de 40 anos
+        const unidade = document.getElementById('periodoUnidade').value;
+        
+        let mesesCalculo;
+        if (unidade === 'anos') mesesCalculo = mesesRaw * 12;
+        else if (unidade === 'dias') mesesCalculo = mesesRaw / 30;
+        else mesesCalculo = mesesRaw;
+
+        const meses = Math.min(mesesCalculo, 480); // Limite de 40 anos
         const aliquota = obterValorNumerico(document.getElementById('aliquotaIR').value) || 0;
         
         const usarRegressiva = aliquota === 0;
@@ -655,7 +677,11 @@
         let dadosPoupanca = [saldoPoupanca];
         let labels = ["Início"];
         
-        for (let i = 1; i <= meses; i++) {
+        const numIteracoes = Math.ceil(meses);
+
+        for (let i = 1; i <= numIteracoes; i++) {
+            const proporcaoPeriodo = (i <= Math.floor(meses)) ? 1 : (meses % 1);
+
             // Validação: Não permite que a retirada exceda o saldo disponível
             const retiradaReal = Math.min(retirada, saldoBruto + aporte);
             const retiradaPoupancaReal = Math.min(retirada, saldoPoupanca + aporte);
@@ -665,7 +691,7 @@
             
             totalInvestidoAcumulado += (aporte - retiradaReal);
             
-            let jurosMesBruto = baseCalculo * taxaMensal;
+            let jurosMesBruto = baseCalculo * (Math.pow(1 + taxaMensal, proporcaoPeriodo) - 1);
             saldoBruto = baseCalculo + jurosMesBruto;
 
             // Cálculo correto do Leão: Alíquota sobre o lucro acumulado total até o mês i
@@ -677,8 +703,8 @@
             // Juros líquido é a variação do saldo líquido descontando aportes/retiradas
             const jurosMesLiquido = saldoLiquido - lastSaldoLiquido - (aporte - retiradaReal);
 
-            // Evolução Poupança (Isenta de IR)
-            saldoPoupanca = basePoupanca * (1 + taxaPoupancaMensal);
+            // Evolução Poupança (Isenta de IR) proporcional
+            saldoPoupanca = basePoupanca * Math.pow(1 + taxaPoupancaMensal, proporcaoPeriodo);
 
             htmlTabela += `<tr>\n                <td>${i}</td>\n                <td>${formatarMoeda(aporte)}</td>\n                <td>${formatarMoeda(retiradaReal)}</td>\n                <td>${formatarMoeda(jurosMesBruto)}</td>\n                <td>${formatarMoeda(jurosMesLiquido)}</td>\n                <td>${formatarMoeda(saldoBruto)}</td>\n                <td>${formatarMoeda(saldoLiquido)}</td>\n            </tr>`;
             
@@ -807,7 +833,7 @@
         csv += 'Aporte Mensal (R$)' + sep + document.getElementById('aporteMensal').value + '\n';
         csv += 'Retirada Mensal (R$)' + sep + document.getElementById('retiradaMensal').value + '\n';
         csv += 'Taxa de Juros Anual (%)' + sep + document.getElementById('taxaAnual').value + '\n';
-        csv += 'Período (Meses)' + sep + document.getElementById('periodoMeses').value + '\n';
+        csv += 'Período' + sep + document.getElementById('periodoMeses').value + ' ' + document.getElementById('periodoUnidade').value + '\n';
         csv += 'Alíquota de IR (%)' + sep + document.getElementById('aliquotaIR').value + '\n\n';
 
         csv += 'RESUMO FINAL\n';

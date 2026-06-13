@@ -1,5 +1,5 @@
 // IMPORTANTE: Mude o número da versão sempre que subir um novo ajuste
-const cacheName = 'simulador-v21';
+const cacheName = 'simulador-v25';
 const assets = [
   './',
   './index.html',
