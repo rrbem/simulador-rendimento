@@ -158,15 +158,18 @@ async function carregarCotacoes(dias = 7) {
         // Histórico de 7 dias para o gráfico
         const canvasUSD = document.getElementById('graficoUSDHist');
         const canvasEUR = document.getElementById('graficoEURHist');
+        const canvasBTC = document.getElementById('graficoBTCHist');
 
-        if (canvasUSD && canvasEUR) {
-            const [resUSD, resEUR] = await Promise.all([
+        if (canvasUSD && canvasEUR && canvasBTC) {
+            const [resUSD, resEUR, resBTC] = await Promise.all([
                 fetch(`https://economia.awesomeapi.com.br/json/daily/USD-BRL/${dias}`),
-                fetch(`https://economia.awesomeapi.com.br/json/daily/EUR-BRL/${dias}`)
+                fetch(`https://economia.awesomeapi.com.br/json/daily/EUR-BRL/${dias}`),
+                fetch(`https://economia.awesomeapi.com.br/json/daily/BTC-BRL/${dias}`)
             ]);
             
             const dataHistUSD = await resUSD.json();
             const dataHistEUR = await resEUR.json();
+            const dataHistBTC = await resBTC.json();
 
             const extrairDados = (data) => {
                 const labels = data.map(item => {
@@ -182,6 +185,7 @@ async function carregarCotacoes(dias = 7) {
 
             const usd = extrairDados(dataHistUSD);
             const eur = extrairDados(dataHistEUR);
+            const btc = extrairDados(dataHistBTC);
 
             const criarGrafico = (canvas, label, dados, cor, chartKey) => {
                 if (window[chartKey]) window[chartKey].destroy();
@@ -210,6 +214,7 @@ async function carregarCotacoes(dias = 7) {
 
             criarGrafico(canvasUSD, 'Dólar (R$)', usd, '#2F5597', 'chartUSD');
             criarGrafico(canvasEUR, 'Euro (R$)', eur, '#f59e0b', 'chartEUR');
+            criarGrafico(canvasBTC, 'Bitcoin (R$)', btc, '#f7931a', 'chartBTC');
         }
     } catch (error) {
         console.error("Erro ao buscar cotações:", error);
