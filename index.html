@@ -266,19 +266,20 @@
             color: white;
         }
 
-        /* Estilo para Notificação de Atualização */
+        /* Estilo para Notificação de Atualização (Discreto) */
         #update-notification {
             display: none;
-            background: #f0f9ff;
-            border: 1px solid #bae6fd;
-            color: #0369a1;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            background: #fff8e1;
+            border: 1px solid #ffe082;
+            color: #795548;
+            padding: 8px 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
             text-align: center;
-            font-size: 0.9em;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            font-size: 0.85em;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             animation: slideDown 0.4s ease-out;
+            border-left: 4px solid #ffb300;
         }
         @keyframes slideDown {
             from { transform: translateY(-10px); opacity: 0; }
@@ -302,35 +303,51 @@
     <script>
         let registrationWaiting;
 
+        function showUpdateUI() {
+            const div = document.getElementById('update-notification');
+            if (div) div.style.display = 'block';
+        }
+
         if ('serviceWorker' in navigator) {
+            // Registra e solicita ao navegador que verifique atualizações no servidor
             navigator.serviceWorker.register('./sw.js').then(reg => {
-                // Verifica se já existe um worker esperando (ex: refresh manual)
+                reg.update(); 
+
                 if (reg.waiting) {
                     registrationWaiting = reg.waiting;
-                    document.getElementById('update-notification').style.display = 'block';
+                    showUpdateUI();
                 }
-                // Escuta por novas atualizações encontradas
+
                 reg.addEventListener('updatefound', () => {
                     const newWorker = reg.installing;
                     newWorker.addEventListener('statechange', () => {
                         if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
                             registrationWaiting = newWorker;
-                            document.getElementById('update-notification').style.display = 'block';
+                            showUpdateUI();
                         }
                     });
                 });
             });
-            // Recarrega a página automaticamente quando o novo service worker assumir o controle
+
             navigator.serviceWorker.addEventListener('controllerchange', () => {
                 window.location.reload();
             });
         }
 
-        function handleUpdate() {
+        async function handleUpdate() {
+            // AÇÃO NUCLEAR: Limpa todos os caches e remove o Service Worker para garantir versão limpa
+            if ('caches' in window) {
+                const names = await caches.keys();
+                for (const name of names) await caches.delete(name);
+            }
+
             if (registrationWaiting) {
                 registrationWaiting.postMessage({ type: 'SKIP_WAITING' });
             } else {
-                window.location.reload();
+                // Fallback: Desregistra todos os SWs e recarrega forçadamente do servidor
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                for (const reg of registrations) await reg.unregister();
+                window.location.reload(true);
             }
         }
     </script>
@@ -342,8 +359,8 @@
 
 <div class="container">
     <div id="update-notification">
-        🚀 Uma nova versão está disponível!
-        <button class="btn-update" onclick="handleUpdate()">Atualizar agora</button>
+        ✨ Uma nova versão do simulador está disponível. 
+        <button class="btn-update" onclick="handleUpdate()">Descartar cache e atualizar</button>
     </div>
 
     <header class="header-container">
