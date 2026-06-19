@@ -3,6 +3,9 @@
 document.addEventListener('abaAtivada', (e) => {
     if (e && e.target && e.target.id === 'aba-info') {
         carregarCotacoes();
+        configurarCampoIr();
+        atualizarGraficoIr();
+        ajustarAlturaGraficoAsync();
     }
     if (e && e.target && e.target.id === 'aba-acoes') {
         carregarDadosAcoes();
@@ -258,6 +261,90 @@ async function carregarCotacoes(dias = 7) {
     } catch (error) {
         console.error("Erro ao buscar cotações:", error);
     }
+}
+
+function parseBRLCurrency(valor) {
+    if (!valor) return 0;
+    const texto = String(valor)
+        .replace(/[R$\s]/g, '')
+        .replace(/\./g, '')
+        .replace(/,/g, '.');
+    const num = parseFloat(texto);
+    return Number.isFinite(num) ? num : 0;
+}
+
+function configurarCampoIr() {
+    const inputIr = document.getElementById('ir-sim-valor');
+    const resetIr = document.getElementById('ir-sim-reset');
+    if (!inputIr || inputIr.dataset.hooked) return;
+
+    inputIr.addEventListener('input', () => {
+        atualizarGraficoIr();
+    });
+    if (resetIr) {
+        resetIr.addEventListener('click', () => {
+            inputIr.value = 'R$ 1.000,00';
+            atualizarGraficoIr();
+        });
+    }
+    inputIr.dataset.hooked = 'true';
+}
+
+function ajustarAlturaGrafico() {
+    const tabela = document.querySelector('.ir-table-side');
+    const grafico = document.querySelector('.ir-chart-card');
+    if (!tabela || !grafico) return;
+
+    // Remove as restrições de altura para deixar o conteúdo respirar
+    grafico.style.height = 'auto';
+    grafico.style.maxHeight = 'none';
+    grafico.style.minHeight = 'auto';
+    
+    const alturaTabela = tabela.getBoundingClientRect().height;
+    const alturaGrafico = grafico.getBoundingClientRect().height;
+    
+    // Se o gráfico cabe na altura da tabela, força a altura
+    if (alturaGrafico <= alturaTabela) {
+        grafico.style.height = `${alturaTabela}px`;
+        grafico.style.maxHeight = `${alturaTabela}px`;
+    }
+}
+
+function ajustarAlturaGraficoAsync() {
+    requestAnimationFrame(() => ajustarAlturaGrafico());
+    setTimeout(() => ajustarAlturaGrafico(), 50);
+}
+
+window.addEventListener('resize', () => {
+    ajustarAlturaGraficoAsync();
+});
+
+function atualizarGraficoIr() {
+    const elBruto = document.getElementById('ir-sim-valor');
+    const title = document.getElementById('ir-sim-title');
+    const barras = document.querySelectorAll('.ir-sim-bar');
+    const bruto = parseBRLCurrency(elBruto ? elBruto.value : '');
+    if (title) {
+        title.innerText = `Simulação de IR sobre ${bruto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
+    }
+
+    const valores = Array.from(barras).map(bar => {
+        const taxa = parseFloat(bar.dataset.taxa) || 0;
+        return bruto * (taxa / 100);
+    });
+    const maxValor = Math.max(...valores, 1);
+
+    barras.forEach((bar, idx) => {
+        const valor = valores[idx] || 0;
+        const taxa = parseFloat(bar.dataset.taxa) || 0;
+        const pct = Math.round((valor / maxValor) * 100);
+        const fillEl = bar.querySelector('.ir-sim-fill');
+
+        bar.style.setProperty('--bar-percent', `${pct}%`);
+        if (fillEl) {
+            fillEl.innerText = valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+    });
 }
 
 /**
