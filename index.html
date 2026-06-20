@@ -127,12 +127,19 @@
             color: white;
         }
 
-        .btn-add:hover {
+        .btn-decrease {
+            background-color: #60a5fa;
+            color: white;
+        }
+
+        .btn-add:hover,
+        .btn-decrease:hover {
             background-color: #3b82f6;
             transform: translateY(-1px);
         }
 
-        .btn-add:active {
+        .btn-add:active,
+        .btn-decrease:active {
             transform: scale(0.96);
             box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);
         }
@@ -469,7 +476,8 @@
 
         <div class="buttons-group">
             <button class="btn-calc" onclick="calcular()">Calcular Resultados</button>
-            <button class="btn-add" onclick="incrementarPeriodo()">+1 Mês</button>
+            <button class="btn-add" onclick="incrementarPeriodo()">+1P</button>
+            <button class="btn-decrease" onclick="decrementarPeriodo()">-1P</button>
             <button class="btn-reset" onclick="resetarCampos()">Limpar Campos</button>
             <button class="btn-export" onclick="exportarExcel()">📊 Exportar Excel</button>
         </div>
@@ -609,6 +617,8 @@
             document.getElementById('periodoUnidade').value = 'meses';
             document.getElementById('aliquotaIR').value = '0,00';
             
+            salvarDadosLocal();
+
             carregarTaxaDoGoverno();
         }
     }
@@ -621,15 +631,15 @@
         calcular();
     }
 
-    function atualizarTextoBotoesPeriodo() {
-        const sel = document.getElementById('periodoUnidade');
-        const addBtn = document.querySelector('.btn-add');
-        if (!sel || !addBtn) return;
-
-        const map = { dias: 'Dia', meses: 'Mês', anos: 'Ano' };
-        const label = map[sel.value] || 'Mês';
-        addBtn.innerText = `+1 ${label}`;
+    function decrementarPeriodo() {
+        const periodoInput = document.getElementById('periodoMeses');
+        const mesesAtuais = parseInt(periodoInput.value.replace(/\D/g, '')) || 0;
+        periodoInput.value = String(Math.max(1, mesesAtuais - 1));
+        salvarDadosLocal();
+        calcular();
     }
+
+    
 
     function salvarDadosLocal() {
         const campos = ['valorInicial', 'aporteMensal', 'retiradaMensal', 'taxaAnual', 'periodoMeses', 'aliquotaIR', 'periodoUnidade'];
@@ -668,7 +678,6 @@
         document.getElementById('main-title').innerText = novoTitulo;
 
         carregarDadosLocal();
-        atualizarTextoBotoesPeriodo();
 
         const campos = document.querySelectorAll('input[data-type]');
         campos.forEach(campo => {
@@ -691,7 +700,7 @@
         // Listener para recalcular se mudar de Meses para Anos
         const selUnidade = document.getElementById('periodoUnidade');
         if (selUnidade) {
-            selUnidade.addEventListener('change', () => { atualizarTextoBotoesPeriodo(); salvarDadosLocal(); calcular(); });
+            selUnidade.addEventListener('change', () => { salvarDadosLocal(); calcular(); });
         }
     });
 
