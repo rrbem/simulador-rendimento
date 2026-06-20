@@ -1034,41 +1034,73 @@
         const ctx = document.getElementById('graficoEvolucao').getContext('2d');
         if (meuGrafico) meuGrafico.destroy();
 
-        const linhasMudanca = (pontosMudancaAliquota || []).filter(n => n >= 1 && n < labels.length);
         const pluginLinhaIr = {
             id: 'irChangeLine',
             beforeDraw(chart) {
-                if (!linhasMudanca || linhasMudanca.length === 0) return;
+                if (!pontosMudancaAliquota || pontosMudancaAliquota.length === 0) return;
                 const ctx = chart.ctx;
                 const xScale = chart.scales.x;
                 const yScale = chart.scales.y;
                 const top = yScale.top;
                 const bottom = yScale.bottom;
 
-                const pontoMeta = chart.getDatasetMeta(0).data;
-                linhasMudanca.forEach((index) => {
-                    const ponto = pontoMeta[index];
-                    const x = ponto ? ponto.x : (typeof xScale.getPixelForValue === 'function' ? xScale.getPixelForValue(labels[index]) : xScale.getPixelForTick(index));
+                const totalTicks = labels.length - 1;
+                const boundaries = [0];
+                if (totalTicks >= 6) boundaries.push(6);
+                if (totalTicks >= 12) boundaries.push(12);
+                if (totalTicks >= 24) boundaries.push(24);
+                if (boundaries[boundaries.length - 1] < totalTicks) {
+                    boundaries.push(totalTicks);
+                }
 
+                const pontoMeta = chart.getDatasetMeta(0).data;
+                const getPixel = (idx) => {
+                    const floor = Math.floor(idx);
+                    const ceil = Math.ceil(idx);
+                    const pFloor = pontoMeta[floor] ? pontoMeta[floor].x : xScale.getPixelForTick(floor);
+                    const pCeil = pontoMeta[ceil] ? pontoMeta[ceil].x : xScale.getPixelForTick(ceil);
+                    return pFloor + (pCeil - pFloor) * (idx - floor);
+                };
+
+                // Desenha as linhas verticais vermelhas tracejadas nos limites de corte
+                boundaries.forEach((b) => {
+                    if (b === 0 || b === totalTicks) return;
+                    const x = getPixel(b);
                     if (!Number.isFinite(x)) return;
 
                     ctx.save();
-                    ctx.strokeStyle = 'rgba(239, 68, 68, 0.65)';
-                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = 'rgba(239, 68, 68, 0.55)';
+                    ctx.lineWidth = 1.5;
                     ctx.setLineDash([4, 4]);
                     ctx.beginPath();
                     ctx.moveTo(x, top);
                     ctx.lineTo(x, bottom);
                     ctx.stroke();
                     ctx.restore();
-
-                    ctx.save();
-                    ctx.fillStyle = 'rgba(239, 68, 68, 0.85)';
-                    ctx.font = '600 11px "Segoe UI", sans-serif';
-                    ctx.textAlign = 'center';
-                    ctx.fillText(`IR ${calcularAliquotaRegressiva(index)}%`, x, top + 14);
-                    ctx.restore();
                 });
+
+                // Desenha as labels centralizadas nos respectivos intervalos de alíquota
+                for (let i = 0; i < boundaries.length - 1; i++) {
+                    const start = boundaries[i];
+                    const end = boundaries[i + 1];
+                    const mid = start + (end - start) / 2;
+                    const x = getPixel(mid);
+                    const startX = getPixel(start);
+                    const endX = getPixel(end);
+                    const widthPx = endX - startX;
+
+                    // Apenas desenha se o espaço em pixels for suficiente para não encavalar
+                    if (widthPx > 35 && Number.isFinite(x)) {
+                        const aliq = calcularAliquotaRegressiva(end);
+                        const aliqText = String(aliq).replace('.', ',');
+                        ctx.save();
+                        ctx.fillStyle = 'rgba(220, 38, 38, 0.9)';
+                        ctx.font = '600 11px "Plus Jakarta Sans", "Segoe UI", sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(`IR ${aliqText}%`, x, top + 14);
+                        ctx.restore();
+                    }
+                }
             }
         };
 
