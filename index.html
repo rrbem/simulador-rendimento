@@ -13,6 +13,10 @@
 
       gtag('config', 'G-6HQMKR4FHB');
     </script>
+    <!-- Google Fonts para Tipografia Premium -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-color: #2F5597;
@@ -22,10 +26,14 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Plus Jakarta Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 20px;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Outfit', sans-serif;
         }
 
         .container {
@@ -40,74 +48,138 @@
         .header-container {
             display: flex;
             flex-direction: column;
-            background: linear-gradient(135deg, rgba(47, 85, 151, 0.15), rgba(16, 185, 129, 0.1));
-            border: 1px solid rgba(47, 85, 151, 0.15);
-            border-radius: 18px;
-            padding: 24px 24px 18px;
+            background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.12), transparent 400px),
+                        linear-gradient(135deg, #2F5597 0%, #1e3a6d 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 28px 28px 20px;
             margin-bottom: 25px;
-            box-shadow: 0 20px 45px rgba(47, 85, 151, 0.08);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px -15px rgba(30, 58, 138, 0.25);
         }
 
         .header-top {
             display: flex;
-            align-items: flex-start;
-            gap: 18px;
+            align-items: center;
+            gap: 22px;
             flex-wrap: wrap;
         }
 
         .header-top img {
-            width: 72px;
-            height: 72px;
-            border-radius: 18px;
-            border: 1px solid rgba(47, 85, 151, 0.16);
-            background: white;
+            width: 76px;
+            height: 76px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
             padding: 10px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .header-top img:hover {
+            transform: translateY(-3px) scale(1.05) rotate(3deg);
+            box-shadow: 0 16px 32px rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.45);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         .header-copy {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 6px;
             min-width: 0;
+            flex: 1;
         }
 
         .header-chip {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background: white;
-            color: #1e3a6d;
-            padding: 8px 14px;
+            background: rgba(255, 255, 255, 0.12);
+            color: #e0f2fe;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
             border-radius: 999px;
             font-weight: 700;
-            letter-spacing: 0.02em;
-            box-shadow: 0 8px 20px rgba(47, 85, 151, 0.08);
+            font-size: 0.72em;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
             width: fit-content;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
         .header-copy h1 {
-            color: #1e3a6d;
-            margin: 0;
-            font-size: clamp(1.75rem, 2.4vw, 2.6rem);
-            line-height: 1.05;
+            color: #ffffff;
+            margin: 2px 0 0 0;
+            font-size: clamp(1.8rem, 2.6vw, 2.8rem);
+            line-height: 1.1;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #ffffff 40%, #bfdbfe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .header-subtitle {
-            margin: 0;
-            color: #334155;
-            max-width: 780px;
-            font-size: 1em;
-            line-height: 1.6;
+            margin: 4px 0 0 0;
+            color: #d9e2ec;
+            max-width: 720px;
+            font-size: 0.92em;
+            line-height: 1.5;
+            font-weight: 400;
         }
 
         .header-meta {
-            margin-top: 18px;
-            padding-top: 16px;
-            border-top: 1px solid rgba(47, 85, 151, 0.12);
-            color: #64748b;
-            font-size: 0.85em;
+            margin-top: 20px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.82em;
             display: flex;
             justify-content: flex-end;
+            align-items: center;
+        }
+
+        .meta-date {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            padding: 5px 12px;
+            color: #e2e8f0;
+            font-weight: 500;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .meta-icon {
+            color: #bfdbfe;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 640px) {
+            .header-container {
+                padding: 20px 20px 16px;
+                border-radius: 20px;
+            }
+            .header-top {
+                gap: 16px;
+            }
+            .header-top img {
+                width: 60px;
+                height: 60px;
+                border-radius: 16px;
+                padding: 8px;
+            }
+            .header-meta {
+                margin-top: 16px;
+                padding-top: 12px;
+            }
         }
 
         .page-footer {
@@ -526,10 +598,16 @@
         <div class="header-top">
             <img src="icon-192.png" alt="Ícone Financeiro">
             <div class="header-copy">
-                <h1 id="main-title">Simulador de Renda</h1>
+                <h1 id="main-title">Simulador de <span class="text-gradient">Renda</span></h1>
+                <p class="header-subtitle">Projete a evolução do seu patrimônio com taxas reais, simule retiradas e planeje sua liberdade financeira.</p>
             </div>
         </div>
-        <div class="header-meta">Data de atualização: <span id="header-date">...</span></div>
+        <div class="header-meta">
+            <div class="meta-date">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="meta-icon"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <span>Atualizado em: <strong id="header-date">...</strong></span>
+            </div>
+        </div>
     </header>
 
     <nav class="tabs-nav">
@@ -776,7 +854,7 @@
         const hoje = new Date().toLocaleDateString('pt-BR');
         const novoTitulo = `Simulador de Renda Detalhado - ${hoje}`;
         document.title = novoTitulo;
-        document.getElementById('main-title').innerText = 'Simulador de Renda';
+        document.getElementById('main-title').innerHTML = 'Simulador de <span class="text-gradient">Renda</span>';
         const headerDate = document.getElementById('header-date');
         if (headerDate) headerDate.innerText = hoje;
 
