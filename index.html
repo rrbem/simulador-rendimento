@@ -103,49 +103,63 @@
             margin-bottom: 20px;
         }
 
-        .btn-calc {
-            padding: 12px;
-            background-color: var(--primary-color);
-            color: white;
+        .btn-calc,
+        .btn-add,
+        .btn-reset,
+        .btn-export {
+            padding: 10px 14px;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
-            font-weight: bold;
-            font-size: 1em;
+            font-weight: 600;
+            font-size: 0.95em;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            box-shadow: 0 5px 12px rgba(15, 23, 42, 0.08);
+        }
+
+        .btn-calc {
+            background-color: #2F5597;
+            color: white;
+        }
+
+        .btn-add {
+            background-color: #60a5fa;
+            color: white;
+        }
+
+        .btn-add:hover {
+            background-color: #3b82f6;
+            transform: translateY(-1px);
+        }
+
+        .btn-add:active {
+            transform: scale(0.96);
+            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);
         }
 
         .btn-calc:hover {
             background-color: #1e3a6d;
+            transform: translateY(-1px);
         }
 
         .btn-reset {
-            padding: 12px;
-            background-color: #e67e22;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1em;
+            background-color: #e2e8f0;
+            color: #1f2937;
         }
 
         .btn-reset:hover {
-            background-color: #d35400;
+            background-color: #cbd5e1;
+            transform: translateY(-1px);
         }
 
         .btn-export {
-            padding: 10px;
             background-color: #27ae60;
             color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.9em;
         }
 
         .btn-export:hover {
             background-color: #229954;
+            transform: translateY(-1px);
         }
 
         .summary-box {
@@ -172,39 +186,56 @@
 
         .table-container {
             overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
             margin-top: 20px;
         }
 
-        th {
-            background-color: var(--primary-color);
+        .table-container table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.05);
+        }
+
+        .table-container thead th {
+            text-align: center;
+            padding: 12px 14px;
+            background: linear-gradient(135deg, #2F5597 0%, #1e3a6d 100%);
             color: white;
-            padding: 12px;
-            text-align: center;
+            font-weight: 700;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            box-shadow: inset 0 -6px 12px rgba(0,0,0,0.03);
         }
 
-        td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            text-align: center;
+        .table-container thead th:first-child {
+            border-top-left-radius: 12px;
         }
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
+        .table-container thead th:last-child {
+            border-top-right-radius: 12px;
+        }
+
+        .table-container td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            text-align: center;
+            color: #334155;
+        }
+
+        .table-container tr:nth-child(even) {
+            background-color: #fbfdff;
         }
 
         .chart-container {
-            height: 400px;
+            height: 480px;
             margin: 30px 0;
-            padding: 20px;
-            background: #fff;
-            border-radius: 12px;
+            padding: 25px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 14px;
             border: 1px solid #e0e6ed;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
         }
 
         @media (max-width: 768px) {
@@ -438,6 +469,7 @@
 
         <div class="buttons-group">
             <button class="btn-calc" onclick="calcular()">Calcular Resultados</button>
+            <button class="btn-add" onclick="incrementarPeriodo()">+1 Mês</button>
             <button class="btn-reset" onclick="resetarCampos()">Limpar Campos</button>
             <button class="btn-export" onclick="exportarExcel()">📊 Exportar Excel</button>
         </div>
@@ -581,6 +613,24 @@
         }
     }
 
+    function incrementarPeriodo() {
+        const periodoInput = document.getElementById('periodoMeses');
+        const mesesAtuais = parseInt(periodoInput.value.replace(/\D/g, '')) || 0;
+        periodoInput.value = String(mesesAtuais + 1);
+        salvarDadosLocal();
+        calcular();
+    }
+
+    function atualizarTextoBotoesPeriodo() {
+        const sel = document.getElementById('periodoUnidade');
+        const addBtn = document.querySelector('.btn-add');
+        if (!sel || !addBtn) return;
+
+        const map = { dias: 'Dia', meses: 'Mês', anos: 'Ano' };
+        const label = map[sel.value] || 'Mês';
+        addBtn.innerText = `+1 ${label}`;
+    }
+
     function salvarDadosLocal() {
         const campos = ['valorInicial', 'aporteMensal', 'retiradaMensal', 'taxaAnual', 'periodoMeses', 'aliquotaIR', 'periodoUnidade'];
         const dados = {};
@@ -618,6 +668,7 @@
         document.getElementById('main-title').innerText = novoTitulo;
 
         carregarDadosLocal();
+        atualizarTextoBotoesPeriodo();
 
         const campos = document.querySelectorAll('input[data-type]');
         campos.forEach(campo => {
@@ -640,7 +691,7 @@
         // Listener para recalcular se mudar de Meses para Anos
         const selUnidade = document.getElementById('periodoUnidade');
         if (selUnidade) {
-            selUnidade.addEventListener('change', () => { salvarDadosLocal(); calcular(); });
+            selUnidade.addEventListener('change', () => { atualizarTextoBotoesPeriodo(); salvarDadosLocal(); calcular(); });
         }
     });
 
@@ -779,12 +830,57 @@
         document.getElementById('resRendimentoLiquido').innerText = formatarMoeda(rendimentoLiquido);
         document.getElementById('resMontanteLiquido').innerText = formatarMoeda(montanteLiquido);
 
-        renderizarGrafico(labels, dadosBrutos, dadosLiquidos, dadosPoupanca);
+        const pontosMudancaAliquota = [];
+        if (usarRegressiva) {
+            if (meses >= 6) pontosMudancaAliquota.push(6);
+            if (meses >= 12) pontosMudancaAliquota.push(12);
+            if (meses >= 24) pontosMudancaAliquota.push(24);
+        }
+
+        renderizarGrafico(labels, dadosBrutos, dadosLiquidos, dadosPoupanca, pontosMudancaAliquota);
     }
 
-    function renderizarGrafico(labels, brutos, liquidos, poupanca) {
+    function renderizarGrafico(labels, brutos, liquidos, poupanca, pontosMudancaAliquota) {
         const ctx = document.getElementById('graficoEvolucao').getContext('2d');
         if (meuGrafico) meuGrafico.destroy();
+
+        const linhasMudanca = (pontosMudancaAliquota || []).filter(n => n >= 1 && n < labels.length);
+        const pluginLinhaIr = {
+            id: 'irChangeLine',
+            beforeDraw(chart) {
+                if (!linhasMudanca || linhasMudanca.length === 0) return;
+                const ctx = chart.ctx;
+                const xScale = chart.scales.x;
+                const yScale = chart.scales.y;
+                const top = yScale.top;
+                const bottom = yScale.bottom;
+
+                const pontoMeta = chart.getDatasetMeta(0).data;
+                linhasMudanca.forEach((index) => {
+                    const ponto = pontoMeta[index];
+                    const x = ponto ? ponto.x : (typeof xScale.getPixelForValue === 'function' ? xScale.getPixelForValue(labels[index]) : xScale.getPixelForTick(index));
+
+                    if (!Number.isFinite(x)) return;
+
+                    ctx.save();
+                    ctx.strokeStyle = 'rgba(239, 68, 68, 0.65)';
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([4, 4]);
+                    ctx.beginPath();
+                    ctx.moveTo(x, top);
+                    ctx.lineTo(x, bottom);
+                    ctx.stroke();
+                    ctx.restore();
+
+                    ctx.save();
+                    ctx.fillStyle = 'rgba(239, 68, 68, 0.85)';
+                    ctx.font = '600 11px "Segoe UI", sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(`IR ${calcularAliquotaRegressiva(index)}%`, x, top + 14);
+                    ctx.restore();
+                });
+            }
+        };
 
         meuGrafico = new Chart(ctx, {
             type: 'line',
@@ -795,18 +891,23 @@
                         label: 'Montante Bruto',
                         data: brutos,
                         borderColor: '#2F5597',
+                        backgroundColor: 'rgba(47, 85, 151, 0.08)',
                         borderWidth: 3,
-                        fill: false,
+                        fill: true,
                         tension: 0.4,
-                        pointRadius: labels.length > 60 ? 0 : 3,
+                        pointRadius: labels.length > 60 ? 0 : 4,
+                        pointBackgroundColor: '#2F5597',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
                         pointHitRadius: 10
                     },
                     {
                         label: 'Montante Líquido',
                         data: liquidos,
                         borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.08)',
                         borderWidth: 3,
-                        fill: false,
+                        fill: true,
                         tension: 0.4,
                         pointRadius: 0
                     },
@@ -814,17 +915,20 @@
                         label: 'Poupança (Isenta)',
                         data: poupanca,
                         borderColor: '#f59e0b',
+                        backgroundColor: 'rgba(245, 158, 11, 0.05)',
                         borderDash: [10, 5],
                         borderWidth: 2,
-                        fill: false,
+                        fill: true,
                         tension: 0.4,
                         pointRadius: 0
                     }
                 ]
             },
+            plugins: [pluginLinhaIr],
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                animation: { duration: 750, easing: 'easeInOutQuart' },
                 interaction: {
                     mode: 'index',
                     intersect: false,
@@ -834,17 +938,24 @@
                         position: 'top',
                         labels: {
                             usePointStyle: true,
-                            padding: 20,
-                            font: { family: "'Segoe UI', sans-serif", size: 12 }
+                            padding: 25,
+                            font: { family: "'Segoe UI', sans-serif", size: 13, weight: '600' },
+                            color: '#334155',
+                            boxWidth: 12,
+                            boxHeight: 12
                         }
                     },
                     tooltip: {
-                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                        titleColor: '#333',
-                        bodyColor: '#666',
-                        borderColor: '#ddd',
+                        backgroundColor: 'rgba(30, 41, 59, 0.95)',
+                        titleColor: '#fff',
+                        titleFont: { size: 14, weight: 'bold' },
+                        bodyColor: '#e2e8f0',
+                        bodyFont: { size: 13 },
+                        borderColor: 'rgba(255, 255, 255, 0.2)',
                         borderWidth: 1,
-                        padding: 12,
+                        padding: 14,
+                        displayColors: true,
+                        boxPadding: 8,
                         callbacks: {
                             label: (context) => {
                                 let label = context.dataset.label || '';
@@ -856,12 +967,12 @@
                     }
                 },
                 scales: {
-                    x: { grid: { display: false }, ticks: { autoSkip: true, maxTicksLimit: 12 } },
+                    x: { grid: { display: false, drawBorder: false }, ticks: { autoSkip: true, maxTicksLimit: 12, color: '#64748b', font: { size: 12 } } },
                     y: { 
                         beginAtZero: false,
                         grace: '5%',
-                        grid: { color: 'rgba(0, 0, 0, 0.05)' },
-                        ticks: { callback: v => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }) }
+                        grid: { color: 'rgba(100, 116, 139, 0.08)', drawBorder: false },
+                        ticks: { callback: v => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }), color: '#64748b', font: { size: 12 } }
                     }
                 }
             }
