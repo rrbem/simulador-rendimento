@@ -1,0 +1,235 @@
+<style>
+    .amort-container { padding: 5px; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .amort-card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border: 1px solid #e0e6ed;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    }
+    .amort-title { color: #1e3a6d; margin-top: 0; display: flex; align-items: center; gap: 10px; }
+    .amort-input-group { margin: 15px 0; }
+    .amort-input-group label { display: block; margin-bottom: 5px; font-size: 0.9em; font-weight: 600; color: #475569; }
+    .amort-input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 0.95em; }
+    .amort-select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 0.95em; background: #fff; cursor: pointer; }
+
+    .grid-amort { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+
+    .amort-result-banner {
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        border-left: 5px solid #16a34a;
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 20px;
+        color: #14532d;
+    }
+    .amort-result-banner.investir {
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        border-left-color: #2563eb;
+        color: #1e3a8a;
+    }
+    .amort-result-highlight { font-size: 1.4em; font-weight: 800; display: block; margin: 5px 0; }
+
+    .grid-comparison {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+    .comp-card {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 20px;
+        transition: transform 0.2s;
+    }
+    .comp-card:hover { transform: translateY(-2px); }
+    .comp-card.active-scenario {
+        border-color: #2F5597;
+        box-shadow: 0 4px 12px rgba(47, 85, 151, 0.08);
+    }
+    .comp-card h4 { margin-top: 0; color: #1e3a6d; font-size: 1.1em; display: flex; align-items: center; gap: 8px; }
+    .comp-value-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px dashed #e2e8f0;
+        font-size: 0.9em;
+    }
+    .comp-value-row:last-child { border-bottom: none; }
+    .comp-value-row strong { color: #1e293b; }
+    .comp-highlight-val { font-size: 1.25em; font-weight: 700; color: #2F5597; }
+
+    .collapsible-container { margin-top: 20px; }
+    .collapsible-trigger {
+        background: #e2e8f0;
+        color: #334155;
+        padding: 10px 15px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.9em;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+    }
+    .collapsible-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+    }
+    .collapsible-content.expanded {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
+    .amort-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85em; }
+    .amort-table th { background: #2F5597; color: white; padding: 8px; text-align: center; }
+    .amort-table td { padding: 8px; border-bottom: 1px solid #f1f5f9; text-align: center; color: #334155; }
+    .amort-table tr:nth-child(even) { background: #f8fafc; }
+
+    .advice-box {
+        background: #fffbeb;
+        border: 1px solid #fef3c7;
+        border-left: 4px solid #d97706;
+        padding: 15px;
+        border-radius: 8px;
+        font-size: 0.9em;
+        line-height: 1.5;
+        color: #78350f;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="amort-container">
+    <div class="fire-card" style="background: linear-gradient(135deg, #2F5597 0%, #1e3a6d 100%); color: white; border: none;">
+        <h2 style="margin: 0; font-family: 'Outfit', sans-serif;">📉 Amortizar Financiamento vs. Investir</h2>
+        <p style="opacity: 0.9; font-size: 0.95em;">Descubra matematicamente o que gera mais riqueza para o seu patrimônio: reduzir sua dívida ou investir seu dinheiro extra.</p>
+    </div>
+
+    <div class="amort-card">
+        <h3 class="amort-title" style="font-family: 'Outfit', sans-serif;">🔧 Parâmetros do Financiamento &amp; Aporte</h3>
+        <div class="grid-amort">
+            <div class="amort-input-group">
+                <label>Saldo Devedor Atual (R$)</label>
+                <input type="text" id="amort-saldo" class="amort-input" data-type="moeda" placeholder="0,00" value="200.000,00">
+            </div>
+            <div class="amort-input-group">
+                <label>Taxa de Juros do Financiamento (% a.a.)</label>
+                <input type="text" id="amort-taxa-financ" class="amort-input" data-type="percentual" placeholder="0,00%" value="10,50">
+            </div>
+            <div class="amort-input-group">
+                <label>Prazo Restante (Meses)</label>
+                <input type="text" id="amort-prazo" class="amort-input" data-type="numero" placeholder="Ex: 360" value="360">
+            </div>
+            <div class="amort-input-group">
+                <label>Sistema de Amortização</label>
+                <select id="amort-sistema" class="amort-select">
+                    <option value="sac" selected>SAC (Amortização Constante)</option>
+                    <option value="price">Price (Parcelas Iguais)</option>
+                </select>
+            </div>
+            <div class="amort-input-group">
+                <label>Valor Extra Disponível (R$)</label>
+                <input type="text" id="amort-extra" class="amort-input" data-type="moeda" placeholder="0,00" value="1.000,00">
+            </div>
+            <div class="amort-input-group">
+                <label>Frequência da Amortização/Aporte</label>
+                <select id="amort-tipo-aporte" class="amort-select">
+                    <option value="mensal" selected>Mensal Recorrente</option>
+                    <option value="pontual">Pontual Único (Mês 1)</option>
+                </select>
+            </div>
+            <div class="amort-input-group">
+                <label>Rentabilidade Líquida do Investimento (% a.a.)</label>
+                <input type="text" id="amort-taxa-invest" class="amort-input" data-type="percentual" placeholder="0,00%" value="10,00">
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner Geral com Resultado Decisivo -->
+    <div id="amort-banner-resultado" class="amort-result-banner">
+        <span>🏆 <strong>Recomendação Financeira:</strong></span>
+        <span id="amort-banner-mensagem" class="amort-result-highlight">Calculando resultados...</span>
+    </div>
+
+    <!-- Colunas de Cenários Comparativos -->
+    <div class="grid-comparison">
+        <div id="comp-card-a" class="comp-card">
+            <h4 style="font-family: 'Outfit', sans-serif;">🏠 Cenário A: Amortizar Financiamento</h4>
+            <div class="comp-value-row">
+                <span>Novo Prazo de Quitação:</span>
+                <strong id="val-prazo-a">---</strong>
+            </div>
+            <div class="comp-value-row">
+                <span>Meses Economizados:</span>
+                <strong id="val-economia-meses" style="color: #16a34a;">---</strong>
+            </div>
+            <div class="comp-value-row">
+                <span>Total de Juros Pagos ao Banco:</span>
+                <strong id="val-juros-a">---</strong>
+            </div>
+            <div class="comp-value-row">
+                <span>Juros Economizados (Poupança):</span>
+                <strong id="val-economia-juros" style="color: #16a34a;">---</strong>
+            </div>
+            <div class="comp-value-row">
+                <span>Patrimônio Líquido Acumulado (Mês <span class="val-prazo-original">N</span>):</span>
+                <strong id="val-patrimonio-a" class="comp-highlight-val">---</strong>
+            </div>
+        </div>
+
+        <div id="comp-card-b" class="comp-card">
+            <h4 style="font-family: 'Outfit', sans-serif;">📈 Cenário B: Investir o Dinheiro Extra</h4>
+            <div class="comp-value-row">
+                <span>Prazo de Quitação Mantido:</span>
+                <strong id="val-prazo-b">---</strong>
+            </div>
+            <div class="comp-value-row">
+                <span>Total de Juros Pagos ao Banco:</span>
+                <strong id="val-juros-b">---</strong>
+            </div>
+            <div class="comp-value-row">
+                <span>Montante Acumulado no Investimento:</span>
+                <strong id="val-invest-acumulado-b" style="color: #2563eb;">---</strong>
+            </div>
+            <div class="comp-value-row">
+                <span>Patrimônio Líquido Acumulado (Mês <span class="val-prazo-original">N</span>):</span>
+                <strong id="val-patrimonio-b" class="comp-highlight-val">---</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- Caixa de Conselho Financeiro Personalizado -->
+    <div id="amort-advice" class="advice-box">...</div>
+
+    <!-- Tabela Colapsável Detalhada -->
+    <div class="collapsible-container">
+        <div class="collapsible-trigger" onclick="alternarDetalhesAmort()">
+            <span>📋 Ver Evolução Mês a Mês da Simulação</span>
+            <span id="collapsible-arrow">▼</span>
+        </div>
+        <div id="collapsible-tabela" class="collapsible-content">
+            <div class="table-container">
+                <table class="amort-table">
+                    <thead>
+                        <tr>
+                            <th>Mês</th>
+                            <th>Saldo (Amortizar)</th>
+                            <th>Parcela (Amortizar)</th>
+                            <th>Saldo (Investir)</th>
+                            <th>Parcela (Investir)</th>
+                            <th>Invest. Acum. (Amortizar)</th>
+                            <th>Invest. Acum. (Investir)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="amort-table-body">
+                        <tr><td colspan="7">Insira os dados acima para rodar a simulação.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

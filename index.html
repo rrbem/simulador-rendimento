@@ -615,6 +615,7 @@
         <button class="tab-btn" onclick="alternarAba(event, 'aba-info')">📈 Taxas e Índices</button>
         <button class="tab-btn" onclick="alternarAba(event, 'aba-acoes')">📊 Mercado de Ações</button>
         <button class="tab-btn" onclick="alternarAba(event, 'aba-economia')">🎯 Planejamento FIRE</button>
+        <button class="tab-btn" onclick="alternarAba(event, 'aba-amortizacao')">📉 Amortizar vs Investir</button>
     </nav>
     
     <div id="aba-simulador" class="tab-content active">
@@ -695,6 +696,7 @@
     <div id="aba-info" class="tab-content"></div>
     <div id="aba-acoes" class="tab-content"></div>
     <div id="aba-economia" class="tab-content"></div>
+    <div id="aba-amortizacao" class="tab-content"></div>
 </div>
 
 <script>
@@ -714,10 +716,14 @@
         const targetAba = document.getElementById(nomeAba);
         
         // Lógica de carregamento sob demanda para abas externas
-        if (nomeAba === 'aba-info' || nomeAba === 'aba-acoes' || nomeAba === 'aba-economia') {
+        if (nomeAba === 'aba-info' || nomeAba === 'aba-acoes' || nomeAba === 'aba-economia' || nomeAba === 'aba-amortizacao') {
             if (targetAba.innerHTML.trim() === "") {
             try {
-                const response = await fetch(nomeAba === 'aba-info' ? 'info.html' : (nomeAba === 'aba-acoes' ? 'acoes.html' : 'economia-criativa.html'));
+                const response = await fetch(
+                    nomeAba === 'aba-info' ? 'info.html' : 
+                    (nomeAba === 'aba-acoes' ? 'acoes.html' : 
+                    (nomeAba === 'aba-economia' ? 'economia-criativa.html' : 'amortizacao.html'))
+                );
                     if (!response.ok) throw new Error('Falha ao carregar arquivo');
                 const html = await response.text();
                 targetAba.innerHTML = html;

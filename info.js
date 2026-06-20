@@ -48,6 +48,9 @@ document.addEventListener('abaAtivada', (e) => {
         calcularFIRE();
         calcularAlocacao();
     }
+    if (e && e.target && e.target.id === 'aba-amortizacao') {
+        inicializarInputsAmort();
+    }
 });
 
 async function carregarDadosAcoes() {
