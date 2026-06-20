@@ -39,17 +39,85 @@
 
         .header-container {
             display: flex;
-            align-items: center;
-            gap: 15px;
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 10px;
+            flex-direction: column;
+            background: linear-gradient(135deg, rgba(47, 85, 151, 0.15), rgba(16, 185, 129, 0.1));
+            border: 1px solid rgba(47, 85, 151, 0.15);
+            border-radius: 18px;
+            padding: 24px 24px 18px;
             margin-bottom: 25px;
+            box-shadow: 0 20px 45px rgba(47, 85, 151, 0.08);
         }
 
-        .header-container img {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
+        .header-top {
+            display: flex;
+            align-items: flex-start;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .header-top img {
+            width: 72px;
+            height: 72px;
+            border-radius: 18px;
+            border: 1px solid rgba(47, 85, 151, 0.16);
+            background: white;
+            padding: 10px;
+        }
+
+        .header-copy {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .header-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            color: #1e3a6d;
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            box-shadow: 0 8px 20px rgba(47, 85, 151, 0.08);
+            width: fit-content;
+        }
+
+        .header-copy h1 {
+            color: #1e3a6d;
+            margin: 0;
+            font-size: clamp(1.75rem, 2.4vw, 2.6rem);
+            line-height: 1.05;
+        }
+
+        .header-subtitle {
+            margin: 0;
+            color: #334155;
+            max-width: 780px;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+
+        .header-meta {
+            margin-top: 18px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(47, 85, 151, 0.12);
+            color: #64748b;
+            font-size: 0.85em;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .page-footer {
+            text-align: center;
+            margin-top: 35px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(15, 23, 42, 0.08);
+            color: #64748b;
+            font-size: 0.9em;
+            font-weight: 600;
         }
 
         h1 {
@@ -455,8 +523,13 @@
     </div>
 
     <header class="header-container">
-        <img src="icon-192.png" alt="Ícone Financeiro">
-        <h1 id="main-title">Simulador de Renda Detalhado</h1>
+        <div class="header-top">
+            <img src="icon-192.png" alt="Ícone Financeiro">
+            <div class="header-copy">
+                <h1 id="main-title">Simulador de Renda</h1>
+            </div>
+        </div>
+        <div class="header-meta">Data de atualização: <span id="header-date">...</span></div>
     </header>
 
     <nav class="tabs-nav">
@@ -703,7 +776,9 @@
         const hoje = new Date().toLocaleDateString('pt-BR');
         const novoTitulo = `Simulador de Renda Detalhado - ${hoje}`;
         document.title = novoTitulo;
-        document.getElementById('main-title').innerText = novoTitulo;
+        document.getElementById('main-title').innerText = 'Simulador de Renda';
+        const headerDate = document.getElementById('header-date');
+        if (headerDate) headerDate.innerText = hoje;
 
         carregarDadosLocal();
 
@@ -1020,7 +1095,7 @@
         const sep = ';'; // Separador ideal para Excel em português (Brasil)
         let csv = '\ufeff'; // Adiciona o BOM para garantir suporte a UTF-8 (acentos e R$) no Excel
         
-        csv += 'SIMULADOR DE RENDA DETALHADO\n';
+        csv += 'SIMULADOR DE RENDA\n';
         csv += 'Data: ' + new Date().toLocaleDateString('pt-BR') + '\n\n';
         
         csv += 'PARÂMETROS DA SIMULAÇÃO\n';
@@ -1063,5 +1138,8 @@
     }
 </script>
 
+    <div class="page-footer">
+        ® RRB 2026
+    </div>
 </body>
 </html>
