@@ -5,6 +5,7 @@ document.addEventListener('abaAtivada', (e) => {
         carregarCotacoes();
         configurarCampoIr();
         atualizarGraficoIr();
+        configurarCalculadoraReal();
         ajustarAlturaGraficoAsync();
     }
     if (e && e.target && e.target.id === 'aba-acoes') {
@@ -742,3 +743,189 @@ window.alternarDetalhesAmort = function() {
         if (seta) seta.innerText = '▼';
     }
 };
+
+/**
+ * Lógica da Calculadora de Rentabilidade Real
+ */
+function obterValorPercentual(valor) {
+    if (!valor) return 0;
+    const limpo = String(valor)
+        .replace(/\s/g, '')
+        .replace('%', '')
+        .replace(/\./g, '')
+        .replace(',', '.');
+    const num = parseFloat(limpo);
+    return isNaN(num) ? 0 : num;
+}
+
+function configurarCalculadoraReal() {
+    const elNominal = document.getElementById('real-tx-nominal');
+    const elInflacao = document.getElementById('real-tx-inflacao');
+    const elValor = document.getElementById('real-valor');
+    const elTempo = document.getElementById('real-tempo');
+    const btnReset = document.getElementById('real-btn-reset');
+    
+    if (!elNominal || !elInflacao || !elValor || !elTempo) return;
+    
+    // Configura valores padrões baseados no governo se disponíveis
+    if (window.taxaSelicAtual && !elNominal.dataset.initialized) {
+        const defaultCDI = window.taxaSelicAtual - 0.1;
+        elNominal.value = defaultCDI.toFixed(2).replace('.', ',') + '%';
+        elNominal.dataset.initialized = 'true';
+    }
+    if (window.ipcaAtual && !elInflacao.dataset.initialized) {
+        elInflacao.value = window.ipcaAtual.toFixed(2).replace('.', ',') + '%';
+        elInflacao.dataset.initialized = 'true';
+    }
+    
+    // Registra listeners nos inputs com suas respectivas formatações
+    [
+        { el: elNominal, fmt: typeof formatarPercentualInput === 'function' ? formatarPercentualInput : null },
+        { el: elInflacao, fmt: typeof formatarPercentualInput === 'function' ? formatarPercentualInput : null },
+        { el: elValor, fmt: typeof formatarMoedaInput === 'function' ? formatarMoedaInput : null },
+        { el: elTempo, fmt: typeof formatarNumeroInput === 'function' ? formatarNumeroInput : null }
+    ].forEach(item => {
+        const el = item.el;
+        const fmt = item.fmt;
+        if (el && !el.dataset.hooked) {
+            el.addEventListener('input', function() {
+                if (fmt) {
+                    this.value = fmt(this.value);
+                }
+                atualizarCalculadoraReal();
+            });
+            el.dataset.hooked = 'true';
+        }
+    });
+    
+    // Registra reset
+    if (btnReset && !btnReset.dataset.hooked) {
+        btnReset.addEventListener('click', () => {
+            if (window.taxaSelicAtual) {
+                const defaultCDI = window.taxaSelicAtual - 0.1;
+                elNominal.value = defaultCDI.toFixed(2).replace('.', ',') + '%';
+            } else {
+                elNominal.value = '10,40%';
+            }
+            if (window.ipcaAtual) {
+                elInflacao.value = window.ipcaAtual.toFixed(2).replace('.', ',') + '%';
+            } else {
+                elInflacao.value = '4,50%';
+            }
+            elValor.value = '1.000,00';
+            elTempo.value = '5';
+            atualizarCalculadoraReal();
+        });
+        btnReset.dataset.hooked = 'true';
+    }
+    
+    atualizarCalculadoraReal();
+}
+
+function atualizarCalculadoraReal() {
+    const elNominal = document.getElementById('real-tx-nominal');
+    const elInflacao = document.getElementById('real-tx-inflacao');
+    const elValor = document.getElementById('real-valor');
+    const elTempo = document.getElementById('real-tempo');
+    
+    const elFisher = document.getElementById('real-res-fisher');
+    const elLinear = document.getElementById('real-res-linear');
+    const elDiferenca = document.getElementById('real-res-diferenca');
+    
+    const elMonNominal = document.getElementById('real-mon-nominal');
+    const elMonReal = document.getElementById('real-mon-real');
+    const elMonPerda = document.getElementById('real-mon-perda');
+    
+    const barReal = document.getElementById('yield-bar-real');
+    const barInflation = document.getElementById('yield-bar-inflation');
+    const warningNeg = document.getElementById('yield-warning-neg');
+    
+    if (!elNominal || !elInflacao || !elValor || !elTempo ||
+        !elFisher || !elLinear || !elDiferenca ||
+        !elMonNominal || !elMonReal || !elMonPerda) return;
+    
+    const nominal = obterValorPercentual(elNominal.value);
+    const inflacao = obterValorPercentual(elInflacao.value);
+    
+    let valorSimulado = 0;
+    if (typeof parseBRLCurrency === 'function') {
+        valorSimulado = parseBRLCurrency(elValor.value);
+    } else {
+        const text = String(elValor.value).replace(/[R$\s]/g, '').replace(/\./g, '').replace(/,/g, '.');
+        const parsed = parseFloat(text);
+        valorSimulado = Number.isFinite(parsed) ? parsed : 0;
+    }
+    
+    const tempoAnos = parseInt(elTempo.value.replace(/\D/g, '')) || 0;
+    
+    const i_nom = nominal / 100;
+    const i_inf = inflacao / 100;
+    
+    let real_pct = 0;
+    if (i_inf !== -1) {
+        real_pct = (((1 + i_nom) / (1 + i_inf)) - 1) * 100;
+    }
+    const i_real = real_pct / 100;
+    
+    const linear_pct = nominal - inflacao;
+    const diferenca = linear_pct - real_pct;
+    
+    elFisher.innerText = real_pct.toFixed(2).replace('.', ',') + '%';
+    elLinear.innerText = linear_pct.toFixed(2).replace('.', ',') + '%';
+    elDiferenca.innerText = Math.abs(diferenca).toFixed(2).replace('.', ',') + '%';
+    
+    // Cálculo do montante final acumulado (Juro Composto: M = P * (1 + i)^t)
+    const monNominal = valorSimulado * Math.pow(1 + i_nom, tempoAnos);
+    const monReal = valorSimulado * Math.pow(1 + i_real, tempoAnos);
+    const monPerda = Math.max(0, monNominal - monReal);
+    
+    const formatarBRL = (val) => {
+        return val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    };
+    
+    elMonNominal.innerText = formatarBRL(monNominal);
+    elMonReal.innerText = formatarBRL(monReal);
+    elMonPerda.innerText = formatarBRL(monPerda);
+    
+    if (real_pct >= 0) {
+        elFisher.className = 'yield-result-val subida';
+        elMonReal.className = 'yield-result-val subida';
+        if (warningNeg) warningNeg.style.display = 'none';
+        
+        if (nominal > 0) {
+            const pctReal = (real_pct / nominal) * 100;
+            const pctInf = 100 - pctReal;
+            
+            if (barReal) {
+                barReal.style.width = `${pctReal}%`;
+                barReal.style.display = 'flex';
+                barReal.className = 'yield-bar-real';
+                barReal.innerText = `Ganho Real: ${real_pct.toFixed(2).replace('.', ',')}%`;
+            }
+            if (barInflation) {
+                barInflation.style.width = `${pctInf}%`;
+                barInflation.style.display = 'flex';
+                barInflation.innerText = `Efeito da Inflação: ${(nominal - real_pct).toFixed(2).replace('.', ',')}%`;
+            }
+        } else {
+            if (barReal) barReal.style.width = '0%';
+            if (barInflation) {
+                barInflation.style.width = '100%';
+                barInflation.innerText = 'Sem Rendimento';
+            }
+        }
+    } else {
+        elFisher.className = 'yield-result-val descida';
+        elMonReal.className = 'yield-result-val descida';
+        if (warningNeg) warningNeg.style.display = 'block';
+        
+        if (barReal) {
+            barReal.style.display = 'none';
+        }
+        if (barInflation) {
+            barInflation.style.width = '100%';
+            barInflation.innerText = `Perda de Poder de Compra: ${Math.abs(real_pct).toFixed(2).replace('.', ',')}%`;
+            barInflation.className = 'yield-bar-lost';
+        }
+    }
+}

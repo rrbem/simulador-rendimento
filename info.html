@@ -77,6 +77,87 @@
         </div>
     </div>
 </div>
+
+<div class="fire-card real-yield-card" style="margin-top: 20px; background: #fff;">
+    <h3 class="fire-title" style="margin:0 0 10px 0; color: var(--primary-color);">💡 Calculadora de Rentabilidade Real</h3>
+    <p style="font-size: 0.9em; color: #475569; margin-bottom: 15px;">
+        Descubra o ganho real do seu investimento após descontar a inflação (IPCA). Esta calculadora utiliza a <strong>Equação de Fisher</strong>, o método matemático exato de desvalorização monetária.
+    </p>
+    
+    <div class="yield-calculator-wrapper">
+        <div class="yield-inputs-side">
+            <div class="ir-input-group">
+                <label for="real-tx-nominal">Rentabilidade Nominal Anual (%)</label>
+                <div class="ir-input-reset-row">
+                    <input id="real-tx-nominal" type="text" placeholder="10,40%" data-type="percentual" value="10,40%">
+                </div>
+            </div>
+            <div class="ir-input-group" style="margin-top: 12px;">
+                <label for="real-tx-inflacao">Inflação Anual (IPCA %)</label>
+                <div class="ir-input-reset-row">
+                    <input id="real-tx-inflacao" type="text" placeholder="4,50%" data-type="percentual" value="4,50%">
+                </div>
+            </div>
+            <div class="ir-input-group" style="margin-top: 12px;">
+                <label for="real-valor">Valor Simulado (R$)</label>
+                <div class="ir-input-reset-row">
+                    <input id="real-valor" type="text" placeholder="1.000,00" data-type="moeda" value="1.000,00">
+                </div>
+            </div>
+            <div class="ir-input-group" style="margin-top: 12px;">
+                <label for="real-tempo">Tempo (Anos)</label>
+                <div class="ir-input-reset-row">
+                    <input id="real-tempo" type="text" placeholder="5" data-type="numero" value="5">
+                </div>
+            </div>
+            <button id="real-btn-reset" type="button" class="btn-reset-small" style="margin-top: 15px; width: 100%;">Resetar para Taxas Atuais</button>
+        </div>
+        
+        <div class="yield-results-side">
+            <div class="yield-results-card">
+                <div class="yield-result-item">
+                    <span class="yield-result-label">Rentabilidade Real (Exata - Fisher):</span>
+                    <strong id="real-res-fisher" class="yield-result-val subida">5,65%</strong>
+                </div>
+                <div class="yield-result-item">
+                    <span class="yield-result-label">Cálculo Linear (Subtração Simples):</span>
+                    <span id="real-res-linear" class="yield-result-val-small">5,90%</span>
+                </div>
+                <div class="yield-result-item">
+                    <span class="yield-result-label">Diferença / Erro de Cálculo:</span>
+                    <span id="real-res-diferenca" class="yield-result-val-small" style="color: #ef4444;">0,25%</span>
+                </div>
+                
+                <div class="yield-result-item" style="border-top: 1px dashed #cbd5e1; margin-top: 10px; padding-top: 12px;">
+                    <span class="yield-result-label"><strong>Montante Nominal Final:</strong></span>
+                    <span id="real-mon-nominal" class="yield-result-val-small">R$ 1.610,51</span>
+                </div>
+                <div class="yield-result-item">
+                    <span class="yield-result-label"><strong>Montante Real (Poder Compra):</strong></span>
+                    <strong id="real-mon-real" class="yield-result-val subida" style="font-size: 1.15em;">R$ 1.323,53</strong>
+                </div>
+                <div class="yield-result-item">
+                    <span class="yield-result-label"><strong>Perda para a Inflação:</strong></span>
+                    <span id="real-mon-perda" class="yield-result-val-small" style="color: #ef4444;">R$ 286,98</span>
+                </div>
+                
+                <div class="yield-visual-container">
+                    <div class="yield-bar-row">
+                        <div class="yield-bar-label">Distribuição da Rentabilidade Nominal:</div>
+                        <div class="yield-bar-outer">
+                            <div id="yield-bar-real" class="yield-bar-real" style="width: 54.3%;">Ganho Real</div>
+                            <div id="yield-bar-inflation" class="yield-bar-inflation" style="width: 45.7%;">Efeito da Inflação</div>
+                        </div>
+                    </div>
+                </div>
+                <p id="yield-warning-neg" style="display: none; color: #ef4444; font-weight: bold; font-size: 0.85em; margin: 10px 0 0 0; text-align: center;">
+                    ⚠️ Rentabilidade Real Negativa! Seu patrimônio está perdendo poder de compra neste cenário.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
     .cotacoes-container {
         margin-top: 25px;
@@ -313,6 +394,136 @@
         box-shadow: 0 4px 6px rgba(0,0,0,0.02);
     }
     .fire-title { color: #1e3a6d; margin-top: 0; display: flex; align-items: center; gap: 10px; }
+
+    /* Estilos da Calculadora de Rentabilidade Real */
+    .yield-calculator-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+        gap: 24px;
+        margin: 0 auto;
+        width: 100%;
+    }
+    .yield-inputs-side {
+        flex: 0 0 240px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .yield-results-side {
+        flex: 1 1 auto;
+        display: flex;
+        align-items: stretch;
+    }
+    .yield-results-card {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 16px;
+        box-shadow: 0 4px 12px rgba(47,85,151,0.08);
+        box-sizing: border-box;
+    }
+    .yield-result-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px dashed #e2e8f0;
+    }
+    .yield-result-item:last-of-type {
+        border-bottom: none;
+    }
+    .yield-result-label {
+        font-size: 0.85em;
+        color: #475569;
+        font-weight: 500;
+    }
+    .yield-result-val {
+        font-size: 1.35em;
+        font-weight: 800;
+    }
+    .yield-result-val-small {
+        font-size: 1em;
+        font-weight: 700;
+        color: #475569;
+    }
+    
+    .yield-visual-container {
+        margin-top: 15px;
+    }
+    .yield-bar-row {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .yield-bar-label {
+        font-size: 0.78em;
+        font-weight: 600;
+        color: #475569;
+    }
+    .yield-bar-outer {
+        height: 24px;
+        background: #e2e8f0;
+        border-radius: 6px;
+        overflow: hidden;
+        display: flex;
+    }
+    .yield-bar-real {
+        height: 100%;
+        background: #10b981;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75em;
+        font-weight: bold;
+        transition: width 0.3s ease;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .yield-bar-inflation {
+        height: 100%;
+        background: #f59e0b;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75em;
+        font-weight: bold;
+        transition: width 0.3s ease;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .yield-bar-lost {
+        height: 100%;
+        background: #ef4444;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75em;
+        font-weight: bold;
+        transition: width 0.3s ease;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    @media (max-width: 640px) {
+        .yield-calculator-wrapper {
+            flex-direction: column;
+            gap: 16px;
+        }
+        .yield-inputs-side {
+            flex: 1 1 auto;
+            width: 100%;
+        }
+    }
 </style>
 
 <div class="cotacoes-container">
