@@ -427,3 +427,318 @@ window.initFireChart = function() {
         }
     });
 }
+
+window.inicializarInputsAmort = function() {
+    const elSaldo = document.getElementById('amort-saldo');
+    const elTaxaFinanc = document.getElementById('amort-taxa-financ');
+    const elPrazo = document.getElementById('amort-prazo');
+    const elSistema = document.getElementById('amort-sistema');
+    const elExtra = document.getElementById('amort-extra');
+    const elTipoAporte = document.getElementById('amort-tipo-aporte');
+    const elTaxaInvest = document.getElementById('amort-taxa-invest');
+
+    const inputs = [elSaldo, elTaxaFinanc, elPrazo, elSistema, elExtra, elTipoAporte, elTaxaInvest];
+
+    inputs.forEach(el => {
+        if (!el) return;
+        
+        // Aplica máscaras nos inputs de texto
+        if (el.tagName === 'INPUT' && !el.dataset.hookedMask) {
+            el.addEventListener('input', function() {
+                const tipo = this.getAttribute('data-type');
+                let valor = this.value;
+                if (tipo === 'moeda' && typeof formatarMoedaInput === 'function') {
+                    this.value = formatarMoedaInput(valor);
+                } else if (tipo === 'percentual' && typeof formatarPercentualInput === 'function') {
+                    this.value = formatarPercentualInput(valor);
+                } else if (tipo === 'numero' && typeof formatarNumeroInput === 'function') {
+                    this.value = formatarNumeroInput(valor);
+                }
+            });
+            el.dataset.hookedMask = "true";
+        }
+
+        // Executa o cálculo ao alterar
+        if (!el.dataset.hookedCalc) {
+            el.addEventListener('input', () => window.calcularAmortizacao());
+            el.addEventListener('change', () => window.calcularAmortizacao());
+            el.dataset.hookedCalc = "true";
+        }
+    });
+
+    window.calcularAmortizacao();
+};
+
+window.calcularAmortizacao = function() {
+    function obterValor(id) {
+        const el = document.getElementById(id);
+        if (!el) return 0;
+        const val = el.value;
+        if (!val) return 0;
+        if (typeof obterValorNumerico === 'function') {
+            return obterValorNumerico(val);
+        }
+        const limpo = val.replace(/\./g, '').replace(',', '.');
+        const num = parseFloat(limpo);
+        return isNaN(num) ? 0 : num;
+    }
+
+    function formatarBRL(valor) {
+        if (typeof formatarMoeda === 'function') {
+            return formatarMoeda(valor);
+        }
+        return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    const saldoDevedor = obterValor('amort-saldo');
+    const taxaFinancAnual = obterValor('amort-taxa-financ');
+    const elPrazo = document.getElementById('amort-prazo');
+    const prazoMeses = Math.min(Math.max(parseInt(elPrazo ? elPrazo.value : 0) || 0, 1), 480);
+    const sistema = document.getElementById('amort-sistema') ? document.getElementById('amort-sistema').value : 'sac';
+    const valorExtra = obterValor('amort-extra');
+    const tipoAporte = document.getElementById('amort-tipo-aporte') ? document.getElementById('amort-tipo-aporte').value : 'mensal';
+    const taxaInvestAnual = obterValor('amort-taxa-invest');
+
+    if (saldoDevedor <= 0 || prazoMeses <= 0) {
+        return;
+    }
+
+    // Taxas mensais
+    const iFinancMensal = (taxaFinancAnual / 100) / 12; // taxa nominal dividida por 12
+    const iInvestMensal = Math.pow(1 + (taxaInvestAnual / 100), 1/12) - 1; // taxa composta
+
+    // Cenário B: Investir o Extra (Financiamento segue normal + Investimento cresce)
+    let saldoB = saldoDevedor;
+    let jurosPagoB = 0;
+    let investB = 0;
+    const historicoB = [];
+
+    // Cálculo da parcela no sistema Price
+    let parcelaPriceB = 0;
+    if (sistema === 'price') {
+        if (iFinancMensal > 0) {
+            parcelaPriceB = saldoDevedor * (iFinancMensal * Math.pow(1 + iFinancMensal, prazoMeses)) / (Math.pow(1 + iFinancMensal, prazoMeses) - 1);
+        } else {
+            parcelaPriceB = saldoDevedor / prazoMeses;
+        }
+    }
+
+    for (let m = 1; m <= prazoMeses; m++) {
+        let jurosM = saldoB * iFinancMensal;
+        let amortM = 0;
+        if (sistema === 'sac') {
+            amortM = saldoDevedor / prazoMeses;
+        } else {
+            amortM = parcelaPriceB - jurosM;
+        }
+
+        if (amortM > saldoB) {
+            amortM = saldoB;
+        }
+
+        let parcelaM = amortM + jurosM;
+        saldoB -= amortM;
+        if (saldoB < 0) saldoB = 0;
+        jurosPagoB += jurosM;
+
+        // Investimento cresce com os aportes extras
+        let aporteInvestM = 0;
+        if (tipoAporte === 'mensal') {
+            aporteInvestM = valorExtra;
+        } else if (tipoAporte === 'pontual' && m === 1) {
+            aporteInvestM = valorExtra;
+        }
+
+        investB = (investB + aporteInvestM) * (1 + iInvestMensal);
+
+        historicoB.push({
+            mes: m,
+            saldo: saldoB,
+            parcela: parcelaM,
+            invest: investB,
+            juros: jurosM
+        });
+    }
+
+    // Cenário A: Amortizar Financiamento (Amortizações extras reduzem prazo + posterior investimento)
+    let saldoA = saldoDevedor;
+    let jurosPagoA = 0;
+    let investA = 0;
+    let quitouNoMes = prazoMeses;
+    let jaQuitou = false;
+    const historicoA = [];
+
+    const amortSACNormal = saldoDevedor / prazoMeses;
+
+    for (let m = 1; m <= prazoMeses; m++) {
+        let jurosM = 0;
+        let amortM = 0;
+        let extraM = 0;
+        let parcelaTotalA = 0;
+
+        if (!jaQuitou) {
+            jurosM = saldoA * iFinancMensal;
+
+            if (sistema === 'sac') {
+                amortM = amortSACNormal;
+            } else {
+                amortM = parcelaPriceB - jurosM;
+            }
+
+            if (amortM > saldoA) {
+                amortM = saldoA;
+            }
+
+            if (tipoAporte === 'mensal') {
+                extraM = valorExtra;
+            } else if (tipoAporte === 'pontual' && m === 1) {
+                extraM = valorExtra;
+            }
+
+            if (amortM + extraM > saldoA) {
+                extraM = Math.max(0, saldoA - amortM);
+                amortM = saldoA - extraM;
+            }
+
+            saldoA -= (amortM + extraM);
+            if (saldoA < 0) saldoA = 0;
+            jurosPagoA += jurosM;
+            parcelaTotalA = amortM + jurosM + extraM;
+
+            const totalCashFlowRequired = historicoB[m - 1].parcela + (tipoAporte === 'mensal' ? valorExtra : (tipoAporte === 'pontual' && m === 1 ? valorExtra : 0));
+            const surplus = totalCashFlowRequired - parcelaTotalA;
+
+            if (saldoA <= 0.001) {
+                saldoA = 0;
+                jaQuitou = true;
+                quitouNoMes = m;
+                // Investe o saldo que sobrou no mês de quitação para equivalência perfeita
+                if (surplus > 0) {
+                    investA = surplus * (1 + iInvestMensal);
+                } else {
+                    investA = 0;
+                }
+            } else {
+                investA = 0;
+            }
+        } else {
+            // Financiamento quitado. Passamos a investir o valor integral do fluxo do Cenário B (parcela que seria paga + extra)
+            const valorParaInvestir = historicoB[m - 1].parcela + (tipoAporte === 'mensal' ? valorExtra : 0);
+            investA = (investA + valorParaInvestir) * (1 + iInvestMensal);
+            parcelaTotalA = 0;
+        }
+
+        historicoA.push({
+            mes: m,
+            saldo: saldoA,
+            parcela: parcelaTotalA,
+            invest: investA,
+            juros: jurosM
+        });
+    }
+
+    // Atualização do HTML
+    const spansOriginal = document.querySelectorAll('.val-prazo-original');
+    spansOriginal.forEach(span => {
+        span.innerText = String(prazoMeses);
+    });
+
+    const mesesEconomizados = prazoMeses - quitouNoMes;
+    const elValPrazoA = document.getElementById('val-prazo-a');
+    const elValEconomiaMeses = document.getElementById('val-economia-meses');
+    const elValJurosA = document.getElementById('val-juros-a');
+    const elValEconomiaJuros = document.getElementById('val-economia-juros');
+    const elValPatrimonioA = document.getElementById('val-patrimonio-a');
+
+    if (elValPrazoA) elValPrazoA.innerText = `${quitouNoMes} meses`;
+    if (elValEconomiaMeses) elValEconomiaMeses.innerText = `${mesesEconomizados} meses`;
+    if (elValJurosA) elValJurosA.innerText = formatarBRL(jurosPagoA);
+    if (elValEconomiaJuros) elValEconomiaJuros.innerText = formatarBRL(Math.max(0, jurosPagoB - jurosPagoA));
+    if (elValPatrimonioA) elValPatrimonioA.innerText = formatarBRL(historicoA[prazoMeses - 1].invest);
+
+    const elValPrazoB = document.getElementById('val-prazo-b');
+    const elValJurosB = document.getElementById('val-juros-b');
+    const elValInvestB = document.getElementById('val-invest-acumulado-b');
+    const elValPatrimonioB = document.getElementById('val-patrimonio-b');
+
+    if (elValPrazoB) elValPrazoB.innerText = `${prazoMeses} meses`;
+    if (elValJurosB) elValJurosB.innerText = formatarBRL(jurosPagoB);
+    if (elValInvestB) elValInvestB.innerText = formatarBRL(investB);
+    if (elValPatrimonioB) elValPatrimonioB.innerText = formatarBRL(investB);
+
+    const bannerEl = document.getElementById('amort-banner-resultado');
+    const mensagemEl = document.getElementById('amort-banner-mensagem');
+    const patA = historicoA[prazoMeses - 1].invest;
+    const patB = investB;
+    const diferencaPat = Math.abs(patA - patB);
+
+    const elCardA = document.getElementById('comp-card-a');
+    const elCardB = document.getElementById('comp-card-b');
+
+    if (patA > patB) {
+        if (bannerEl) bannerEl.className = 'amort-result-banner';
+        if (mensagemEl) mensagemEl.innerHTML = `Amortizar Financiamento! (Gera + ${formatarBRL(diferencaPat)} de patrimônio)`;
+        if (elCardA) elCardA.classList.add('active-scenario');
+        if (elCardB) elCardB.classList.remove('active-scenario');
+
+        const elAdvice = document.getElementById('amort-advice');
+        if (elAdvice) {
+            elAdvice.innerHTML = `
+                <strong>💡 Conselho Financeiro Personalizado:</strong><br>
+                Para o seu caso, <strong>Amortizar o Financiamento</strong> é a melhor opção matemática. 
+                Como a taxa do seu financiamento (${taxaFinancAnual.toFixed(2).replace('.', ',')}% a.a.) é superior ou muito próxima à rentabilidade líquida estimada do seu investimento (${taxaInvestAnual.toFixed(2).replace('.', ',')}% a.a.), 
+                quitar a dívida funciona como um "investimento garantido" com retorno equivalente à taxa da dívida, livre de riscos e impostos. 
+                Você economizará <strong>${formatarBRL(Math.max(0, jurosPagoB - jurosPagoA))}</strong> em juros e quitará a dívida <strong>${mesesEconomizados} meses</strong> mais rápido.
+            `;
+        }
+    } else {
+        if (bannerEl) bannerEl.className = 'amort-result-banner investir';
+        if (mensagemEl) mensagemEl.innerHTML = `Investir o Dinheiro Extra! (Gera + ${formatarBRL(diferencaPat)} de patrimônio)`;
+        if (elCardB) elCardB.classList.add('active-scenario');
+        if (elCardA) elCardA.classList.remove('active-scenario');
+
+        const elAdvice = document.getElementById('amort-advice');
+        if (elAdvice) {
+            elAdvice.innerHTML = `
+                <strong>💡 Conselho Financeiro Personalizado:</strong><br>
+                Para o seu caso, <strong>Investir o Dinheiro Extra</strong> é a melhor opção matemática. 
+                Como a taxa de rentabilidade líquida do investimento (${taxaInvestAnual.toFixed(2).replace('.', ',')}% a.a.) é superior à taxa do seu financiamento (${taxaFinancAnual.toFixed(2).replace('.', ',')}% a.a.), 
+                o juro composto trabalhando a seu favor nos investimentos crescerá mais rápido do que os juros cobrados pelo banco. 
+                Ao final dos ${prazoMeses} meses, seu patrimônio líquido acumulado será maior em <strong>${formatarBRL(diferencaPat)}</strong> em comparação com a opção de amortizar.
+            `;
+        }
+    }
+
+    // Tabela detalhada
+    let tableHtml = '';
+    for (let i = 0; i < prazoMeses; i++) {
+        const hA = historicoA[i];
+        const hB = historicoB[i];
+        tableHtml += `
+            <tr>
+                <td>${i + 1}</td>
+                <td>${formatarBRL(hA.saldo)}</td>
+                <td>${formatarBRL(hA.parcela)}</td>
+                <td>${formatarBRL(hB.saldo)}</td>
+                <td>${formatarBRL(hB.parcela)}</td>
+                <td>${formatarBRL(hA.invest)}</td>
+                <td>${formatarBRL(hB.invest)}</td>
+            </tr>
+        `;
+    }
+    const elTableBody = document.getElementById('amort-table-body');
+    if (elTableBody) elTableBody.innerHTML = tableHtml;
+};
+
+window.alternarDetalhesAmort = function() {
+    const tabela = document.getElementById('collapsible-tabela');
+    const seta = document.getElementById('collapsible-arrow');
+    if (!tabela) return;
+
+    tabela.classList.toggle('expanded');
+    if (tabela.classList.contains('expanded')) {
+        if (seta) seta.innerText = '▲';
+    } else {
+        if (seta) seta.innerText = '▼';
+    }
+};
