@@ -683,6 +683,8 @@
                         <th>Aporte</th>
                         <th>Retirada</th>
                         <th>Juros (Bruto)</th>
+                        <th>Alíquota IR</th>
+                        <th>IR Descontado</th>
                         <th>Juros (Líquido)</th>
                         <th>Total Acumulado</th>
                         <th>Total Líquido</th>
@@ -1002,7 +1004,7 @@
             // Evolução Poupança (Isenta de IR) proporcional
             saldoPoupanca = basePoupanca * Math.pow(1 + taxaPoupancaMensal, proporcaoPeriodo);
 
-            htmlTabela += `<tr>\n                <td>${i}</td>\n                <td>${formatarMoeda(aporte)}</td>\n                <td>${formatarMoeda(retiradaReal)}</td>\n                <td>${formatarMoeda(jurosMesBruto)}</td>\n                <td>${formatarMoeda(jurosMesLiquido)}</td>\n                <td>${formatarMoeda(saldoBruto)}</td>\n                <td>${formatarMoeda(saldoLiquido)}</td>\n            </tr>`;
+            htmlTabela += `<tr>\n                <td>${i}</td>\n                <td>${formatarMoeda(aporte)}</td>\n                <td>${formatarMoeda(retiradaReal)}</td>\n                <td>${formatarMoeda(jurosMesBruto)}</td>\n                <td>${aliqAtual.toFixed(2).replace('.', ',')}%</td>\n                <td>${formatarMoeda(impostoTeorico)}</td>\n                <td>${formatarMoeda(jurosMesLiquido)}</td>\n                <td>${formatarMoeda(saldoBruto)}</td>\n                <td>${formatarMoeda(saldoLiquido)}</td>\n            </tr>`;
             
             dadosBrutos.push(saldoBruto);
             dadosLiquidos.push(saldoLiquido);
@@ -1233,7 +1235,7 @@
         csv += 'Montante Líquido' + sep + document.getElementById('resMontanteLiquido').innerText.replace('R$', '').trim() + '\n\n';
 
         csv += 'EVOLUÇÃO MÊS A MÊS\n';
-        csv += ['Mês', 'Aporte', 'Retirada', 'Juros (Bruto)', 'Juros (Líquido)', 'Total Acumulado', 'Total Líquido'].join(sep) + '\n';
+        csv += ['Mês', 'Aporte', 'Retirada', 'Juros (Bruto)', 'Alíquota IR', 'IR Descontado', 'Juros (Líquido)', 'Total Acumulado', 'Total Líquido'].join(sep) + '\n';
         
         const tabela = document.querySelector('#tabelaEvolucao tbody');
         for (let row of tabela.rows) {
