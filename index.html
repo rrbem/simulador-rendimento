@@ -964,10 +964,9 @@
         let saldoBruto = vInicial;
         let saldoPoupanca = vInicial;
         let totalInvestidoAcumulado = vInicial;
-        let lastSaldoLiquido = vInicial;
         let htmlTabela = "";
         let dadosBrutos = [saldoBruto];
-        let dadosLiquidos = [lastSaldoLiquido];
+        let dadosLiquidos = [vInicial];
         let dadosPoupanca = [saldoPoupanca];
         let labels = ["Início"];
         
@@ -994,8 +993,11 @@
             const impostoTeorico = lucroAcumulado * (aliqAtual / 100);
             const saldoLiquido = saldoBruto - impostoTeorico;
             
-            // Juros líquido é a variação do saldo líquido descontando aportes/retiradas
-            const jurosMesLiquido = saldoLiquido - lastSaldoLiquido - (aporte - retiradaReal);
+            // Juros líquido: juros brutos do mês descontados do IR da faixa atual.
+            // Não usar a diferença entre saldos líquidos consecutivos, pois quando a
+            // alíquota muda de faixa (ex: mês 6→7: 22,5%→20%) o saldo líquido acumulado
+            // salta artificialmente, distorcendo o juros líquido do mês da transição.
+            const jurosMesLiquido = jurosMesBruto * (1 - aliqAtual / 100);
 
             // Evolução Poupança (Isenta de IR) proporcional
             saldoPoupanca = basePoupanca * Math.pow(1 + taxaPoupancaMensal, proporcaoPeriodo);
@@ -1006,7 +1008,7 @@
             dadosLiquidos.push(saldoLiquido);
             dadosPoupanca.push(saldoPoupanca);
             labels.push(`Mês ${i}`);
-            lastSaldoLiquido = saldoLiquido;
+
         }
 
         document.querySelector("#tabelaEvolucao tbody").innerHTML = htmlTabela;
