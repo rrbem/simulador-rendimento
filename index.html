@@ -370,8 +370,31 @@
             box-shadow: 0 8px 20px rgba(39, 174, 96, 0.38);
         }
 
-        .btn-export:active {
-            transform: scale(0.97) translateY(0);
+        .taxa-card {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 22px;
+            padding: 16px 18px;
+            background: linear-gradient(145deg, #ffffff 0%, #ebf2ff 100%);
+            border: 1px solid rgba(47, 85, 151, 0.14);
+            border-radius: 18px;
+            box-shadow: 0 6px 18px rgba(47, 85, 151, 0.08);
+        }
+
+        .taxa-card-title {
+            font-size: 0.80em;
+            font-weight: 700;
+            color: #334155;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .taxa-card-value {
+            font-size: 1.5em;
+            font-weight: 800;
+            color: #1e3a6d;
+            font-family: 'Outfit', sans-serif;
         }
 
         @media (max-width: 640px) {
@@ -760,8 +783,12 @@
                 <input type="text" id="retiradaMensal" placeholder="0,00" data-type="moeda" value="0,00">
             </div>
             <div class="input-group">
+                <label>Taxa de aplicação (%)</label>
+                <input type="text" id="taxaAplicacao" placeholder="100,00" data-type="percentual" value="100,00">
+            </div>
+            <div class="input-group">
                 <label>Taxa de Juros Anual (%)</label>
-                <input type="text" id="taxaAnual" placeholder="0,00%" data-type="percentual">
+                <input type="text" id="taxaAnual" placeholder="0,00" data-type="percentual">
                 <div class="taxa-info" id="taxaInfo">Buscando taxa do governo...</div>
             </div>
             <div class="input-group">
@@ -788,6 +815,10 @@
             <button class="btn-reset" onclick="resetarCampos()">Limpar Campos</button>
             <button class="btn-export" onclick="exportarExcel()">📊 Exportar Excel</button>
         </div>
+        <div class="taxa-card" id="taxaEfetivaCard">
+            <div class="taxa-card-title">Taxa Efetiva Usada (%)</div>
+            <div class="taxa-card-value" id="taxaEfetivaValor">0,00%</div>
+        </div>
 
         <div class="summary-box" id="resumo">
             <div class="summary-item">Total Investido<span id="resTotalInvestido">R$ 0,00</span></div>
@@ -807,6 +838,7 @@
                 <thead>
                     <tr>
                         <th>Mês</th>
+                        <th>Taxa Aplic.</th>
                         <th>Aporte</th>
                         <th>Retirada</th>
                         <th>Juros (Bruto)</th>
@@ -906,8 +938,8 @@
     function formatarPercentualInput(valor) {
         let num = valor.replace(/[^\d]/g, '');
         if (!num) return '';
-        // Permite até 4 dígitos (ex: 2250 -> 22,50)
-        num = num.slice(0, 4);
+        // Permite até 6 dígitos (ex: 12000 -> 120,00)
+        num = num.slice(0, 6);
         if (num.length <= 1) return num;
         if (num.length === 2) return num; // Caso o usuário digite apenas dois números
         let inteiros = num.slice(0, -2);
@@ -919,6 +951,24 @@
         return valor.replace(/[^\d]/g, '').slice(0, 5);
     }
 
+    function atualizarTaxaAnualPorAplicacao() {
+        const campoAplicacao = document.getElementById('taxaAplicacao');
+        const campoTaxaAnual = document.getElementById('taxaAnual');
+        if (!campoAplicacao || !campoTaxaAnual) return null;
+
+        const valorAplicacaoRaw = campoAplicacao.value;
+        const taxaAplicacao = obterValorNumerico(valorAplicacaoRaw);
+        const baseCdi = typeof window.taxaCDIAtual === 'number' ? window.taxaCDIAtual : NaN;
+
+        if (!valorAplicacaoRaw || !isFinite(baseCdi)) {
+            return null;
+        }
+
+        const taxaFinal = baseCdi * (taxaAplicacao / 100);
+        campoTaxaAnual.value = isFinite(taxaFinal) ? taxaFinal.toFixed(2).replace('.', ',') : '';
+        return taxaFinal;
+    }
+
     function resetarCampos() {
         if (confirm('Deseja realmente limpar todos os campos e voltar aos valores originais?')) {
             localStorage.removeItem('simulador_dados');
@@ -926,7 +976,8 @@
             document.getElementById('valorInicial').value = '1.000,00';
             document.getElementById('aporteMensal').value = '0,00';
             document.getElementById('retiradaMensal').value = '0,00';
-            document.getElementById('taxaAnual').value = ''; 
+            document.getElementById('taxaAplicacao').value = '100,00';
+            document.getElementById('taxaAnual').value = '';
             document.getElementById('periodoMeses').value = '1';
             document.getElementById('periodoUnidade').value = 'meses';
             document.getElementById('aliquotaIR').value = '0,00';
@@ -956,7 +1007,7 @@
     
 
     function salvarDadosLocal() {
-        const campos = ['valorInicial', 'aporteMensal', 'retiradaMensal', 'taxaAnual', 'periodoMeses', 'aliquotaIR', 'periodoUnidade'];
+        const campos = ['valorInicial', 'aporteMensal', 'retiradaMensal', 'taxaAplicacao', 'taxaAnual', 'periodoMeses', 'aliquotaIR', 'periodoUnidade'];
         const dados = {};
         campos.forEach(id => {
             const el = document.getElementById(id);
@@ -1037,10 +1088,12 @@
                 const taxaSelic = parseFloat(dataSelic[0].valor);
                 window.taxaSelicAtual = taxaSelic;
                 const taxaCDI = taxaSelic - 0.1;
+                window.taxaCDIAtual = taxaCDI;
                 
-                if (!document.getElementById('taxaAnual').value) {
-                    document.getElementById('taxaAnual').value = taxaCDI.toFixed(2).replace('.', ',');
+                if (!document.getElementById('taxaAplicacao').value) {
+                    document.getElementById('taxaAplicacao').value = '100,00';
                 }
+                atualizarTaxaAnualPorAplicacao();
                 document.getElementById('taxaInfo').textContent = `SELIC: ${taxaSelic.toFixed(2).replace('.', ',')}% a.a. | CDI: ${taxaCDI.toFixed(2).replace('.', ',')}% a.a.`;
             }
 
@@ -1059,9 +1112,11 @@
         } catch (error) {
             const taxaPadrao = 14.40;
             window.taxaSelicAtual = taxaPadrao;
-            if (!document.getElementById('taxaAnual').value) {
-                document.getElementById('taxaAnual').value = taxaPadrao.toFixed(2).replace('.', ',');
+            window.taxaCDIAtual = taxaPadrao;
+            if (!document.getElementById('taxaAplicacao').value) {
+                document.getElementById('taxaAplicacao').value = '100,00';
             }
+            atualizarTaxaAnualPorAplicacao();
             document.getElementById('taxaInfo').textContent = `Taxa padrão CDI: ${taxaPadrao.toFixed(2).replace('.', ',')}% a.a. (Erro ao buscar taxa do governo)`;
             calcular();
         }
@@ -1072,6 +1127,12 @@
         const aporte = obterValorNumerico(document.getElementById('aporteMensal').value) || 0;
         const retirada = obterValorNumerico(document.getElementById('retiradaMensal').value) || 0;
         const taxaAnual = obterValorNumerico(document.getElementById('taxaAnual').value) || 0;
+        const taxaAplicacaoValor = obterValorNumerico(document.getElementById('taxaAplicacao').value) || 0;
+        const taxaEfetiva = taxaAplicacaoValor * taxaAnual / 100;
+        if (document.getElementById('taxaEfetivaValor')) {
+            document.getElementById('taxaEfetivaValor').innerText = taxaEfetiva.toFixed(2).replace('.', ',') + '%';
+        }
+        const taxaAplicada = taxaEfetiva;
         const mesesRaw = parseInt(document.getElementById('periodoMeses').value.replace(/\D/g, '')) || 0;
         const unidade = document.getElementById('periodoUnidade').value;
         
@@ -1084,7 +1145,7 @@
         const aliquota = obterValorNumerico(document.getElementById('aliquotaIR').value) || 0;
         
         const usarRegressiva = aliquota === 0;
-        const taxaMensal = Math.pow(1 + (taxaAnual / 100), 1/12) - 1;
+        const taxaMensal = Math.pow(1 + (taxaEfetiva / 100), 1/12) - 1;
 
         // Cálculo da Taxa da Poupança (Regra: 0.5% se Selic > 8.5, senão 70% da Selic)
         const selicRef = window.taxaSelicAtual || (taxaAnual + 0.1);
@@ -1131,7 +1192,7 @@
             // Evolução Poupança (Isenta de IR) proporcional
             saldoPoupanca = basePoupanca * Math.pow(1 + taxaPoupancaMensal, proporcaoPeriodo);
 
-            htmlTabela += `<tr>\n                <td>${i}</td>\n                <td>${formatarMoeda(aporte)}</td>\n                <td>${formatarMoeda(retiradaReal)}</td>\n                <td>${formatarMoeda(jurosMesBruto)}</td>\n                <td>${aliqAtual.toFixed(2).replace('.', ',')}%</td>\n                <td>${formatarMoeda(impostoTeorico)}</td>\n                <td>${formatarMoeda(jurosMesLiquido)}</td>\n                <td>${formatarMoeda(saldoBruto)}</td>\n                <td>${formatarMoeda(saldoLiquido)}</td>\n            </tr>`;
+            htmlTabela += `<tr>\n                <td>${i}</td>\n                <td>${taxaAplicada.toFixed(2).replace('.', ',')}%</td>\n                <td>${formatarMoeda(aporte)}</td>\n                <td>${formatarMoeda(retiradaReal)}</td>\n                <td>${formatarMoeda(jurosMesBruto)}</td>\n                <td>${aliqAtual.toFixed(2).replace('.', ',')}%</td>\n                <td>${formatarMoeda(impostoTeorico)}</td>\n                <td>${formatarMoeda(jurosMesLiquido)}</td>\n                <td>${formatarMoeda(saldoBruto)}</td>\n                <td>${formatarMoeda(saldoLiquido)}</td>\n            </tr>`;
             
             dadosBrutos.push(saldoBruto);
             dadosLiquidos.push(saldoLiquido);
@@ -1349,6 +1410,7 @@
         csv += 'Valor Inicial (R$)' + sep + document.getElementById('valorInicial').value + '\n';
         csv += 'Aporte Mensal (R$)' + sep + document.getElementById('aporteMensal').value + '\n';
         csv += 'Retirada Mensal (R$)' + sep + document.getElementById('retiradaMensal').value + '\n';
+        csv += 'Taxa de aplicação (%)' + sep + document.getElementById('taxaAplicacao').value + '\n';
         csv += 'Taxa de Juros Anual (%)' + sep + document.getElementById('taxaAnual').value + '\n';
         csv += 'Período' + sep + document.getElementById('periodoMeses').value + ' ' + document.getElementById('periodoUnidade').value + '\n';
         csv += 'Alíquota de IR (%)' + sep + document.getElementById('aliquotaIR').value + '\n\n';
