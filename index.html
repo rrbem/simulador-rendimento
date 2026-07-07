@@ -570,14 +570,19 @@
         body.dark .table-container thead th,
         body.dark .table-container tbody td {
             color: #e5e7eb;
+            background: transparent;
         }
 
-        body.dark .table-container tbody tr:nth-child(even) {
-            background: rgba(255,255,255,0.05);
+        body.dark .table-container tr:nth-child(even) td {
+            background: rgba(255,255,255,0.08);
         }
 
-        body.dark .table-container tbody tr:nth-child(odd) {
-            background: rgba(255,255,255,0.02);
+        body.dark .table-container tr:nth-child(odd) td {
+            background: rgba(255,255,255,0.03);
+        }
+
+        body.dark .table-container tbody tr:hover {
+            background-color: rgba(255,255,255,0.12) !important;
         }
 
         body.dark .table-container td,
