@@ -1611,9 +1611,12 @@ if (nomeAba === 'aba-info' || nomeAba === 'aba-renda-fixa' || nomeAba === 'aba-a
         const dataCDI120 = [];
         const dataTesouro = [];
 
+        // Distribui os pontos ao longo do período total usando meses fracionários
+        // para garantir crescimento suave (sem repetições de mês que causam ondulações)
         for (let i = 0; i <= pontos; i++) {
-            const mesesAtuais = i === pontos ? meses : i;
-            labels.push(`Mês ${i}`);
+            const frac = i / pontos;
+            const mesesAtuais = frac * meses; // pode ser fracionário
+            labels.push(`Mês ${Math.round(mesesAtuais)}`);
             dataPoupanca.push(valor * Math.pow(1 + taxaPoupancaMensal, mesesAtuais));
             dataCDI.push(valor * Math.pow(1 + taxaCDIMensal, mesesAtuais));
             dataCDI110.push(valor * Math.pow(1 + taxaCDIMensal * 1.10, mesesAtuais));
@@ -1639,7 +1642,8 @@ if (nomeAba === 'aba-info' || nomeAba === 'aba-renda-fixa' || nomeAba === 'aba-a
                         borderColor: '#f59e0b',
                         backgroundColor: 'rgba(245, 158, 11, 0.08)',
                         borderWidth: 3,
-                        tension: 0.35,
+                        tension: 0.2,
+                        cubicInterpolationMode: 'monotone',
                         pointRadius: 0
                     },
                     {
@@ -1648,7 +1652,8 @@ if (nomeAba === 'aba-info' || nomeAba === 'aba-renda-fixa' || nomeAba === 'aba-a
                         borderColor: '#2563eb',
                         backgroundColor: 'rgba(37, 99, 235, 0.08)',
                         borderWidth: 3,
-                        tension: 0.35,
+                        tension: 0.2,
+                        cubicInterpolationMode: 'monotone',
                         pointRadius: 0
                     },
                     {
@@ -1658,7 +1663,8 @@ if (nomeAba === 'aba-info' || nomeAba === 'aba-renda-fixa' || nomeAba === 'aba-a
                         backgroundColor: 'rgba(124, 58, 237, 0.08)',
                         borderWidth: 3,
                         borderDash: [6, 4],
-                        tension: 0.35,
+                        tension: 0.2,
+                        cubicInterpolationMode: 'monotone',
                         pointRadius: 0
                     },
                     {
@@ -1668,7 +1674,8 @@ if (nomeAba === 'aba-info' || nomeAba === 'aba-renda-fixa' || nomeAba === 'aba-a
                         backgroundColor: 'rgba(219, 39, 119, 0.08)',
                         borderWidth: 3,
                         borderDash: [6, 4],
-                        tension: 0.35,
+                        tension: 0.2,
+                        cubicInterpolationMode: 'monotone',
                         pointRadius: 0
                     },
                     {
@@ -1677,7 +1684,8 @@ if (nomeAba === 'aba-info' || nomeAba === 'aba-renda-fixa' || nomeAba === 'aba-a
                         borderColor: '#10b981',
                         backgroundColor: 'rgba(16, 185, 129, 0.08)',
                         borderWidth: 3,
-                        tension: 0.35,
+                        tension: 0.2,
+                        cubicInterpolationMode: 'monotone',
                         pointRadius: 0
                     }
                 ]
@@ -1791,7 +1799,8 @@ if (nomeAba === 'aba-info' || nomeAba === 'aba-renda-fixa' || nomeAba === 'aba-a
                         backgroundColor: 'rgba(47, 85, 151, 0.08)',
                         borderWidth: 3,
                         fill: true,
-                        tension: 0.4,
+                        tension: 0.2,
+                        cubicInterpolationMode: 'monotone',
                         pointRadius: labels.length > 60 ? 0 : 4,
                         pointBackgroundColor: '#2F5597',
                         pointBorderColor: '#fff',
@@ -1805,7 +1814,8 @@ if (nomeAba === 'aba-info' || nomeAba === 'aba-renda-fixa' || nomeAba === 'aba-a
                         backgroundColor: 'rgba(16, 185, 129, 0.08)',
                         borderWidth: 3,
                         fill: true,
-                        tension: 0.4,
+                        tension: 0.2,
+                        cubicInterpolationMode: 'monotone',
                         pointRadius: 0
                     },
                     {
@@ -1816,7 +1826,8 @@ if (nomeAba === 'aba-info' || nomeAba === 'aba-renda-fixa' || nomeAba === 'aba-a
                         borderDash: [10, 5],
                         borderWidth: 2,
                         fill: true,
-                        tension: 0.4,
+                        tension: 0.2,
+                        cubicInterpolationMode: 'monotone',
                         pointRadius: 0
                     }
                 ]
