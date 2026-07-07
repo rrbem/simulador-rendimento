@@ -11,6 +11,42 @@ document.addEventListener('abaAtivada', (e) => {
     if (e && e.target && e.target.id === 'aba-acoes') {
         carregarDadosAcoes();
     }
+    if (e && e.target && e.target.id === 'aba-renda-fixa') {
+        if (typeof atualizarRendaFixaTaxasInfo === 'function') {
+            atualizarRendaFixaTaxasInfo();
+        }
+        if (typeof calcularComparacaoRendaFixa === 'function') {
+            calcularComparacaoRendaFixa();
+        }
+
+        const camposRendaFixa = ['simulacaoValor', 'simulacaoPeriodoMeses'];
+        camposRendaFixa.forEach(id => {
+            const el = document.getElementById(id);
+            if (el && !el.dataset.hookedMask) {
+                el.addEventListener('input', function() {
+                    const tipo = this.getAttribute('data-type');
+                    let valor = this.value;
+                    if (tipo === 'moeda' && typeof formatarMoedaInput === 'function') {
+                        this.value = formatarMoedaInput(valor);
+                    } else if (tipo === 'numero' && typeof formatarNumeroInput === 'function') {
+                        this.value = formatarNumeroInput(valor);
+                    }
+                    if (typeof calcularComparacaoRendaFixa === 'function') {
+                        calcularComparacaoRendaFixa();
+                    }
+                });
+                el.dataset.hookedMask = 'true';
+            }
+        });
+
+        const selUnidadeRendaFixa = document.getElementById('simulacaoPeriodoUnidade');
+        if (selUnidadeRendaFixa && !selUnidadeRendaFixa.dataset.hooked) {
+            selUnidadeRendaFixa.addEventListener('change', () => {
+                if (typeof calcularComparacaoRendaFixa === 'function') calcularComparacaoRendaFixa();
+            });
+            selUnidadeRendaFixa.dataset.hooked = 'true';
+        }
+    }
     if (e && e.target && e.target.id === 'aba-economia') {
         const elGasto = document.getElementById('fire-gasto');
         const elRenda = document.getElementById('fire-renda');

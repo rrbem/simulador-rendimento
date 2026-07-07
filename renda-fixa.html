@@ -1,0 +1,51 @@
+<div class="grid-inputs">
+    <div class="input-group">
+        <label>Valor Inicial (R$)</label>
+        <input type="text" id="simulacaoValor" placeholder="0,00" data-type="moeda" value="1.000,00">
+    </div>
+    <div class="input-group">
+        <label>Período</label>
+        <div style="display: flex; gap: 5px; align-items: center;">
+            <input type="text" id="simulacaoPeriodoMeses" placeholder="1" data-type="numero" value="12" style="width: 60px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em;">
+            <select id="simulacaoPeriodoUnidade" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em; cursor: pointer; background: white; flex: 1; min-width: 100px;">
+                <option value="dias">Dias</option>
+                <option value="meses" selected>Meses</option>
+                <option value="anos">Anos</option>
+            </select>
+        </div>
+    </div>
+    <div class="input-group">
+        <label>Taxas Atualizadas</label>
+        <div class="taxa-info" id="taxaRendaFixaInfo">Carregando Selic e CDI...</div>
+    </div>
+</div>
+
+<div class="buttons-group">
+    <button class="btn-calc" onclick="calcularComparacaoRendaFixa()">Calcular</button>
+</div>
+
+<div class="summary-box" id="resumo-renda-fixa">
+    <div class="summary-item">Selic Atual<span id="resSelicAtual">0,00%</span></div>
+    <div class="summary-item">CDI Atual<span id="resCDIAtual">0,00%</span></div>
+    <div class="summary-item">Poupança (a.a.)<span id="resPoupancaAtual">0,00%</span></div>
+</div>
+
+<div class="chart-container">
+    <canvas id="graficoComparacaoRendaFixa"></canvas>
+</div>
+
+<div class="table-container">
+    <table id="tabelaRendaFixa">
+        <thead>
+            <tr>
+                <th>Investimento</th>
+                <th>Taxa a.a.</th>
+                <th>Aliq. IR</th>
+                <th>Montante Bruto</th>
+                <th>Rendimento</th>
+                <th>Montante Líquido</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
