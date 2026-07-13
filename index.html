@@ -1131,22 +1131,31 @@ if (nomeAba === 'aba-info' || nomeAba === 'aba-renda-fixa' || nomeAba === 'aba-a
         return valor.replace(/[^\d]/g, '').slice(0, 5);
     }
 
-    function atualizarTaxaAnualPorAplicacao() {
+    function calcularTaxaEfetiva() {
         const campoAplicacao = document.getElementById('taxaAplicacao');
         const campoTaxaAnual = document.getElementById('taxaAnual');
-        if (!campoAplicacao || !campoTaxaAnual) return null;
+        const valorAplicacaoRaw = campoAplicacao ? campoAplicacao.value : '';
+        const valorAnualRaw = campoTaxaAnual ? campoTaxaAnual.value : '';
 
-        const valorAplicacaoRaw = campoAplicacao.value;
         const taxaAplicacao = obterValorNumerico(valorAplicacaoRaw);
-        const baseCdi = typeof window.taxaCDIAtual === 'number' ? window.taxaCDIAtual : NaN;
+        const taxaAnual = obterValorNumerico(valorAnualRaw);
+        const taxaCDI = typeof window.taxaCDIAtual === 'number' ? window.taxaCDIAtual : NaN;
 
-        if (!valorAplicacaoRaw || !isFinite(baseCdi)) {
-            return null;
+        let taxaEfetiva = 0;
+        if (taxaAnual > 0 && taxaAplicacao > 0) {
+            taxaEfetiva = taxaAnual * taxaAplicacao / 100;
+        } else if (taxaAnual > 0) {
+            taxaEfetiva = taxaAnual;
+        } else if (taxaAplicacao > 0 && isFinite(taxaCDI)) {
+            taxaEfetiva = taxaCDI * taxaAplicacao / 100;
         }
 
-        const taxaFinal = baseCdi * (taxaAplicacao / 100);
-        campoTaxaAnual.value = isFinite(taxaFinal) ? taxaFinal.toFixed(2).replace('.', ',') : '';
-        return taxaFinal;
+        const elTaxaEfetiva = document.getElementById('taxaEfetivaValor');
+        if (elTaxaEfetiva) {
+            elTaxaEfetiva.innerText = taxaEfetiva.toFixed(2).replace('.', ',') + '%';
+        }
+
+        return taxaEfetiva;
     }
 
     function resetarCampos() {
@@ -1248,8 +1257,8 @@ if (nomeAba === 'aba-info' || nomeAba === 'aba-renda-fixa' || nomeAba === 'aba-a
                         this.value = formatarNumeroInput(valor);
                     }
 
-                    if (this.id === 'taxaAplicacao') {
-                        atualizarTaxaAnualPorAplicacao();
+                    if (this.id === 'taxaAplicacao' || this.id === 'taxaAnual') {
+                        calcularTaxaEfetiva();
                     }
                     salvarDadosLocal();
                     calcular();
@@ -1356,7 +1365,10 @@ if (nomeAba === 'aba-info' || nomeAba === 'aba-renda-fixa' || nomeAba === 'aba-a
                 if (!document.getElementById('taxaAplicacao').value) {
                     document.getElementById('taxaAplicacao').value = '100,00';
                 }
-                atualizarTaxaAnualPorAplicacao();
+                if (!document.getElementById('taxaAnual').value) {
+                    document.getElementById('taxaAnual').value = taxaCDI.toFixed(2).replace('.', ',');
+                }
+                calcularTaxaEfetiva();
                 document.getElementById('taxaInfo').textContent = `SELIC: ${taxaSelic.toFixed(2).replace('.', ',')}% a.a. | CDI: ${taxaCDI.toFixed(2).replace('.', ',')}% a.a.`;
             }
 
@@ -1381,7 +1393,10 @@ if (nomeAba === 'aba-info' || nomeAba === 'aba-renda-fixa' || nomeAba === 'aba-a
             if (!document.getElementById('taxaAplicacao').value) {
                 document.getElementById('taxaAplicacao').value = '100,00';
             }
-            atualizarTaxaAnualPorAplicacao();
+            if (!document.getElementById('taxaAnual').value) {
+                document.getElementById('taxaAnual').value = taxaPadrao.toFixed(2).replace('.', ',');
+            }
+            calcularTaxaEfetiva();
             atualizarRendaFixaTaxasInfo();
             calcularComparacaoRendaFixa();
             document.getElementById('taxaInfo').textContent = `Taxa padrão CDI: ${taxaPadrao.toFixed(2).replace('.', ',')}% a.a. (Erro ao buscar taxa do governo)`;
@@ -1412,10 +1427,7 @@ if (nomeAba === 'aba-info' || nomeAba === 'aba-renda-fixa' || nomeAba === 'aba-a
         const retirada = obterValorNumerico(document.getElementById('retiradaMensal').value) || 0;
         const taxaAnual = obterValorNumerico(document.getElementById('taxaAnual').value) || 0;
         const taxaAplicacaoValor = obterValorNumerico(document.getElementById('taxaAplicacao').value) || 0;
-        const taxaEfetiva = taxaAplicacaoValor * taxaAnual / 100;
-        if (document.getElementById('taxaEfetivaValor')) {
-            document.getElementById('taxaEfetivaValor').innerText = taxaEfetiva.toFixed(2).replace('.', ',') + '%';
-        }
+        const taxaEfetiva = calcularTaxaEfetiva();
         const taxaAplicada = taxaEfetiva;
         const mesesRaw = parseInt(document.getElementById('periodoMeses').value.replace(/\D/g, '')) || 0;
         const unidade = document.getElementById('periodoUnidade').value;
