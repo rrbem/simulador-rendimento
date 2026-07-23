@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,16 +8,18 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-6HQMKR4FHB"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-      gtag('config', 'G-6HQMKR4FHB');
+        gtag('config', 'G-6HQMKR4FHB');
     </script>
     <!-- Google Fonts para Tipografia Premium -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --primary-color: #2F5597;
@@ -32,7 +35,12 @@
             margin: 20px;
         }
 
-        h1, h2, h3, h4, h5, h6 {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
             font-family: 'Outfit', sans-serif;
         }
 
@@ -42,14 +50,14 @@
             background: white;
             padding: 25px;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .header-container {
             display: flex;
             flex-direction: column;
             background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.12), transparent 400px),
-                        linear-gradient(135deg, #2F5597 0%, #1e3a6d 100%);
+                linear-gradient(135deg, #2F5597 0%, #1e3a6d 100%);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 24px;
             padding: 28px 28px 20px;
@@ -175,15 +183,18 @@
                 padding: 20px 20px 16px;
                 border-radius: 20px;
             }
+
             .header-top {
                 gap: 16px;
             }
+
             .header-top img {
                 width: 60px;
                 height: 60px;
                 border-radius: 16px;
                 padding: 8px;
             }
+
             .header-meta {
                 margin-top: 16px;
                 padding-top: 12px;
@@ -211,12 +222,12 @@
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 16px;
             margin-bottom: 30px;
-            background: linear-gradient(135deg, rgba(217,225,242,0.55) 0%, rgba(235,240,250,0.8) 100%);
+            background: linear-gradient(135deg, rgba(217, 225, 242, 0.55) 0%, rgba(235, 240, 250, 0.8) 100%);
             border: 1px solid rgba(47, 85, 151, 0.12);
             padding: 24px;
             border-radius: 20px;
             align-items: start;
-            box-shadow: 0 4px 20px rgba(47, 85, 151, 0.07), inset 0 1px 0 rgba(255,255,255,0.9);
+            box-shadow: 0 4px 20px rgba(47, 85, 151, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(8px);
         }
 
@@ -242,19 +253,19 @@
             border: 1.5px solid rgba(47, 85, 151, 0.2);
             border-radius: 10px;
             font-size: 1em;
-            background: rgba(255,255,255,0.92);
+            background: rgba(255, 255, 255, 0.92);
             color: #1e293b;
             font-weight: 600;
             font-family: 'Plus Jakarta Sans', sans-serif;
             transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-            box-shadow: 0 1px 4px rgba(47,85,151,0.06);
+            box-shadow: 0 1px 4px rgba(47, 85, 151, 0.06);
         }
 
         input:focus {
             outline: none;
             border-color: #2F5597;
             background: #ffffff;
-            box-shadow: 0 0 0 3px rgba(47, 85, 151, 0.12), 0 2px 8px rgba(47,85,151,0.1);
+            box-shadow: 0 0 0 3px rgba(47, 85, 151, 0.12), 0 2px 8px rgba(47, 85, 151, 0.1);
         }
 
         select {
@@ -262,12 +273,12 @@
             border: 1.5px solid rgba(47, 85, 151, 0.2);
             border-radius: 10px;
             font-size: 1em;
-            background: rgba(255,255,255,0.92);
+            background: rgba(255, 255, 255, 0.92);
             color: #1e293b;
             font-weight: 600;
             font-family: 'Plus Jakarta Sans', sans-serif;
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
-            box-shadow: 0 1px 4px rgba(47,85,151,0.06);
+            box-shadow: 0 1px 4px rgba(47, 85, 151, 0.06);
             cursor: pointer;
         }
 
@@ -315,7 +326,7 @@
         .btn-decrease,
         .btn-reset,
         .btn-export {
-            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.1), inset 0 1px 0 rgba(255,255,255,0.15);
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.15);
         }
 
         .btn-calc {
@@ -358,13 +369,13 @@
         .btn-reset {
             background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
             color: #374151;
-            border: 1.5px solid rgba(100,116,139,0.18);
+            border: 1.5px solid rgba(100, 116, 139, 0.18);
         }
 
         .btn-reset:hover {
             background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(100,116,139,0.2);
+            box-shadow: 0 8px 20px rgba(100, 116, 139, 0.2);
         }
 
         .btn-export {
@@ -461,7 +472,7 @@
             background: linear-gradient(145deg, #ffffff 0%, #f8faff 100%);
             border: 1px solid rgba(47, 85, 151, 0.12);
             border-radius: 16px;
-            box-shadow: 0 4px 16px rgba(47, 85, 151, 0.07), inset 0 1px 0 rgba(255,255,255,0.9);
+            box-shadow: 0 4px 16px rgba(47, 85, 151, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.9);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             position: relative;
             overflow: hidden;
@@ -498,12 +509,12 @@
 
         body.dark .container {
             background: #07101b;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
         }
 
         body.dark .header-container {
             background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.06), transparent 400px),
-                        #03101d;
+                #03101d;
             border-color: rgba(255, 255, 255, 0.08);
         }
 
@@ -528,9 +539,9 @@
         body.dark .summary-item,
         body.dark .taxa-card {
             background: #111827;
-            border-color: rgba(255,255,255,0.12);
+            border-color: rgba(255, 255, 255, 0.12);
             color: #f8fafc;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
         }
 
         body.dark input {
@@ -544,7 +555,7 @@
         body.dark #periodoUnidade {
             background: #0f172a !important;
             color: #f8fafc !important;
-            border-color: rgba(255,255,255,0.18) !important;
+            border-color: rgba(255, 255, 255, 0.18) !important;
             box-shadow: none !important;
             appearance: none;
             -webkit-appearance: none;
@@ -574,20 +585,20 @@
         }
 
         body.dark .table-container tr:nth-child(even) td {
-            background: rgba(255,255,255,0.08);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         body.dark .table-container tr:nth-child(odd) td {
-            background: rgba(255,255,255,0.03);
+            background: rgba(255, 255, 255, 0.03);
         }
 
         body.dark .table-container tbody tr:hover {
-            background-color: rgba(255,255,255,0.12) !important;
+            background-color: rgba(255, 255, 255, 0.12) !important;
         }
 
         body.dark .table-container td,
         body.dark .table-container th {
-            border-color: rgba(255,255,255,0.08);
+            border-color: rgba(255, 255, 255, 0.08);
         }
 
         body.dark .btn-calc,
@@ -596,7 +607,7 @@
         body.dark .btn-reset,
         body.dark .btn-export,
         body.dark .btn-theme {
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255,255,255,0.08);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
         }
 
         body.dark .btn-calc {
@@ -611,7 +622,7 @@
         body.dark .btn-reset {
             background: linear-gradient(135deg, #111827 0%, #0f172a 100%);
             color: #e2e8f0;
-            border-color: rgba(148,163,184,0.22);
+            border-color: rgba(148, 163, 184, 0.22);
         }
 
         body.dark .btn-export {
@@ -624,7 +635,7 @@
         body.dark .table-container,
         body.dark .chart-container,
         body.dark .taxa-card {
-            border-color: rgba(255,255,255,0.1);
+            border-color: rgba(255, 255, 255, 0.1);
         }
 
         .summary-item span {
@@ -638,7 +649,8 @@
         }
 
         .table-container {
-            overflow-x: visible; /* sem scroll no desktop */
+            overflow-x: visible;
+            /* sem scroll no desktop */
             margin-top: 24px;
             border-radius: 16px;
             box-shadow: 0 8px 32px rgba(15, 23, 42, 0.08);
@@ -657,7 +669,7 @@
             text-align: center;
             padding: 11px 7px;
             background: linear-gradient(135deg, #2F5597 0%, #1e3a6d 100%);
-            color: rgba(255,255,255,0.95);
+            color: rgba(255, 255, 255, 0.95);
             font-weight: 700;
             font-size: 0.72em;
             letter-spacing: 0.04em;
@@ -758,7 +770,7 @@
             border: 1px solid rgba(255, 255, 255, 0.5);
             overflow-x: auto;
             white-space: nowrap;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .tabs-nav::-webkit-scrollbar {
@@ -778,31 +790,37 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .tab-btn:hover {
             background: rgba(255, 255, 255, 0.8);
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .tab-btn.active {
             color: var(--primary-color);
             background: white;
             transform: translateY(0);
-            box-shadow: 0 4px 12px rgba(47, 85, 151, 0.2), 
-                        inset 0 -2px 0 var(--primary-color);
+            box-shadow: 0 4px 12px rgba(47, 85, 151, 0.2),
+                inset 0 -2px 0 var(--primary-color);
         }
 
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
 
         /* Seletores de Período no Gráfico */
         .periodo-selector {
             display: flex;
             gap: 5px;
         }
+
         .btn-periodo {
             padding: 4px 8px;
             font-size: 0.75em;
@@ -813,6 +831,7 @@
             cursor: pointer;
             transition: 0.2s;
         }
+
         .btn-periodo.active {
             background: var(--primary-color);
             color: white;
@@ -829,14 +848,23 @@
             margin-bottom: 15px;
             text-align: center;
             font-size: 0.85em;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
             animation: slideDown 0.4s ease-out;
             border-left: 4px solid #ffb300;
         }
+
         @keyframes slideDown {
-            from { transform: translateY(-10px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
+
         .btn-update {
             background-color: #0ea5e9;
             color: white;
@@ -848,7 +876,10 @@
             font-weight: bold;
             transition: background 0.2s;
         }
-        .btn-update:hover { background-color: #0284c7; }
+
+        .btn-update:hover {
+            background-color: #0284c7;
+        }
     </style>
 
     <link rel="manifest" href="manifest.json">
@@ -863,7 +894,7 @@
         if ('serviceWorker' in navigator) {
             // Registra e solicita ao navegador que verifique atualizações no servidor
             navigator.serviceWorker.register('./sw.js').then(reg => {
-                reg.update(); 
+                reg.update();
 
                 if (reg.waiting) {
                     registrationWaiting = reg.waiting;
@@ -905,1053 +936,1085 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="info.js" defer></script>
-	
+
 </head>
+
 <body>
 
-<div class="container">
-    <div id="update-notification">
-        ✨ Uma nova versão do simulador está disponível. 
-        <button class="btn-update" onclick="handleUpdate()">Descartar cache e atualizar</button>
-    </div>
-
-    <header class="header-container">
-        <div class="header-top">
-            <img src="icon-192.png" alt="Ícone Financeiro">
-            <div class="header-copy">
-                <h1 id="main-title">Simulador de <span class="text-gradient">Renda</span></h1>
-                <p class="header-subtitle">Projete a evolução do seu patrimônio com taxas reais, simule retiradas e planeje sua liberdade financeira.</p>
-            </div>
+    <div class="container">
+        <div id="update-notification">
+            ✨ Uma nova versão do simulador está disponível.
+            <button class="btn-update" onclick="handleUpdate()">Descartar cache e atualizar</button>
         </div>
-        <div class="header-meta">
-            <div class="meta-date">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="meta-icon"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                <span>Atualizado em: <strong id="header-date">...</strong></span>
-            </div>
-            <button class="btn-theme" onclick="toggleTema()">Tema Escuro</button>
-        </div>
-    </header>
 
-    <nav class="tabs-nav">
-        <button class="tab-btn active" onclick="alternarAba(event, 'aba-simulador')">🧮 Simulador</button>
-        <button class="tab-btn" onclick="alternarAba(event, 'aba-renda-fixa')">💰 Renda Fixa</button>
-        <button class="tab-btn" onclick="alternarAba(event, 'aba-info')">📈 Taxas e Índices</button>
-        <button class="tab-btn" onclick="alternarAba(event, 'aba-acoes')">📊 Mercado de Ações</button>
-        <button class="tab-btn" onclick="alternarAba(event, 'aba-economia')">🎯 Planejamento FIRE</button>
-        <button class="tab-btn" onclick="alternarAba(event, 'aba-amortizacao')">📉 Amortizar vs Investir</button>
-    </nav>
-    
-    <div id="aba-simulador" class="tab-content active">
-        <div class="grid-inputs">
-            <div class="input-group">
-                <label>Valor Inicial (R$)</label>
-                <input type="text" id="valorInicial" placeholder="0,00" data-type="moeda" value="1.000,00">
-            </div>
-            <div class="input-group">
-                <label>Aporte Mensal (R$)</label>
-                <input type="text" id="aporteMensal" placeholder="0,00" data-type="moeda" value="0,00">
-            </div>
-            <div class="input-group">
-                <label>Retirada Mensal (R$)</label>
-                <input type="text" id="retiradaMensal" placeholder="0,00" data-type="moeda" value="0,00">
-            </div>
-            <div class="input-group">
-                <label>Taxa de aplicação (%)</label>
-                <input type="text" id="taxaAplicacao" placeholder="100,00" data-type="percentual" value="100,00">
-            </div>
-            <div class="input-group">
-                <label>Taxa de Juros Anual (%)</label>
-                <input type="text" id="taxaAnual" placeholder="0,00" data-type="percentual">
-                <div class="taxa-info" id="taxaInfo">Buscando taxa do governo...</div>
-            </div>
-            <div class="input-group">
-                <label>Período</label>
-                <div style="display: flex; gap: 5px; align-items: center;">
-                    <input type="text" id="periodoMeses" placeholder="1" data-type="numero" value="1" style="width: 60px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em;">
-                    <select id="periodoUnidade" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em; cursor: pointer; background: white; flex: 1; min-width: 100px;">
-                        <option value="dias">Dias</option>
-                        <option value="meses" selected>Meses</option>
-                        <option value="anos">Anos</option>
-                    </select>
+        <header class="header-container">
+            <div class="header-top">
+                <img src="icon-192.png" alt="Ícone Financeiro">
+                <div class="header-copy">
+                    <h1 id="main-title">Simulador de <span class="text-gradient">Renda</span></h1>
+                    <p class="header-subtitle">Projete a evolução do seu patrimônio com taxas reais, simule retiradas e
+                        planeje sua liberdade financeira.</p>
                 </div>
             </div>
-            <div class="input-group">
-                <label>Alíquota de IR (% ou "0" para Regressiva)</label>
-                <input type="text" id="aliquotaIR" placeholder="22,50%" data-type="percentual" value="0,00">
+            <div class="header-meta">
+                <div class="meta-date">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                        class="meta-icon">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <span>Atualizado em: <strong id="header-date">...</strong></span>
+                </div>
+                <button class="btn-theme" onclick="toggleTema()">Tema Escuro</button>
+            </div>
+        </header>
+
+        <nav class="tabs-nav">
+            <button class="tab-btn active" onclick="alternarAba(event, 'aba-simulador')">🧮 Simulador</button>
+            <button class="tab-btn" onclick="alternarAba(event, 'aba-renda-fixa')">💰 Renda Fixa</button>
+            <button class="tab-btn" onclick="alternarAba(event, 'aba-info')">📈 Taxas e Índices</button>
+            <button class="tab-btn" onclick="alternarAba(event, 'aba-acoes')">📊 Mercado de Ações</button>
+            <button class="tab-btn" onclick="alternarAba(event, 'aba-economia')">🎯 Planejamento FIRE</button>
+            <button class="tab-btn" onclick="alternarAba(event, 'aba-amortizacao')">📉 Amortizar vs Investir</button>
+        </nav>
+
+        <div id="aba-simulador" class="tab-content active">
+            <div class="grid-inputs">
+                <div class="input-group">
+                    <label>Valor Inicial (R$)</label>
+                    <input type="text" id="valorInicial" placeholder="0,00" data-type="moeda" value="1.000,00">
+                </div>
+                <div class="input-group">
+                    <label>Aporte Mensal (R$)</label>
+                    <input type="text" id="aporteMensal" placeholder="0,00" data-type="moeda" value="0,00">
+                </div>
+                <div class="input-group">
+                    <label>Retirada Mensal (R$)</label>
+                    <input type="text" id="retiradaMensal" placeholder="0,00" data-type="moeda" value="0,00">
+                </div>
+                <div class="input-group">
+                    <label>Taxa de aplicação (%)</label>
+                    <input type="text" id="taxaAplicacao" placeholder="100,00" data-type="percentual" value="100,00">
+                </div>
+                <div class="input-group">
+                    <label>Taxa de Juros Anual (%)</label>
+                    <input type="text" id="taxaAnual" placeholder="0,00" data-type="percentual">
+                    <div class="taxa-info" id="taxaInfo">Buscando taxa do governo...</div>
+                </div>
+                <div class="input-group">
+                    <label>Período</label>
+                    <div style="display: flex; gap: 5px; align-items: center;">
+                        <input type="text" id="periodoMeses" placeholder="1" data-type="numero" value="1"
+                            style="width: 60px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em;">
+                        <select id="periodoUnidade"
+                            style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em; cursor: pointer; background: white; flex: 1; min-width: 100px;">
+                            <option value="dias">Dias</option>
+                            <option value="meses" selected>Meses</option>
+                            <option value="anos">Anos</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Alíquota de IR (% ou "0" para Regressiva)</label>
+                    <input type="text" id="aliquotaIR" placeholder="22,50%" data-type="percentual" value="0,00">
+                </div>
+            </div>
+
+            <div class="buttons-group">
+                <button class="btn-calc" onclick="calcular()">Calcular Resultados</button>
+                <button class="btn-add" onclick="incrementarPeriodo()">+1P</button>
+                <button class="btn-decrease" onclick="decrementarPeriodo()">-1P</button>
+                <button class="btn-reset" onclick="resetarCampos()">Limpar Campos</button>
+                <button class="btn-export" onclick="exportarExcel()">📊 Exportar Excel</button>
+            </div>
+            <div class="taxa-card" id="taxaEfetivaCard">
+                <div class="taxa-card-title">Taxa Efetiva Usada (%)</div>
+                <div class="taxa-card-value" id="taxaEfetivaValor">0,00%</div>
+            </div>
+
+            <div class="summary-box" id="resumo">
+                <div class="summary-item">Total Investido<span id="resTotalInvestido">R$ 0,00</span></div>
+                <div class="summary-item">Montante Bruto<span id="resMontanteBruto">R$ 0,00</span></div>
+                <div class="summary-item">Rendimento Bruto<span id="resRendimentoBruto">R$ 0,00</span></div>
+                <div class="summary-item">Imposto de Renda<span id="resIR">R$ 0,00</span></div>
+                <div class="summary-item">Rendimento Líquido<span id="resRendimentoLiquido">R$ 0,00</span></div>
+                <div class="summary-item">Montante Líquido<span id="resMontanteLiquido">R$ 0,00</span></div>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="graficoEvolucao"></canvas>
+            </div>
+
+            <div class="table-container">
+                <table id="tabelaEvolucao">
+                    <thead>
+                        <tr>
+                            <th>Mês</th>
+                            <th>Taxa Aplic.</th>
+                            <th>Aporte</th>
+                            <th>Retirada</th>
+                            <th>Juros (Bruto)</th>
+                            <th>Alíquota IR</th>
+                            <th>IR Descontado</th>
+                            <th>Juros (Líquido)</th>
+                            <th>Total Acumulado</th>
+                            <th>Total Líquido</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
             </div>
         </div>
 
-        <div class="buttons-group">
-            <button class="btn-calc" onclick="calcular()">Calcular Resultados</button>
-            <button class="btn-add" onclick="incrementarPeriodo()">+1P</button>
-            <button class="btn-decrease" onclick="decrementarPeriodo()">-1P</button>
-            <button class="btn-reset" onclick="resetarCampos()">Limpar Campos</button>
-            <button class="btn-export" onclick="exportarExcel()">📊 Exportar Excel</button>
-        </div>
-        <div class="taxa-card" id="taxaEfetivaCard">
-            <div class="taxa-card-title">Taxa Efetiva Usada (%)</div>
-            <div class="taxa-card-value" id="taxaEfetivaValor">0,00%</div>
-        </div>
+        <div id="aba-renda-fixa" class="tab-content"></div>
 
-        <div class="summary-box" id="resumo">
-            <div class="summary-item">Total Investido<span id="resTotalInvestido">R$ 0,00</span></div>
-            <div class="summary-item">Montante Bruto<span id="resMontanteBruto">R$ 0,00</span></div>
-            <div class="summary-item">Rendimento Bruto<span id="resRendimentoBruto">R$ 0,00</span></div>
-            <div class="summary-item">Imposto de Renda<span id="resIR">R$ 0,00</span></div>
-            <div class="summary-item">Rendimento Líquido<span id="resRendimentoLiquido">R$ 0,00</span></div>
-            <div class="summary-item">Montante Líquido<span id="resMontanteLiquido">R$ 0,00</span></div>
-        </div>
-
-        <div class="chart-container">
-            <canvas id="graficoEvolucao"></canvas>
-        </div>
-
-        <div class="table-container">
-            <table id="tabelaEvolucao">
-                <thead>
-                    <tr>
-                        <th>Mês</th>
-                        <th>Taxa Aplic.</th>
-                        <th>Aporte</th>
-                        <th>Retirada</th>
-                        <th>Juros (Bruto)</th>
-                        <th>Alíquota IR</th>
-                        <th>IR Descontado</th>
-                        <th>Juros (Líquido)</th>
-                        <th>Total Acumulado</th>
-                        <th>Total Líquido</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
+        <div id="aba-info" class="tab-content"></div>
+        <div id="aba-acoes" class="tab-content"></div>
+        <div id="aba-economia" class="tab-content"></div>
+        <div id="aba-amortizacao" class="tab-content"></div>
     </div>
 
-    <div id="aba-renda-fixa" class="tab-content"></div>
+    <script>
+        let meuGrafico = null;
+        let graficoComparacaoRendaFixa = null;
 
-    <div id="aba-info" class="tab-content"></div>
-    <div id="aba-acoes" class="tab-content"></div>
-    <div id="aba-economia" class="tab-content"></div>
-    <div id="aba-amortizacao" class="tab-content"></div>
-</div>
+        function formatarMoeda(valor) {
+            return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
 
-<script>
-    let meuGrafico = null;
-    let graficoComparacaoRendaFixa = null;
+        async function alternarAba(evt, nomeAba) {
+            const contents = document.getElementsByClassName("tab-content");
+            for (let content of contents) content.classList.remove("active");
 
-    function formatarMoeda(valor) {
-        return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    }
+            const buttons = document.getElementsByClassName("tab-btn");
+            for (let btn of buttons) btn.classList.remove("active");
 
-    async function alternarAba(evt, nomeAba) {
-        const contents = document.getElementsByClassName("tab-content");
-        for (let content of contents) content.classList.remove("active");
+            const targetAba = document.getElementById(nomeAba);
 
-        const buttons = document.getElementsByClassName("tab-btn");
-        for (let btn of buttons) btn.classList.remove("active");
+            // Lógica de carregamento sob demanda para abas externas
+            if (nomeAba === 'aba-info' || nomeAba === 'aba-renda-fixa' || nomeAba === 'aba-acoes' || nomeAba === 'aba-economia' || nomeAba === 'aba-amortizacao') {
+                if (targetAba.innerHTML.trim() === "") {
+                    try {
+                        const response = await fetch(
+                            nomeAba === 'aba-info' ? 'info.html' :
+                                (nomeAba === 'aba-renda-fixa' ? 'renda-fixa.html' :
+                                    (nomeAba === 'aba-acoes' ? 'acoes.html' :
+                                        (nomeAba === 'aba-economia' ? 'economia-criativa.html' : 'amortizacao.html'))))
+                            ;
+                        if (!response.ok) throw new Error('Falha ao carregar arquivo');
+                        const html = await response.text();
+                        targetAba.innerHTML = html;
+                    } catch (error) {
+                        targetAba.innerHTML = "<p>Erro ao carregar as informações. Use um servidor local (Live Server).</p>";
+                        return;
+                    }
+                }
 
-        const targetAba = document.getElementById(nomeAba);
-        
-        // Lógica de carregamento sob demanda para abas externas
-if (nomeAba === 'aba-info' || nomeAba === 'aba-renda-fixa' || nomeAba === 'aba-acoes' || nomeAba === 'aba-economia' || nomeAba === 'aba-amortizacao') {
-            if (targetAba.innerHTML.trim() === "") {
+                // Dispara um evento customizado informando que a aba está pronta/ativa
+                // Isso permite que o info.js execute sem o index.html chamá-lo diretamente
+                targetAba.dispatchEvent(new CustomEvent('abaAtivada', { bubbles: true }));
+            }
+
+            targetAba.classList.add("active");
+            evt.currentTarget.classList.add("active");
+
+            // Guarda a aba ativa para restaurar no reload
+            try { localStorage.setItem('abaAtiva', nomeAba); } catch (e) { /* ignore */ }
+        }
+
+        async function recarregarAbaAcoes() {
             try {
-                const response = await fetch(
-                    nomeAba === 'aba-info' ? 'info.html' : 
-                    (nomeAba === 'aba-renda-fixa' ? 'renda-fixa.html' : 
-                    (nomeAba === 'aba-acoes' ? 'acoes.html' : 
-                    (nomeAba === 'aba-economia' ? 'economia-criativa.html' : 'amortizacao.html'))))
-                ;
-                    if (!response.ok) throw new Error('Falha ao carregar arquivo');
+                // Recarrega o template HTML forçando a busca no servidor (cache bust)
+                const response = await fetch(`acoes.html?t=${Date.now()}`);
+                if (!response.ok) throw new Error('Falha ao buscar template');
                 const html = await response.text();
-                targetAba.innerHTML = html;
-            } catch (error) {
-                    targetAba.innerHTML = "<p>Erro ao carregar as informações. Use um servidor local (Live Server).</p>";
-                    return;
+                document.getElementById('aba-acoes').innerHTML = html;
+
+                // Popula os dados da API logo em seguida
+                if (typeof carregarDadosAcoes === 'function') {
+                    carregarDadosAcoes();
+                }
+            } catch (e) {
+                console.error("Erro ao atualizar aba de ações:", e);
+            }
+        }
+
+        function obterValorNumerico(valor) {
+            if (!valor) return 0;
+            // Remove pontos de milhar, substitui vírgula por ponto
+            const limpo = valor.replace(/\./g, '').replace(',', '.');
+            const num = parseFloat(limpo);
+            return isNaN(num) ? 0 : num;
+        }
+
+        function formatarMoedaInput(valor) {
+            let num = valor.replace(/[^\d]/g, '');
+            if (!num) return '';
+            num = (parseInt(num) / 100).toFixed(2);
+            return num.replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        }
+
+        function formatarPercentualInput(valor) {
+            let num = valor.replace(/[^\d]/g, '');
+            if (!num) return '';
+            // Permite até 6 dígitos (ex: 12000 -> 120,00)
+            num = num.slice(0, 6);
+            if (num.length <= 1) return num;
+            if (num.length === 2) return num; // Caso o usuário digite apenas dois números
+            let inteiros = num.slice(0, -2);
+            let decimais = num.slice(-2);
+            return inteiros + ',' + decimais;
+        }
+
+        function formatarNumeroInput(valor) {
+            return valor.replace(/[^\d]/g, '').slice(0, 5);
+        }
+
+        function calcularTaxaEfetiva() {
+            const campoAplicacao = document.getElementById('taxaAplicacao');
+            const campoTaxaAnual = document.getElementById('taxaAnual');
+            const valorAplicacaoRaw = campoAplicacao ? campoAplicacao.value : '';
+            const valorAnualRaw = campoTaxaAnual ? campoTaxaAnual.value : '';
+
+            const taxaAplicacao = obterValorNumerico(valorAplicacaoRaw);
+            const taxaAnual = obterValorNumerico(valorAnualRaw);
+            const taxaCDI = typeof window.taxaCDIAtual === 'number' ? window.taxaCDIAtual : NaN;
+
+            let taxaEfetiva = 0;
+            if (taxaAnual > 0 && taxaAplicacao > 0) {
+                taxaEfetiva = taxaAnual * taxaAplicacao / 100;
+            } else if (taxaAnual > 0) {
+                taxaEfetiva = taxaAnual;
+            } else if (taxaAplicacao > 0 && isFinite(taxaCDI)) {
+                taxaEfetiva = taxaCDI * taxaAplicacao / 100;
+            }
+
+            const elTaxaEfetiva = document.getElementById('taxaEfetivaValor');
+            if (elTaxaEfetiva) {
+                elTaxaEfetiva.innerText = taxaEfetiva.toFixed(2).replace('.', ',') + '%';
+            }
+
+            return taxaEfetiva;
+        }
+
+        function resetarCampos() {
+            if (confirm('Deseja realmente limpar todos os campos e voltar aos valores originais?')) {
+                localStorage.removeItem('simulador_dados');
+
+                document.getElementById('valorInicial').value = '1.000,00';
+                document.getElementById('aporteMensal').value = '0,00';
+                document.getElementById('retiradaMensal').value = '0,00';
+                document.getElementById('taxaAplicacao').value = '100,00';
+                document.getElementById('taxaAnual').value = '';
+                document.getElementById('periodoMeses').value = '1';
+                document.getElementById('periodoUnidade').value = 'meses';
+                document.getElementById('aliquotaIR').value = '0,00';
+
+                salvarDadosLocal();
+
+                carregarTaxaDoGoverno();
+            }
+        }
+
+        function incrementarPeriodo() {
+            const periodoInput = document.getElementById('periodoMeses');
+            const mesesAtuais = parseInt(periodoInput.value.replace(/\D/g, '')) || 0;
+            periodoInput.value = String(mesesAtuais + 1);
+            salvarDadosLocal();
+            calcular();
+        }
+
+        function decrementarPeriodo() {
+            const periodoInput = document.getElementById('periodoMeses');
+            const mesesAtuais = parseInt(periodoInput.value.replace(/\D/g, '')) || 0;
+            periodoInput.value = String(Math.max(1, mesesAtuais - 1));
+            salvarDadosLocal();
+            calcular();
+        }
+
+
+
+        function salvarDadosLocal() {
+            const campos = ['valorInicial', 'aporteMensal', 'retiradaMensal', 'taxaAplicacao', 'taxaAnual', 'periodoMeses', 'aliquotaIR', 'periodoUnidade', 'simulacaoValor', 'simulacaoPeriodoMeses', 'simulacaoPeriodoUnidade'];
+            const dados = {};
+            campos.forEach(id => {
+                const el = document.getElementById(id);
+                dados[id] = el ? el.value : '';
+            });
+            localStorage.setItem('simulador_dados', JSON.stringify(dados));
+        }
+
+        function carregarDadosLocal() {
+            const dadosStr = localStorage.getItem('simulador_dados');
+            if (dadosStr) {
+                try {
+                    const dados = JSON.parse(dadosStr);
+                    Object.keys(dados).forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el && dados[id] !== undefined) {
+                            el.value = dados[id];
+                        }
+                    });
+                } catch (error) {
+                    console.error('Erro ao carregar dados locais:', error);
+                    localStorage.removeItem('simulador_dados');
                 }
             }
-            
-            // Dispara um evento customizado informando que a aba está pronta/ativa
-            // Isso permite que o info.js execute sem o index.html chamá-lo diretamente
-            targetAba.dispatchEvent(new CustomEvent('abaAtivada', { bubbles: true }));
         }
 
-        targetAba.classList.add("active");
-        evt.currentTarget.classList.add("active");
+        function calcularAliquotaRegressiva(meses) {
+            if (meses <= 6) return 22.5;
+            if (meses <= 12) return 20.0;
+            if (meses <= 24) return 17.5;
+            return 15.0;
+        }
 
-        // Guarda a aba ativa para restaurar no reload
-        try { localStorage.setItem('abaAtiva', nomeAba); } catch (e) { /* ignore */ }
-    }
-
-    async function recarregarAbaAcoes() {
-        try {
-            // Recarrega o template HTML forçando a busca no servidor (cache bust)
-            const response = await fetch(`acoes.html?t=${Date.now()}`);
-            if (!response.ok) throw new Error('Falha ao buscar template');
-            const html = await response.text();
-            document.getElementById('aba-acoes').innerHTML = html;
-            
-            // Popula os dados da API logo em seguida
-            if (typeof carregarDadosAcoes === 'function') {
-                carregarDadosAcoes();
+        document.addEventListener('DOMContentLoaded', function () {
+            const hoje = new Date().toLocaleDateString('pt-BR');
+            const novoTitulo = `Simulador de Renda Detalhado - ${hoje}`;
+            document.title = novoTitulo;
+            document.getElementById('main-title').innerHTML = 'Simulador de <span class="text-gradient">Renda</span>';
+            const headerDate = document.getElementById('header-date');
+            if (headerDate) {
+                fetch('sw.js?v=' + new Date().getTime())
+                    .then(r => r.text())
+                    .then(text => {
+                        const vMatch = text.match(/const VERSAO = ['"]([^'"]+)['"]/);
+                        const dMatch = text.match(/const DATA_ATUALIZACAO = ['"]([^'"]+)['"]/);
+                        if (vMatch && dMatch) {
+                            //headerDate.innerText = `${dMatch[1]} - V.${vMatch[1]}`;
+                            headerDate.innerText = `${dMatch[1]} - V.00`;
+                        } else {
+                            headerDate.innerText = hoje;
+                        }
+                    })
+                    .catch(() => {
+                        headerDate.innerText = hoje;
+                    });
             }
-        } catch (e) {
-            console.error("Erro ao atualizar aba de ações:", e);
-        }
-    }
 
-    function obterValorNumerico(valor) {
-        if (!valor) return 0;
-        // Remove pontos de milhar, substitui vírgula por ponto
-        const limpo = valor.replace(/\./g, '').replace(',', '.');
-        const num = parseFloat(limpo);
-        return isNaN(num) ? 0 : num;
-    }
+            carregarDadosLocal();
+            atualizarRendaFixaTaxasInfo();
 
-    function formatarMoedaInput(valor) {
-        let num = valor.replace(/[^\d]/g, '');
-        if (!num) return '';
-        num = (parseInt(num) / 100).toFixed(2);
-        return num.replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    }
+            function inicializarAutoCalculo() {
+                const camposSimulador = ['valorInicial', 'aporteMensal', 'retiradaMensal', 'taxaAplicacao', 'taxaAnual', 'periodoMeses', 'aliquotaIR'];
+                camposSimulador.forEach(id => {
+                    const campo = document.getElementById(id);
+                    if (!campo) return;
+                    campo.addEventListener('input', function () {
+                        const tipo = this.getAttribute('data-type');
+                        let valor = this.value;
+                        if (tipo === 'moeda') {
+                            this.value = formatarMoedaInput(valor);
+                        } else if (tipo === 'percentual') {
+                            this.value = formatarPercentualInput(valor);
+                        } else if (tipo === 'numero') {
+                            this.value = formatarNumeroInput(valor);
+                        }
 
-    function formatarPercentualInput(valor) {
-        let num = valor.replace(/[^\d]/g, '');
-        if (!num) return '';
-        // Permite até 6 dígitos (ex: 12000 -> 120,00)
-        num = num.slice(0, 6);
-        if (num.length <= 1) return num;
-        if (num.length === 2) return num; // Caso o usuário digite apenas dois números
-        let inteiros = num.slice(0, -2);
-        let decimais = num.slice(-2);
-        return inteiros + ',' + decimais;
-    }
+                        if (this.id === 'taxaAplicacao' || this.id === 'taxaAnual') {
+                            calcularTaxaEfetiva();
+                        }
+                        salvarDadosLocal();
+                        calcular();
+                    });
+                });
 
-    function formatarNumeroInput(valor) {
-        return valor.replace(/[^\d]/g, '').slice(0, 5);
-    }
+                const selPeriodo = document.getElementById('periodoUnidade');
+                if (selPeriodo) {
+                    selPeriodo.addEventListener('change', () => {
+                        salvarDadosLocal();
+                        calcular();
+                    });
+                }
+            }
 
-    function calcularTaxaEfetiva() {
-        const campoAplicacao = document.getElementById('taxaAplicacao');
-        const campoTaxaAnual = document.getElementById('taxaAnual');
-        const valorAplicacaoRaw = campoAplicacao ? campoAplicacao.value : '';
-        const valorAnualRaw = campoTaxaAnual ? campoTaxaAnual.value : '';
+            function inicializarAutoCalculoRendaFixa() {
+                const camposRendaFixa = ['simulacaoValor', 'simulacaoPeriodoMeses'];
+                camposRendaFixa.forEach(id => {
+                    const campo = document.getElementById(id);
+                    if (!campo) return;
+                    campo.addEventListener('input', function () {
+                        const tipo = this.getAttribute('data-type');
+                        let valor = this.value;
+                        if (tipo === 'moeda') {
+                            this.value = formatarMoedaInput(valor);
+                        } else if (tipo === 'numero') {
+                            this.value = formatarNumeroInput(valor);
+                        }
+                        salvarDadosLocal();
+                        calcularComparacaoRendaFixa();
+                    });
+                });
 
-        const taxaAplicacao = obterValorNumerico(valorAplicacaoRaw);
-        const taxaAnual = obterValorNumerico(valorAnualRaw);
-        const taxaCDI = typeof window.taxaCDIAtual === 'number' ? window.taxaCDIAtual : NaN;
+                const selUnidadeRendaFixa = document.getElementById('simulacaoPeriodoUnidade');
+                if (selUnidadeRendaFixa) {
+                    selUnidadeRendaFixa.addEventListener('change', () => {
+                        salvarDadosLocal();
+                        calcularComparacaoRendaFixa();
+                    });
+                }
+            }
 
-        let taxaEfetiva = 0;
-        if (taxaAnual > 0 && taxaAplicacao > 0) {
-            taxaEfetiva = taxaAnual * taxaAplicacao / 100;
-        } else if (taxaAnual > 0) {
-            taxaEfetiva = taxaAnual;
-        } else if (taxaAplicacao > 0 && isFinite(taxaCDI)) {
-            taxaEfetiva = taxaCDI * taxaAplicacao / 100;
-        }
+            inicializarAutoCalculo();
+            inicializarAutoCalculoRendaFixa();
 
-        const elTaxaEfetiva = document.getElementById('taxaEfetivaValor');
-        if (elTaxaEfetiva) {
-            elTaxaEfetiva.innerText = taxaEfetiva.toFixed(2).replace('.', ',') + '%';
-        }
+            // Restaura aba ativa salva (se houver) antes de calcular para garantir que abas externas sejam carregadas
+            const abaSalva = localStorage.getItem('abaAtiva');
+            if (abaSalva && abaSalva !== 'aba-simulador') {
+                const botoes = Array.from(document.querySelectorAll('.tab-btn'));
+                const botao = botoes.find(b => {
+                    const oc = b.getAttribute('onclick') || '';
+                    return oc.indexOf("'" + abaSalva + "'") !== -1;
+                });
+                if (botao) {
+                    // chama alternarAba com um evento fake para ativar e carregar conteúdo
+                    alternarAba({ currentTarget: botao }, abaSalva);
+                }
+            }
 
-        return taxaEfetiva;
-    }
-
-    function resetarCampos() {
-        if (confirm('Deseja realmente limpar todos os campos e voltar aos valores originais?')) {
-            localStorage.removeItem('simulador_dados');
-            
-            document.getElementById('valorInicial').value = '1.000,00';
-            document.getElementById('aporteMensal').value = '0,00';
-            document.getElementById('retiradaMensal').value = '0,00';
-            document.getElementById('taxaAplicacao').value = '100,00';
-            document.getElementById('taxaAnual').value = '';
-            document.getElementById('periodoMeses').value = '1';
-            document.getElementById('periodoUnidade').value = 'meses';
-            document.getElementById('aliquotaIR').value = '0,00';
-            
-            salvarDadosLocal();
-
+            aplicarTemaSalvo();
+            calcular();
             carregarTaxaDoGoverno();
-        }
-    }
-
-    function incrementarPeriodo() {
-        const periodoInput = document.getElementById('periodoMeses');
-        const mesesAtuais = parseInt(periodoInput.value.replace(/\D/g, '')) || 0;
-        periodoInput.value = String(mesesAtuais + 1);
-        salvarDadosLocal();
-        calcular();
-    }
-
-    function decrementarPeriodo() {
-        const periodoInput = document.getElementById('periodoMeses');
-        const mesesAtuais = parseInt(periodoInput.value.replace(/\D/g, '')) || 0;
-        periodoInput.value = String(Math.max(1, mesesAtuais - 1));
-        salvarDadosLocal();
-        calcular();
-    }
-
-    
-
-    function salvarDadosLocal() {
-        const campos = ['valorInicial', 'aporteMensal', 'retiradaMensal', 'taxaAplicacao', 'taxaAnual', 'periodoMeses', 'aliquotaIR', 'periodoUnidade', 'simulacaoValor', 'simulacaoPeriodoMeses', 'simulacaoPeriodoUnidade'];
-        const dados = {};
-        campos.forEach(id => {
-            const el = document.getElementById(id);
-            dados[id] = el ? el.value : '';
         });
-        localStorage.setItem('simulador_dados', JSON.stringify(dados));
-    }
 
-    function carregarDadosLocal() {
-        const dadosStr = localStorage.getItem('simulador_dados');
-        if (dadosStr) {
+        function aplicarTemaSalvo() {
+            const temaSalvo = localStorage.getItem('temaSimulador') || 'claro';
+            const usarEscuro = temaSalvo === 'escuro';
+            document.body.classList.toggle('dark', usarEscuro);
+            const botaoTema = document.querySelector('.btn-theme');
+            if (botaoTema) {
+                botaoTema.innerText = usarEscuro ? 'Tema Claro' : 'Tema Escuro';
+            }
+        }
+
+        function toggleTema() {
+            const usarEscuro = !document.body.classList.contains('dark');
+            document.body.classList.toggle('dark', usarEscuro);
+            localStorage.setItem('temaSimulador', usarEscuro ? 'escuro' : 'claro');
+            const botaoTema = document.querySelector('.btn-theme');
+            if (botaoTema) {
+                botaoTema.innerText = usarEscuro ? 'Tema Claro' : 'Tema Escuro';
+            }
+        }
+
+        async function carregarTaxaDoGoverno() {
             try {
-                const dados = JSON.parse(dadosStr);
-                Object.keys(dados).forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el && dados[id] !== undefined) {
-                        el.value = dados[id];
+                // Buscamos Selic (432), IPCA 12m (13522) e Salário Mínimo (1619) do BCB
+                const [resSelic, resIpca, resSalario] = await Promise.all([
+                    fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados/ultimos/1?formato=json'),
+                    fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.13522/dados/ultimos/1?formato=json'),
+                    fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.1619/dados/ultimos/1?formato=json')
+                ]);
+
+                const dataSelic = await resSelic.json();
+                const dataIpca = await resIpca.json();
+                const dataSalario = await resSalario.json();
+
+                if (dataSelic && dataSelic[0]) {
+                    const taxaSelic = parseFloat(dataSelic[0].valor);
+                    window.taxaSelicAtual = taxaSelic;
+                    const taxaCDI = taxaSelic - 0.1;
+                    window.taxaCDIAtual = taxaCDI;
+
+                    if (!document.getElementById('taxaAplicacao').value) {
+                        document.getElementById('taxaAplicacao').value = '100,00';
                     }
-                });
+                    if (!document.getElementById('taxaAnual').value) {
+                        document.getElementById('taxaAnual').value = taxaCDI.toFixed(2).replace('.', ',');
+                    }
+                    calcularTaxaEfetiva();
+                    document.getElementById('taxaInfo').textContent = `SELIC: ${taxaSelic.toFixed(2).replace('.', ',')}% a.a. | CDI: ${taxaCDI.toFixed(2).replace('.', ',')}% a.a.`;
+                }
+
+                if (dataIpca && dataIpca[0]) {
+                    window.ipcaAtual = parseFloat(dataIpca[0].valor);
+                }
+
+                if (dataSalario && dataSalario[0]) {
+                    window.salarioMinimoAtual = parseFloat(dataSalario[0].valor);
+                }
+
+                atualizarRendaFixaTaxasInfo();
+                calcularComparacaoRendaFixa();
+                calcular();
+                // Tenta atualizar a aba FIRE se ela já estiver carregada
+                if (typeof calcularFIRE === 'function') calcularFIRE();
+
             } catch (error) {
-                console.error('Erro ao carregar dados locais:', error);
-                localStorage.removeItem('simulador_dados');
-            }
-        }
-    }
-
-    function calcularAliquotaRegressiva(meses) {
-        if (meses <= 6) return 22.5;
-        if (meses <= 12) return 20.0;
-        if (meses <= 24) return 17.5;
-        return 15.0;
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const hoje = new Date().toLocaleDateString('pt-BR');
-        const novoTitulo = `Simulador de Renda Detalhado - ${hoje}`;
-        document.title = novoTitulo;
-        document.getElementById('main-title').innerHTML = 'Simulador de <span class="text-gradient">Renda</span>';
-        const headerDate = document.getElementById('header-date');
-        if (headerDate) headerDate.innerText = hoje;
-
-        carregarDadosLocal();
-        atualizarRendaFixaTaxasInfo();
-
-        function inicializarAutoCalculo() {
-            const camposSimulador = ['valorInicial', 'aporteMensal', 'retiradaMensal', 'taxaAplicacao', 'taxaAnual', 'periodoMeses', 'aliquotaIR'];
-            camposSimulador.forEach(id => {
-                const campo = document.getElementById(id);
-                if (!campo) return;
-                campo.addEventListener('input', function() {
-                    const tipo = this.getAttribute('data-type');
-                    let valor = this.value;
-                    if (tipo === 'moeda') {
-                        this.value = formatarMoedaInput(valor);
-                    } else if (tipo === 'percentual') {
-                        this.value = formatarPercentualInput(valor);
-                    } else if (tipo === 'numero') {
-                        this.value = formatarNumeroInput(valor);
-                    }
-
-                    if (this.id === 'taxaAplicacao' || this.id === 'taxaAnual') {
-                        calcularTaxaEfetiva();
-                    }
-                    salvarDadosLocal();
-                    calcular();
-                });
-            });
-
-            const selPeriodo = document.getElementById('periodoUnidade');
-            if (selPeriodo) {
-                selPeriodo.addEventListener('change', () => {
-                    salvarDadosLocal();
-                    calcular();
-                });
-            }
-        }
-
-        function inicializarAutoCalculoRendaFixa() {
-            const camposRendaFixa = ['simulacaoValor', 'simulacaoPeriodoMeses'];
-            camposRendaFixa.forEach(id => {
-                const campo = document.getElementById(id);
-                if (!campo) return;
-                campo.addEventListener('input', function() {
-                    const tipo = this.getAttribute('data-type');
-                    let valor = this.value;
-                    if (tipo === 'moeda') {
-                        this.value = formatarMoedaInput(valor);
-                    } else if (tipo === 'numero') {
-                        this.value = formatarNumeroInput(valor);
-                    }
-                    salvarDadosLocal();
-                    calcularComparacaoRendaFixa();
-                });
-            });
-
-            const selUnidadeRendaFixa = document.getElementById('simulacaoPeriodoUnidade');
-            if (selUnidadeRendaFixa) {
-                selUnidadeRendaFixa.addEventListener('change', () => {
-                    salvarDadosLocal();
-                    calcularComparacaoRendaFixa();
-                });
-            }
-        }
-
-        inicializarAutoCalculo();
-        inicializarAutoCalculoRendaFixa();
-
-        // Restaura aba ativa salva (se houver) antes de calcular para garantir que abas externas sejam carregadas
-        const abaSalva = localStorage.getItem('abaAtiva');
-        if (abaSalva && abaSalva !== 'aba-simulador') {
-            const botoes = Array.from(document.querySelectorAll('.tab-btn'));
-            const botao = botoes.find(b => {
-                const oc = b.getAttribute('onclick') || '';
-                return oc.indexOf("'" + abaSalva + "'") !== -1;
-            });
-            if (botao) {
-                // chama alternarAba com um evento fake para ativar e carregar conteúdo
-                alternarAba({ currentTarget: botao }, abaSalva);
-            }
-        }
-
-        aplicarTemaSalvo();
-        calcular();
-        carregarTaxaDoGoverno();
-    });
-
-    function aplicarTemaSalvo() {
-        const temaSalvo = localStorage.getItem('temaSimulador') || 'claro';
-        const usarEscuro = temaSalvo === 'escuro';
-        document.body.classList.toggle('dark', usarEscuro);
-        const botaoTema = document.querySelector('.btn-theme');
-        if (botaoTema) {
-            botaoTema.innerText = usarEscuro ? 'Tema Claro' : 'Tema Escuro';
-        }
-    }
-
-    function toggleTema() {
-        const usarEscuro = !document.body.classList.contains('dark');
-        document.body.classList.toggle('dark', usarEscuro);
-        localStorage.setItem('temaSimulador', usarEscuro ? 'escuro' : 'claro');
-        const botaoTema = document.querySelector('.btn-theme');
-        if (botaoTema) {
-            botaoTema.innerText = usarEscuro ? 'Tema Claro' : 'Tema Escuro';
-        }
-    }
-
-    async function carregarTaxaDoGoverno() {
-        try {
-            // Buscamos Selic (432), IPCA 12m (13522) e Salário Mínimo (1619) do BCB
-            const [resSelic, resIpca, resSalario] = await Promise.all([
-                fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados/ultimos/1?formato=json'),
-                fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.13522/dados/ultimos/1?formato=json'),
-                fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.1619/dados/ultimos/1?formato=json')
-            ]);
-
-            const dataSelic = await resSelic.json();
-            const dataIpca = await resIpca.json();
-            const dataSalario = await resSalario.json();
-            
-            if (dataSelic && dataSelic[0]) {
-                const taxaSelic = parseFloat(dataSelic[0].valor);
-                window.taxaSelicAtual = taxaSelic;
-                const taxaCDI = taxaSelic - 0.1;
-                window.taxaCDIAtual = taxaCDI;
-                
+                const taxaPadrao = 14.40;
+                window.taxaSelicAtual = taxaPadrao;
+                window.taxaCDIAtual = taxaPadrao;
                 if (!document.getElementById('taxaAplicacao').value) {
                     document.getElementById('taxaAplicacao').value = '100,00';
                 }
                 if (!document.getElementById('taxaAnual').value) {
-                    document.getElementById('taxaAnual').value = taxaCDI.toFixed(2).replace('.', ',');
+                    document.getElementById('taxaAnual').value = taxaPadrao.toFixed(2).replace('.', ',');
                 }
                 calcularTaxaEfetiva();
-                document.getElementById('taxaInfo').textContent = `SELIC: ${taxaSelic.toFixed(2).replace('.', ',')}% a.a. | CDI: ${taxaCDI.toFixed(2).replace('.', ',')}% a.a.`;
+                atualizarRendaFixaTaxasInfo();
+                calcularComparacaoRendaFixa();
+                document.getElementById('taxaInfo').textContent = `Taxa padrão CDI: ${taxaPadrao.toFixed(2).replace('.', ',')}% a.a. (Erro ao buscar taxa do governo)`;
+                calcular();
             }
-
-            if (dataIpca && dataIpca[0]) {
-                window.ipcaAtual = parseFloat(dataIpca[0].valor);
-            }
-
-            if (dataSalario && dataSalario[0]) {
-                window.salarioMinimoAtual = parseFloat(dataSalario[0].valor);
-            }
-
-            atualizarRendaFixaTaxasInfo();
-            calcularComparacaoRendaFixa();
-            calcular();
-            // Tenta atualizar a aba FIRE se ela já estiver carregada
-            if (typeof calcularFIRE === 'function') calcularFIRE();
-
-        } catch (error) {
-            const taxaPadrao = 14.40;
-            window.taxaSelicAtual = taxaPadrao;
-            window.taxaCDIAtual = taxaPadrao;
-            if (!document.getElementById('taxaAplicacao').value) {
-                document.getElementById('taxaAplicacao').value = '100,00';
-            }
-            if (!document.getElementById('taxaAnual').value) {
-                document.getElementById('taxaAnual').value = taxaPadrao.toFixed(2).replace('.', ',');
-            }
-            calcularTaxaEfetiva();
-            atualizarRendaFixaTaxasInfo();
-            calcularComparacaoRendaFixa();
-            document.getElementById('taxaInfo').textContent = `Taxa padrão CDI: ${taxaPadrao.toFixed(2).replace('.', ',')}% a.a. (Erro ao buscar taxa do governo)`;
-            calcular();
-        }
-    }
-
-    function atualizarRendaFixaTaxasInfo() {
-        const taxaSelic = typeof window.taxaSelicAtual === 'number' ? window.taxaSelicAtual : 0;
-        const taxaCDI = typeof window.taxaCDIAtual === 'number' ? window.taxaCDIAtual : 0;
-        const taxaPoupancaMensal = taxaSelic > 8.5 ? 0.005 : Math.pow(1 + (taxaSelic * 0.7 / 100), 1 / 12) - 1;
-        const taxaPoupancaAnual = Math.pow(1 + taxaPoupancaMensal, 12) - 1;
-        const infoEl = document.getElementById('taxaRendaFixaInfo');
-        if (infoEl) {
-            infoEl.innerText = `Selic: ${taxaSelic.toFixed(2).replace('.', ',')}% | CDI: ${taxaCDI.toFixed(2).replace('.', ',')}%`;
-        }
-        const resSelic = document.getElementById('resSelicAtual');
-        const resCDI = document.getElementById('resCDIAtual');
-        const resPoupanca = document.getElementById('resPoupancaAtual');
-        if (resSelic) resSelic.innerText = `${taxaSelic.toFixed(2).replace('.', ',')}%`;
-        if (resCDI) resCDI.innerText = `${taxaCDI.toFixed(2).replace('.', ',')}%`;
-        if (resPoupanca) resPoupanca.innerText = `${(taxaPoupancaAnual * 100).toFixed(2).replace('.', ',')}%`;
-    }
-
-    function calcular() {
-        const vInicial = obterValorNumerico(document.getElementById('valorInicial').value) || 0;
-        const aporte = obterValorNumerico(document.getElementById('aporteMensal').value) || 0;
-        const retirada = obterValorNumerico(document.getElementById('retiradaMensal').value) || 0;
-        const taxaAnual = obterValorNumerico(document.getElementById('taxaAnual').value) || 0;
-        const taxaAplicacaoValor = obterValorNumerico(document.getElementById('taxaAplicacao').value) || 0;
-        const taxaEfetiva = calcularTaxaEfetiva();
-        const taxaAplicada = taxaEfetiva;
-        const mesesRaw = parseInt(document.getElementById('periodoMeses').value.replace(/\D/g, '')) || 0;
-        const unidade = document.getElementById('periodoUnidade').value;
-        
-        let mesesCalculo;
-        if (unidade === 'anos') mesesCalculo = mesesRaw * 12;
-        else if (unidade === 'dias') mesesCalculo = mesesRaw / 30;
-        else mesesCalculo = mesesRaw;
-
-        const meses = Math.min(mesesCalculo, 480); // Limite de 40 anos
-        const aliquota = obterValorNumerico(document.getElementById('aliquotaIR').value) || 0;
-        
-        const usarRegressiva = aliquota === 0;
-        const taxaMensal = Math.pow(1 + (taxaEfetiva / 100), 1/12) - 1;
-
-        // Cálculo da Taxa da Poupança (Regra: 0.5% se Selic > 8.5, senão 70% da Selic)
-        const selicRef = window.taxaSelicAtual || (taxaAnual + 0.1);
-        const taxaPoupancaMensal = selicRef > 8.5 ? 0.005 : (Math.pow(1 + (selicRef * 0.7 / 100), 1/12) - 1);
-
-        let saldoBruto = vInicial;
-        let saldoPoupanca = vInicial;
-        let totalInvestidoAcumulado = vInicial;
-        let htmlTabela = "";
-        let dadosBrutos = [saldoBruto];
-        let dadosLiquidos = [vInicial];
-        let dadosPoupanca = [saldoPoupanca];
-        let labels = ["Início"];
-        
-        const numIteracoes = Math.ceil(meses);
-
-        for (let i = 1; i <= numIteracoes; i++) {
-            const proporcaoPeriodo = (i <= Math.floor(meses)) ? 1 : (meses % 1);
-
-            // Validação: Não permite que a retirada exceda o saldo disponível
-            const retiradaReal = Math.min(retirada, saldoBruto + aporte);
-            const retiradaPoupancaReal = Math.min(retirada, saldoPoupanca + aporte);
-
-            let baseCalculo = saldoBruto + aporte - retiradaReal;
-            let basePoupanca = saldoPoupanca + aporte - retiradaPoupancaReal;
-            
-            totalInvestidoAcumulado += (aporte - retiradaReal);
-            
-            let jurosMesBruto = baseCalculo * (Math.pow(1 + taxaMensal, proporcaoPeriodo) - 1);
-            saldoBruto = baseCalculo + jurosMesBruto;
-
-            // Cálculo correto do Leão: Alíquota sobre o lucro acumulado total até o mês i
-            const aliqAtual = usarRegressiva ? calcularAliquotaRegressiva(i) : aliquota;
-            const lucroAcumulado = Math.max(0, saldoBruto - totalInvestidoAcumulado);
-            const impostoTeorico = lucroAcumulado * (aliqAtual / 100);
-            const saldoLiquido = saldoBruto - impostoTeorico;
-            
-            // Juros líquido: juros brutos do mês descontados do IR da faixa atual.
-            // Não usar a diferença entre saldos líquidos consecutivos, pois quando a
-            // alíquota muda de faixa (ex: mês 6→7: 22,5%→20%) o saldo líquido acumulado
-            // salta artificialmente, distorcendo o juros líquido do mês da transição.
-            const jurosMesLiquido = jurosMesBruto * (1 - aliqAtual / 100);
-
-            // Evolução Poupança (Isenta de IR) proporcional
-            saldoPoupanca = basePoupanca * Math.pow(1 + taxaPoupancaMensal, proporcaoPeriodo);
-
-            htmlTabela += `<tr>\n                <td>${i}</td>\n                <td>${taxaAplicada.toFixed(2).replace('.', ',')}%</td>\n                <td>${formatarMoeda(aporte)}</td>\n                <td>${formatarMoeda(retiradaReal)}</td>\n                <td>${formatarMoeda(jurosMesBruto)}</td>\n                <td>${aliqAtual.toFixed(2).replace('.', ',')}%</td>\n                <td>${formatarMoeda(impostoTeorico)}</td>\n                <td>${formatarMoeda(jurosMesLiquido)}</td>\n                <td>${formatarMoeda(saldoBruto)}</td>\n                <td>${formatarMoeda(saldoLiquido)}</td>\n            </tr>`;
-            
-            dadosBrutos.push(saldoBruto);
-            dadosLiquidos.push(saldoLiquido);
-            dadosPoupanca.push(saldoPoupanca);
-            labels.push(`Mês ${i}`);
-
         }
 
-        document.querySelector("#tabelaEvolucao tbody").innerHTML = htmlTabela;
-
-        const totalInvestido = totalInvestidoAcumulado;
-        const montanteBruto = saldoBruto;
-        const rendimentoBruto = Math.max(0, montanteBruto - totalInvestido);
-        const aliqFinal = usarRegressiva ? calcularAliquotaRegressiva(meses) : aliquota;
-        const imposto = rendimentoBruto * (aliqFinal / 100);
-        const rendimentoLiquido = rendimentoBruto - imposto;
-        const montanteLiquido = montanteBruto - imposto;
-
-        document.getElementById('resTotalInvestido').innerText = formatarMoeda(totalInvestido);
-        document.getElementById('resMontanteBruto').innerText = formatarMoeda(montanteBruto);
-        document.getElementById('resRendimentoBruto').innerText = formatarMoeda(rendimentoBruto);
-        document.getElementById('resIR').innerText = formatarMoeda(imposto);
-        document.getElementById('resRendimentoLiquido').innerText = formatarMoeda(rendimentoLiquido);
-        document.getElementById('resMontanteLiquido').innerText = formatarMoeda(montanteLiquido);
-
-        const pontosMudancaAliquota = [];
-        if (usarRegressiva) {
-            if (meses >= 6) pontosMudancaAliquota.push(6);
-            if (meses >= 12) pontosMudancaAliquota.push(12);
-            if (meses >= 24) pontosMudancaAliquota.push(24);
-        }
-
-        renderizarGrafico(labels, dadosBrutos, dadosLiquidos, dadosPoupanca, pontosMudancaAliquota);
-    }
-
-    function calcularComparacaoRendaFixa() {
-        // Segurança: se a aba externa ainda não foi carregada, aborta silenciosamente
-        const elValor = document.getElementById('simulacaoValor');
-        const elPeriodo = document.getElementById('simulacaoPeriodoMeses');
-        const elUnidade = document.getElementById('simulacaoPeriodoUnidade');
-        if (!elValor || !elPeriodo || !elUnidade) return;
-
-        const valor = obterValorNumerico(elValor.value) || 0;
-        const periodoRaw = parseInt(elPeriodo.value.replace(/\D/g, '')) || 0;
-        const unidade = elUnidade.value;
-        let mesesCalculo = unidade === 'anos' ? periodoRaw * 12 : unidade === 'dias' ? periodoRaw / 30 : periodoRaw;
-        const meses = Math.min(Math.max(mesesCalculo, 1), 480);
-
-        const taxaSelic = typeof window.taxaSelicAtual === 'number' ? window.taxaSelicAtual : 13.75;
-        const taxaCDI = typeof window.taxaCDIAtual === 'number' ? window.taxaCDIAtual : taxaSelic * 0.98;
-        const taxaPoupancaMensal = taxaSelic > 8.5 ? 0.005 : Math.pow(1 + (taxaSelic * 0.7 / 100), 1 / 12) - 1;
-        const taxaSelicMensal = Math.pow(1 + taxaSelic / 100, 1 / 12) - 1;
-        const taxaCDIMensal = Math.pow(1 + taxaCDI / 100, 1 / 12) - 1;
-
-        const brutoPoupanca = valor * Math.pow(1 + taxaPoupancaMensal, meses);
-        const brutoCDI = valor * Math.pow(1 + taxaCDIMensal, meses);
-        const brutoTesouro = valor * Math.pow(1 + taxaSelicMensal, meses);
-
-        const aliquota = calcularAliquotaRegressiva(meses);
-        const lucroPoupanca = brutoPoupanca - valor;
-        const lucroCDI = brutoCDI - valor;
-        const lucroTesouro = brutoTesouro - valor;
-        const impostoCDI = lucroCDI * (aliquota / 100);
-        const impostoTesouro = lucroTesouro * (aliquota / 100);
-        const liquidoCDI = brutoCDI - impostoCDI;
-        const liquidoTesouro = brutoTesouro - impostoTesouro;
-
-        const taxaPoupancaAnual = Math.pow(1 + taxaPoupancaMensal, 12) - 1;
-
-        document.getElementById('taxaRendaFixaInfo').innerText = `Selic: ${taxaSelic.toFixed(2).replace('.', ',')}% | CDI: ${taxaCDI.toFixed(2).replace('.', ',')}%`;
-        document.getElementById('resSelicAtual').innerText = `${taxaSelic.toFixed(2).replace('.', ',')}%`;
-        document.getElementById('resCDIAtual').innerText = `${taxaCDI.toFixed(2).replace('.', ',')}%`;
-        document.getElementById('resPoupancaAtual').innerText = `${(taxaPoupancaAnual * 100).toFixed(2).replace('.', ',')}%`;
-
-        const investimentos = [
-            {
-                nome: 'Poupança',
-                taxa: `${(taxaPoupancaAnual * 100).toFixed(2).replace('.', ',')}%`,
-                aliquota: 'Isento',
-                bruto: brutoPoupanca,
-                rendimento: lucroPoupanca,
-                liquido: brutoPoupanca
-            },
-            {
-                nome: 'CDB 100% CDI',
-                taxa: `${taxaCDI.toFixed(2).replace('.', ',')}%`,
-                aliquota: `${aliquota.toFixed(2).replace('.', ',')}%`,
-                bruto: brutoCDI,
-                rendimento: lucroCDI,
-                liquido: liquidoCDI
-            },
-            {
-                nome: 'CDB 110% CDI',
-                taxa: `${(taxaCDI * 1.10).toFixed(2).replace('.', ',')}%`,
-                aliquota: `${aliquota.toFixed(2).replace('.', ',')}%`,
-                bruto: valor * Math.pow(1 + taxaCDIMensal * 1.10, meses),
-                rendimento: valor * Math.pow(1 + taxaCDIMensal * 1.10, meses) - valor,
-                liquido: valor * Math.pow(1 + taxaCDIMensal * 1.10, meses) - (valor * Math.pow(1 + taxaCDIMensal * 1.10, meses) - valor) * (aliquota / 100)
-            },
-            {
-                nome: 'CDB 120% CDI',
-                taxa: `${(taxaCDI * 1.20).toFixed(2).replace('.', ',')}%`,
-                aliquota: `${aliquota.toFixed(2).replace('.', ',')}%`,
-                bruto: valor * Math.pow(1 + taxaCDIMensal * 1.20, meses),
-                rendimento: valor * Math.pow(1 + taxaCDIMensal * 1.20, meses) - valor,
-                liquido: valor * Math.pow(1 + taxaCDIMensal * 1.20, meses) - (valor * Math.pow(1 + taxaCDIMensal * 1.20, meses) - valor) * (aliquota / 100)
-            },
-            {
-                nome: 'Tesouro Selic',
-                taxa: `${taxaSelic.toFixed(2).replace('.', ',')}%`,
-                aliquota: `${aliquota.toFixed(2).replace('.', ',')}%`,
-                bruto: brutoTesouro,
-                rendimento: lucroTesouro,
-                liquido: liquidoTesouro
+        function atualizarRendaFixaTaxasInfo() {
+            const taxaSelic = typeof window.taxaSelicAtual === 'number' ? window.taxaSelicAtual : 0;
+            const taxaCDI = typeof window.taxaCDIAtual === 'number' ? window.taxaCDIAtual : 0;
+            const taxaPoupancaMensal = taxaSelic > 8.5 ? 0.005 : Math.pow(1 + (taxaSelic * 0.7 / 100), 1 / 12) - 1;
+            const taxaPoupancaAnual = Math.pow(1 + taxaPoupancaMensal, 12) - 1;
+            const infoEl = document.getElementById('taxaRendaFixaInfo');
+            if (infoEl) {
+                infoEl.innerText = `Selic: ${taxaSelic.toFixed(2).replace('.', ',')}% | CDI: ${taxaCDI.toFixed(2).replace('.', ',')}%`;
             }
-        ];
-
-        investimentos.sort((a, b) => b.liquido - a.liquido);
-
-        const htmlTabela = investimentos.map((item, index) => {
-            const classe = index === 0 ? ' class="best-investment"' : '';
-            return `<tr${classe}>\n                <td>${item.nome}</td>\n                <td>${item.taxa}</td>\n                <td>${item.aliquota}</td>\n                <td>${formatarMoeda(item.bruto)}</td>\n                <td>${formatarMoeda(item.rendimento)}</td>\n                <td>${formatarMoeda(item.liquido)}</td>\n            </tr>`;
-        }).join('');
-
-        document.querySelector('#tabelaRendaFixa tbody').innerHTML = htmlTabela;
-
-        const pontos = Math.min(Math.ceil(meses), 60);
-        const labels = [];
-        const dataPoupanca = [];
-        const dataCDI = [];
-        const dataCDI110 = [];
-        const dataCDI120 = [];
-        const dataTesouro = [];
-
-        // Distribui os pontos ao longo do período total usando meses fracionários
-        // para garantir crescimento suave (sem repetições de mês que causam ondulações)
-        for (let i = 0; i <= pontos; i++) {
-            const frac = i / pontos;
-            const mesesAtuais = frac * meses; // pode ser fracionário
-            labels.push(`Mês ${Math.round(mesesAtuais)}`);
-            dataPoupanca.push(valor * Math.pow(1 + taxaPoupancaMensal, mesesAtuais));
-            dataCDI.push(valor * Math.pow(1 + taxaCDIMensal, mesesAtuais));
-            dataCDI110.push(valor * Math.pow(1 + taxaCDIMensal * 1.10, mesesAtuais));
-            dataCDI120.push(valor * Math.pow(1 + taxaCDIMensal * 1.20, mesesAtuais));
-            dataTesouro.push(valor * Math.pow(1 + taxaSelicMensal, mesesAtuais));
+            const resSelic = document.getElementById('resSelicAtual');
+            const resCDI = document.getElementById('resCDIAtual');
+            const resPoupanca = document.getElementById('resPoupancaAtual');
+            if (resSelic) resSelic.innerText = `${taxaSelic.toFixed(2).replace('.', ',')}%`;
+            if (resCDI) resCDI.innerText = `${taxaCDI.toFixed(2).replace('.', ',')}%`;
+            if (resPoupanca) resPoupanca.innerText = `${(taxaPoupancaAnual * 100).toFixed(2).replace('.', ',')}%`;
         }
 
-        renderizarGraficoComparacao(labels, dataPoupanca, dataCDI, dataCDI110, dataCDI120, dataTesouro);
-    }
+        function calcular() {
+            const vInicial = obterValorNumerico(document.getElementById('valorInicial').value) || 0;
+            const aporte = obterValorNumerico(document.getElementById('aporteMensal').value) || 0;
+            const retirada = obterValorNumerico(document.getElementById('retiradaMensal').value) || 0;
+            const taxaAnual = obterValorNumerico(document.getElementById('taxaAnual').value) || 0;
+            const taxaAplicacaoValor = obterValorNumerico(document.getElementById('taxaAplicacao').value) || 0;
+            const taxaEfetiva = calcularTaxaEfetiva();
+            const taxaAplicada = taxaEfetiva;
+            const mesesRaw = parseInt(document.getElementById('periodoMeses').value.replace(/\D/g, '')) || 0;
+            const unidade = document.getElementById('periodoUnidade').value;
 
-    function renderizarGraficoComparacao(labels, poupanca, cdi, cdi110, cdi120, tesouro) {
-        const ctx = document.getElementById('graficoComparacaoRendaFixa').getContext('2d');
-        if (graficoComparacaoRendaFixa) graficoComparacaoRendaFixa.destroy();
+            let mesesCalculo;
+            if (unidade === 'anos') mesesCalculo = mesesRaw * 12;
+            else if (unidade === 'dias') mesesCalculo = mesesRaw / 30;
+            else mesesCalculo = mesesRaw;
 
-        graficoComparacaoRendaFixa = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: 'Poupança',
-                        data: poupanca,
-                        borderColor: '#f59e0b',
-                        backgroundColor: 'rgba(245, 158, 11, 0.08)',
-                        borderWidth: 3,
-                        tension: 0.2,
-                        cubicInterpolationMode: 'monotone',
-                        pointRadius: 0
-                    },
-                    {
-                        label: 'CDB 100% CDI',
-                        data: cdi,
-                        borderColor: '#2563eb',
-                        backgroundColor: 'rgba(37, 99, 235, 0.08)',
-                        borderWidth: 3,
-                        tension: 0.2,
-                        cubicInterpolationMode: 'monotone',
-                        pointRadius: 0
-                    },
-                    {
-                        label: 'CDB 110% CDI',
-                        data: cdi110,
-                        borderColor: '#7c3aed',
-                        backgroundColor: 'rgba(124, 58, 237, 0.08)',
-                        borderWidth: 3,
-                        borderDash: [6, 4],
-                        tension: 0.2,
-                        cubicInterpolationMode: 'monotone',
-                        pointRadius: 0
-                    },
-                    {
-                        label: 'CDB 120% CDI',
-                        data: cdi120,
-                        borderColor: '#db2777',
-                        backgroundColor: 'rgba(219, 39, 119, 0.08)',
-                        borderWidth: 3,
-                        borderDash: [6, 4],
-                        tension: 0.2,
-                        cubicInterpolationMode: 'monotone',
-                        pointRadius: 0
-                    },
-                    {
-                        label: 'Tesouro Selic',
-                        data: tesouro,
-                        borderColor: '#10b981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.08)',
-                        borderWidth: 3,
-                        tension: 0.2,
-                        cubicInterpolationMode: 'monotone',
-                        pointRadius: 0
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                animation: { duration: 600, easing: 'easeInOutQuart' },
-                interaction: { mode: 'index', intersect: false },
-                plugins: {
-                    legend: { position: 'top', labels: { color: '#334155', boxWidth: 12, boxHeight: 12 } },
-                    tooltip: {
-                        callbacks: {
-                            label: (context) => {
-                                return `${context.dataset.label}: ${formatarMoeda(context.parsed.y)}`;
+            const meses = Math.min(mesesCalculo, 480); // Limite de 40 anos
+            const aliquota = obterValorNumerico(document.getElementById('aliquotaIR').value) || 0;
+
+            const usarRegressiva = aliquota === 0;
+            const taxaMensal = Math.pow(1 + (taxaEfetiva / 100), 1 / 12) - 1;
+
+            // Cálculo da Taxa da Poupança (Regra: 0.5% se Selic > 8.5, senão 70% da Selic)
+            const selicRef = window.taxaSelicAtual || (taxaAnual + 0.1);
+            const taxaPoupancaMensal = selicRef > 8.5 ? 0.005 : (Math.pow(1 + (selicRef * 0.7 / 100), 1 / 12) - 1);
+
+            let saldoBruto = vInicial;
+            let saldoPoupanca = vInicial;
+            let totalInvestidoAcumulado = vInicial;
+            let htmlTabela = "";
+            let dadosBrutos = [saldoBruto];
+            let dadosLiquidos = [vInicial];
+            let dadosPoupanca = [saldoPoupanca];
+            let labels = ["Início"];
+
+            const numIteracoes = Math.ceil(meses);
+
+            for (let i = 1; i <= numIteracoes; i++) {
+                const proporcaoPeriodo = (i <= Math.floor(meses)) ? 1 : (meses % 1);
+
+                // Validação: Não permite que a retirada exceda o saldo disponível
+                const retiradaReal = Math.min(retirada, saldoBruto + aporte);
+                const retiradaPoupancaReal = Math.min(retirada, saldoPoupanca + aporte);
+
+                let baseCalculo = saldoBruto + aporte - retiradaReal;
+                let basePoupanca = saldoPoupanca + aporte - retiradaPoupancaReal;
+
+                totalInvestidoAcumulado += (aporte - retiradaReal);
+
+                let jurosMesBruto = baseCalculo * (Math.pow(1 + taxaMensal, proporcaoPeriodo) - 1);
+                saldoBruto = baseCalculo + jurosMesBruto;
+
+                // Cálculo correto do Leão: Alíquota sobre o lucro acumulado total até o mês i
+                const aliqAtual = usarRegressiva ? calcularAliquotaRegressiva(i) : aliquota;
+                const lucroAcumulado = Math.max(0, saldoBruto - totalInvestidoAcumulado);
+                const impostoTeorico = lucroAcumulado * (aliqAtual / 100);
+                const saldoLiquido = saldoBruto - impostoTeorico;
+
+                // Juros líquido: juros brutos do mês descontados do IR da faixa atual.
+                // Não usar a diferença entre saldos líquidos consecutivos, pois quando a
+                // alíquota muda de faixa (ex: mês 6→7: 22,5%→20%) o saldo líquido acumulado
+                // salta artificialmente, distorcendo o juros líquido do mês da transição.
+                const jurosMesLiquido = jurosMesBruto * (1 - aliqAtual / 100);
+
+                // Evolução Poupança (Isenta de IR) proporcional
+                saldoPoupanca = basePoupanca * Math.pow(1 + taxaPoupancaMensal, proporcaoPeriodo);
+
+                htmlTabela += `<tr>\n                <td>${i}</td>\n                <td>${taxaAplicada.toFixed(2).replace('.', ',')}%</td>\n                <td>${formatarMoeda(aporte)}</td>\n                <td>${formatarMoeda(retiradaReal)}</td>\n                <td>${formatarMoeda(jurosMesBruto)}</td>\n                <td>${aliqAtual.toFixed(2).replace('.', ',')}%</td>\n                <td>${formatarMoeda(impostoTeorico)}</td>\n                <td>${formatarMoeda(jurosMesLiquido)}</td>\n                <td>${formatarMoeda(saldoBruto)}</td>\n                <td>${formatarMoeda(saldoLiquido)}</td>\n            </tr>`;
+
+                dadosBrutos.push(saldoBruto);
+                dadosLiquidos.push(saldoLiquido);
+                dadosPoupanca.push(saldoPoupanca);
+                labels.push(`Mês ${i}`);
+
+            }
+
+            document.querySelector("#tabelaEvolucao tbody").innerHTML = htmlTabela;
+
+            const totalInvestido = totalInvestidoAcumulado;
+            const montanteBruto = saldoBruto;
+            const rendimentoBruto = Math.max(0, montanteBruto - totalInvestido);
+            const aliqFinal = usarRegressiva ? calcularAliquotaRegressiva(meses) : aliquota;
+            const imposto = rendimentoBruto * (aliqFinal / 100);
+            const rendimentoLiquido = rendimentoBruto - imposto;
+            const montanteLiquido = montanteBruto - imposto;
+
+            document.getElementById('resTotalInvestido').innerText = formatarMoeda(totalInvestido);
+            document.getElementById('resMontanteBruto').innerText = formatarMoeda(montanteBruto);
+            document.getElementById('resRendimentoBruto').innerText = formatarMoeda(rendimentoBruto);
+            document.getElementById('resIR').innerText = formatarMoeda(imposto);
+            document.getElementById('resRendimentoLiquido').innerText = formatarMoeda(rendimentoLiquido);
+            document.getElementById('resMontanteLiquido').innerText = formatarMoeda(montanteLiquido);
+
+            const pontosMudancaAliquota = [];
+            if (usarRegressiva) {
+                if (meses >= 6) pontosMudancaAliquota.push(6);
+                if (meses >= 12) pontosMudancaAliquota.push(12);
+                if (meses >= 24) pontosMudancaAliquota.push(24);
+            }
+
+            renderizarGrafico(labels, dadosBrutos, dadosLiquidos, dadosPoupanca, pontosMudancaAliquota);
+        }
+
+        function calcularComparacaoRendaFixa() {
+            // Segurança: se a aba externa ainda não foi carregada, aborta silenciosamente
+            const elValor = document.getElementById('simulacaoValor');
+            const elPeriodo = document.getElementById('simulacaoPeriodoMeses');
+            const elUnidade = document.getElementById('simulacaoPeriodoUnidade');
+            if (!elValor || !elPeriodo || !elUnidade) return;
+
+            const valor = obterValorNumerico(elValor.value) || 0;
+            const periodoRaw = parseInt(elPeriodo.value.replace(/\D/g, '')) || 0;
+            const unidade = elUnidade.value;
+            let mesesCalculo = unidade === 'anos' ? periodoRaw * 12 : unidade === 'dias' ? periodoRaw / 30 : periodoRaw;
+            const meses = Math.min(Math.max(mesesCalculo, 1), 480);
+
+            const taxaSelic = typeof window.taxaSelicAtual === 'number' ? window.taxaSelicAtual : 13.75;
+            const taxaCDI = typeof window.taxaCDIAtual === 'number' ? window.taxaCDIAtual : taxaSelic * 0.98;
+            const taxaPoupancaMensal = taxaSelic > 8.5 ? 0.005 : Math.pow(1 + (taxaSelic * 0.7 / 100), 1 / 12) - 1;
+            const taxaSelicMensal = Math.pow(1 + taxaSelic / 100, 1 / 12) - 1;
+            const taxaCDIMensal = Math.pow(1 + taxaCDI / 100, 1 / 12) - 1;
+
+            const brutoPoupanca = valor * Math.pow(1 + taxaPoupancaMensal, meses);
+            const brutoCDI = valor * Math.pow(1 + taxaCDIMensal, meses);
+            const brutoTesouro = valor * Math.pow(1 + taxaSelicMensal, meses);
+
+            const aliquota = calcularAliquotaRegressiva(meses);
+            const lucroPoupanca = brutoPoupanca - valor;
+            const lucroCDI = brutoCDI - valor;
+            const lucroTesouro = brutoTesouro - valor;
+            const impostoCDI = lucroCDI * (aliquota / 100);
+            const impostoTesouro = lucroTesouro * (aliquota / 100);
+            const liquidoCDI = brutoCDI - impostoCDI;
+            const liquidoTesouro = brutoTesouro - impostoTesouro;
+
+            const taxaPoupancaAnual = Math.pow(1 + taxaPoupancaMensal, 12) - 1;
+
+            document.getElementById('taxaRendaFixaInfo').innerText = `Selic: ${taxaSelic.toFixed(2).replace('.', ',')}% | CDI: ${taxaCDI.toFixed(2).replace('.', ',')}%`;
+            document.getElementById('resSelicAtual').innerText = `${taxaSelic.toFixed(2).replace('.', ',')}%`;
+            document.getElementById('resCDIAtual').innerText = `${taxaCDI.toFixed(2).replace('.', ',')}%`;
+            document.getElementById('resPoupancaAtual').innerText = `${(taxaPoupancaAnual * 100).toFixed(2).replace('.', ',')}%`;
+
+            const investimentos = [
+                {
+                    nome: 'Poupança',
+                    taxa: `${(taxaPoupancaAnual * 100).toFixed(2).replace('.', ',')}%`,
+                    aliquota: 'Isento',
+                    bruto: brutoPoupanca,
+                    rendimento: lucroPoupanca,
+                    liquido: brutoPoupanca
+                },
+                {
+                    nome: 'CDB 100% CDI',
+                    taxa: `${taxaCDI.toFixed(2).replace('.', ',')}%`,
+                    aliquota: `${aliquota.toFixed(2).replace('.', ',')}%`,
+                    bruto: brutoCDI,
+                    rendimento: lucroCDI,
+                    liquido: liquidoCDI
+                },
+                {
+                    nome: 'CDB 110% CDI',
+                    taxa: `${(taxaCDI * 1.10).toFixed(2).replace('.', ',')}%`,
+                    aliquota: `${aliquota.toFixed(2).replace('.', ',')}%`,
+                    bruto: valor * Math.pow(1 + taxaCDIMensal * 1.10, meses),
+                    rendimento: valor * Math.pow(1 + taxaCDIMensal * 1.10, meses) - valor,
+                    liquido: valor * Math.pow(1 + taxaCDIMensal * 1.10, meses) - (valor * Math.pow(1 + taxaCDIMensal * 1.10, meses) - valor) * (aliquota / 100)
+                },
+                {
+                    nome: 'CDB 120% CDI',
+                    taxa: `${(taxaCDI * 1.20).toFixed(2).replace('.', ',')}%`,
+                    aliquota: `${aliquota.toFixed(2).replace('.', ',')}%`,
+                    bruto: valor * Math.pow(1 + taxaCDIMensal * 1.20, meses),
+                    rendimento: valor * Math.pow(1 + taxaCDIMensal * 1.20, meses) - valor,
+                    liquido: valor * Math.pow(1 + taxaCDIMensal * 1.20, meses) - (valor * Math.pow(1 + taxaCDIMensal * 1.20, meses) - valor) * (aliquota / 100)
+                },
+                {
+                    nome: 'Tesouro Selic',
+                    taxa: `${taxaSelic.toFixed(2).replace('.', ',')}%`,
+                    aliquota: `${aliquota.toFixed(2).replace('.', ',')}%`,
+                    bruto: brutoTesouro,
+                    rendimento: lucroTesouro,
+                    liquido: liquidoTesouro
+                }
+            ];
+
+            investimentos.sort((a, b) => b.liquido - a.liquido);
+
+            const htmlTabela = investimentos.map((item, index) => {
+                const classe = index === 0 ? ' class="best-investment"' : '';
+                return `<tr${classe}>\n                <td>${item.nome}</td>\n                <td>${item.taxa}</td>\n                <td>${item.aliquota}</td>\n                <td>${formatarMoeda(item.bruto)}</td>\n                <td>${formatarMoeda(item.rendimento)}</td>\n                <td>${formatarMoeda(item.liquido)}</td>\n            </tr>`;
+            }).join('');
+
+            document.querySelector('#tabelaRendaFixa tbody').innerHTML = htmlTabela;
+
+            const pontos = Math.min(Math.ceil(meses), 60);
+            const labels = [];
+            const dataPoupanca = [];
+            const dataCDI = [];
+            const dataCDI110 = [];
+            const dataCDI120 = [];
+            const dataTesouro = [];
+
+            // Distribui os pontos ao longo do período total usando meses fracionários
+            // para garantir crescimento suave (sem repetições de mês que causam ondulações)
+            for (let i = 0; i <= pontos; i++) {
+                const frac = i / pontos;
+                const mesesAtuais = frac * meses; // pode ser fracionário
+                labels.push(`Mês ${Math.round(mesesAtuais)}`);
+                dataPoupanca.push(valor * Math.pow(1 + taxaPoupancaMensal, mesesAtuais));
+                dataCDI.push(valor * Math.pow(1 + taxaCDIMensal, mesesAtuais));
+                dataCDI110.push(valor * Math.pow(1 + taxaCDIMensal * 1.10, mesesAtuais));
+                dataCDI120.push(valor * Math.pow(1 + taxaCDIMensal * 1.20, mesesAtuais));
+                dataTesouro.push(valor * Math.pow(1 + taxaSelicMensal, mesesAtuais));
+            }
+
+            renderizarGraficoComparacao(labels, dataPoupanca, dataCDI, dataCDI110, dataCDI120, dataTesouro);
+        }
+
+        function renderizarGraficoComparacao(labels, poupanca, cdi, cdi110, cdi120, tesouro) {
+            const ctx = document.getElementById('graficoComparacaoRendaFixa').getContext('2d');
+            if (graficoComparacaoRendaFixa) graficoComparacaoRendaFixa.destroy();
+
+            graficoComparacaoRendaFixa = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Poupança',
+                            data: poupanca,
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.08)',
+                            borderWidth: 3,
+                            tension: 0.2,
+                            cubicInterpolationMode: 'monotone',
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'CDB 100% CDI',
+                            data: cdi,
+                            borderColor: '#2563eb',
+                            backgroundColor: 'rgba(37, 99, 235, 0.08)',
+                            borderWidth: 3,
+                            tension: 0.2,
+                            cubicInterpolationMode: 'monotone',
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'CDB 110% CDI',
+                            data: cdi110,
+                            borderColor: '#7c3aed',
+                            backgroundColor: 'rgba(124, 58, 237, 0.08)',
+                            borderWidth: 3,
+                            borderDash: [6, 4],
+                            tension: 0.2,
+                            cubicInterpolationMode: 'monotone',
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'CDB 120% CDI',
+                            data: cdi120,
+                            borderColor: '#db2777',
+                            backgroundColor: 'rgba(219, 39, 119, 0.08)',
+                            borderWidth: 3,
+                            borderDash: [6, 4],
+                            tension: 0.2,
+                            cubicInterpolationMode: 'monotone',
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'Tesouro Selic',
+                            data: tesouro,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.08)',
+                            borderWidth: 3,
+                            tension: 0.2,
+                            cubicInterpolationMode: 'monotone',
+                            pointRadius: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: { duration: 600, easing: 'easeInOutQuart' },
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { position: 'top', labels: { color: '#334155', boxWidth: 12, boxHeight: 12 } },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => {
+                                    return `${context.dataset.label}: ${formatarMoeda(context.parsed.y)}`;
+                                }
                             }
                         }
+                    },
+                    scales: {
+                        x: { grid: { display: false, drawBorder: false }, ticks: { color: '#64748b' } },
+                        y: { grid: { color: 'rgba(100, 116, 139, 0.08)', drawBorder: false }, ticks: { callback: v => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }), color: '#64748b' } }
                     }
-                },
-                scales: {
-                    x: { grid: { display: false, drawBorder: false }, ticks: { color: '#64748b' } },
-                    y: { grid: { color: 'rgba(100, 116, 139, 0.08)', drawBorder: false }, ticks: { callback: v => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }), color: '#64748b' } }
                 }
-            }
-        });
-    }
+            });
+        }
 
-    function renderizarGrafico(labels, brutos, liquidos, poupanca, pontosMudancaAliquota) {
-        const ctx = document.getElementById('graficoEvolucao').getContext('2d');
-        if (meuGrafico) meuGrafico.destroy();
+        function renderizarGrafico(labels, brutos, liquidos, poupanca, pontosMudancaAliquota) {
+            const ctx = document.getElementById('graficoEvolucao').getContext('2d');
+            if (meuGrafico) meuGrafico.destroy();
 
-        const pluginLinhaIr = {
-            id: 'irChangeLine',
-            beforeDraw(chart) {
-                if (!pontosMudancaAliquota || pontosMudancaAliquota.length === 0) return;
-                const ctx = chart.ctx;
-                const xScale = chart.scales.x;
-                const yScale = chart.scales.y;
-                const top = yScale.top;
-                const bottom = yScale.bottom;
+            const pluginLinhaIr = {
+                id: 'irChangeLine',
+                beforeDraw(chart) {
+                    if (!pontosMudancaAliquota || pontosMudancaAliquota.length === 0) return;
+                    const ctx = chart.ctx;
+                    const xScale = chart.scales.x;
+                    const yScale = chart.scales.y;
+                    const top = yScale.top;
+                    const bottom = yScale.bottom;
 
-                const totalTicks = labels.length - 1;
-                const boundaries = [0];
-                if (totalTicks >= 6) boundaries.push(6);
-                if (totalTicks >= 12) boundaries.push(12);
-                if (totalTicks >= 24) boundaries.push(24);
-                if (boundaries[boundaries.length - 1] < totalTicks) {
-                    boundaries.push(totalTicks);
-                }
+                    const totalTicks = labels.length - 1;
+                    const boundaries = [0];
+                    if (totalTicks >= 6) boundaries.push(6);
+                    if (totalTicks >= 12) boundaries.push(12);
+                    if (totalTicks >= 24) boundaries.push(24);
+                    if (boundaries[boundaries.length - 1] < totalTicks) {
+                        boundaries.push(totalTicks);
+                    }
 
-                const pontoMeta = chart.getDatasetMeta(0).data;
-                const getPixel = (idx) => {
-                    const floor = Math.floor(idx);
-                    const ceil = Math.ceil(idx);
-                    const pFloor = pontoMeta[floor] ? pontoMeta[floor].x : xScale.getPixelForTick(floor);
-                    const pCeil = pontoMeta[ceil] ? pontoMeta[ceil].x : xScale.getPixelForTick(ceil);
-                    return pFloor + (pCeil - pFloor) * (idx - floor);
-                };
+                    const pontoMeta = chart.getDatasetMeta(0).data;
+                    const getPixel = (idx) => {
+                        const floor = Math.floor(idx);
+                        const ceil = Math.ceil(idx);
+                        const pFloor = pontoMeta[floor] ? pontoMeta[floor].x : xScale.getPixelForTick(floor);
+                        const pCeil = pontoMeta[ceil] ? pontoMeta[ceil].x : xScale.getPixelForTick(ceil);
+                        return pFloor + (pCeil - pFloor) * (idx - floor);
+                    };
 
-                // Desenha as linhas verticais vermelhas tracejadas nos limites de corte
-                boundaries.forEach((b) => {
-                    if (b === 0 || b === totalTicks) return;
-                    const x = getPixel(b);
-                    if (!Number.isFinite(x)) return;
+                    // Desenha as linhas verticais vermelhas tracejadas nos limites de corte
+                    boundaries.forEach((b) => {
+                        if (b === 0 || b === totalTicks) return;
+                        const x = getPixel(b);
+                        if (!Number.isFinite(x)) return;
 
-                    ctx.save();
-                    ctx.strokeStyle = 'rgba(239, 68, 68, 0.55)';
-                    ctx.lineWidth = 1.5;
-                    ctx.setLineDash([4, 4]);
-                    ctx.beginPath();
-                    ctx.moveTo(x, top);
-                    ctx.lineTo(x, bottom);
-                    ctx.stroke();
-                    ctx.restore();
-                });
-
-                // Desenha as labels centralizadas nos respectivos intervalos de alíquota
-                for (let i = 0; i < boundaries.length - 1; i++) {
-                    const start = boundaries[i];
-                    const end = boundaries[i + 1];
-                    const mid = start + (end - start) / 2;
-                    const x = getPixel(mid);
-                    const startX = getPixel(start);
-                    const endX = getPixel(end);
-                    const widthPx = endX - startX;
-
-                    // Apenas desenha se o espaço em pixels for suficiente para não encavalar
-                    if (widthPx > 35 && Number.isFinite(x)) {
-                        const aliq = calcularAliquotaRegressiva(end);
-                        const aliqText = String(aliq).replace('.', ',');
                         ctx.save();
-                        ctx.fillStyle = 'rgba(220, 38, 38, 0.9)';
-                        ctx.font = '600 11px "Plus Jakarta Sans", "Segoe UI", sans-serif';
-                        ctx.textAlign = 'center';
-                        ctx.fillText(`IR ${aliqText}%`, x, top + 14);
+                        ctx.strokeStyle = 'rgba(239, 68, 68, 0.55)';
+                        ctx.lineWidth = 1.5;
+                        ctx.setLineDash([4, 4]);
+                        ctx.beginPath();
+                        ctx.moveTo(x, top);
+                        ctx.lineTo(x, bottom);
+                        ctx.stroke();
                         ctx.restore();
+                    });
+
+                    // Desenha as labels centralizadas nos respectivos intervalos de alíquota
+                    for (let i = 0; i < boundaries.length - 1; i++) {
+                        const start = boundaries[i];
+                        const end = boundaries[i + 1];
+                        const mid = start + (end - start) / 2;
+                        const x = getPixel(mid);
+                        const startX = getPixel(start);
+                        const endX = getPixel(end);
+                        const widthPx = endX - startX;
+
+                        // Apenas desenha se o espaço em pixels for suficiente para não encavalar
+                        if (widthPx > 35 && Number.isFinite(x)) {
+                            const aliq = calcularAliquotaRegressiva(end);
+                            const aliqText = String(aliq).replace('.', ',');
+                            ctx.save();
+                            ctx.fillStyle = 'rgba(220, 38, 38, 0.9)';
+                            ctx.font = '600 11px "Plus Jakarta Sans", "Segoe UI", sans-serif';
+                            ctx.textAlign = 'center';
+                            ctx.fillText(`IR ${aliqText}%`, x, top + 14);
+                            ctx.restore();
+                        }
                     }
                 }
-            }
-        };
+            };
 
-        meuGrafico = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: 'Montante Bruto',
-                        data: brutos,
-                        borderColor: '#2F5597',
-                        backgroundColor: 'rgba(47, 85, 151, 0.08)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.2,
-                        cubicInterpolationMode: 'monotone',
-                        pointRadius: labels.length > 60 ? 0 : 4,
-                        pointBackgroundColor: '#2F5597',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        pointHitRadius: 10
-                    },
-                    {
-                        label: 'Montante Líquido',
-                        data: liquidos,
-                        borderColor: '#10b981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.08)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.2,
-                        cubicInterpolationMode: 'monotone',
-                        pointRadius: 0
-                    },
-                    {
-                        label: 'Poupança (Isenta)',
-                        data: poupanca,
-                        borderColor: '#f59e0b',
-                        backgroundColor: 'rgba(245, 158, 11, 0.05)',
-                        borderDash: [10, 5],
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.2,
-                        cubicInterpolationMode: 'monotone',
-                        pointRadius: 0
-                    }
-                ]
-            },
-            plugins: [pluginLinhaIr],
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                animation: { duration: 750, easing: 'easeInOutQuart' },
-                interaction: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                plugins: {
-                    legend: {
-                        position: 'top',
-                        labels: {
-                            usePointStyle: true,
-                            padding: 25,
-                            font: { family: "'Segoe UI', sans-serif", size: 13, weight: '600' },
-                            color: '#334155',
-                            boxWidth: 12,
-                            boxHeight: 12
+            meuGrafico = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Montante Bruto',
+                            data: brutos,
+                            borderColor: '#2F5597',
+                            backgroundColor: 'rgba(47, 85, 151, 0.08)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.2,
+                            cubicInterpolationMode: 'monotone',
+                            pointRadius: labels.length > 60 ? 0 : 4,
+                            pointBackgroundColor: '#2F5597',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointHitRadius: 10
+                        },
+                        {
+                            label: 'Montante Líquido',
+                            data: liquidos,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.08)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.2,
+                            cubicInterpolationMode: 'monotone',
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'Poupança (Isenta)',
+                            data: poupanca,
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.05)',
+                            borderDash: [10, 5],
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.2,
+                            cubicInterpolationMode: 'monotone',
+                            pointRadius: 0
                         }
+                    ]
+                },
+                plugins: [pluginLinhaIr],
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: { duration: 750, easing: 'easeInOutQuart' },
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
                     },
-                    tooltip: {
-                        backgroundColor: 'rgba(30, 41, 59, 0.95)',
-                        titleColor: '#fff',
-                        titleFont: { size: 14, weight: 'bold' },
-                        bodyColor: '#e2e8f0',
-                        bodyFont: { size: 13 },
-                        borderColor: 'rgba(255, 255, 255, 0.2)',
-                        borderWidth: 1,
-                        padding: 14,
-                        displayColors: true,
-                        boxPadding: 8,
-                        callbacks: {
-                            label: (context) => {
-                                let label = context.dataset.label || '';
-                                if (label) label += ': ';
-                                label += new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(context.parsed.y);
-                                return label;
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 25,
+                                font: { family: "'Segoe UI', sans-serif", size: 13, weight: '600' },
+                                color: '#334155',
+                                boxWidth: 12,
+                                boxHeight: 12
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(30, 41, 59, 0.95)',
+                            titleColor: '#fff',
+                            titleFont: { size: 14, weight: 'bold' },
+                            bodyColor: '#e2e8f0',
+                            bodyFont: { size: 13 },
+                            borderColor: 'rgba(255, 255, 255, 0.2)',
+                            borderWidth: 1,
+                            padding: 14,
+                            displayColors: true,
+                            boxPadding: 8,
+                            callbacks: {
+                                label: (context) => {
+                                    let label = context.dataset.label || '';
+                                    if (label) label += ': ';
+                                    label += new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(context.parsed.y);
+                                    return label;
+                                }
                             }
                         }
-                    }
-                },
-                scales: {
-                    x: { grid: { display: false, drawBorder: false }, ticks: { autoSkip: true, maxTicksLimit: 12, color: '#64748b', font: { size: 12 } } },
-                    y: { 
-                        beginAtZero: false,
-                        grace: '5%',
-                        grid: { color: 'rgba(100, 116, 139, 0.08)', drawBorder: false },
-                        ticks: { callback: v => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }), color: '#64748b', font: { size: 12 } }
+                    },
+                    scales: {
+                        x: { grid: { display: false, drawBorder: false }, ticks: { autoSkip: true, maxTicksLimit: 12, color: '#64748b', font: { size: 12 } } },
+                        y: {
+                            beginAtZero: false,
+                            grace: '5%',
+                            grid: { color: 'rgba(100, 116, 139, 0.08)', drawBorder: false },
+                            ticks: { callback: v => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }), color: '#64748b', font: { size: 12 } }
+                        }
                     }
                 }
-            }
-        });
-    }
-
-    function exportarExcel() {
-        const sep = ';'; // Separador ideal para Excel em português (Brasil)
-        let csv = '\ufeff'; // Adiciona o BOM para garantir suporte a UTF-8 (acentos e R$) no Excel
-        
-        csv += 'SIMULADOR DE RENDA\n';
-        csv += 'Data: ' + new Date().toLocaleDateString('pt-BR') + '\n\n';
-        
-        csv += 'PARÂMETROS DA SIMULAÇÃO\n';
-        csv += 'Valor Inicial (R$)' + sep + document.getElementById('valorInicial').value + '\n';
-        csv += 'Aporte Mensal (R$)' + sep + document.getElementById('aporteMensal').value + '\n';
-        csv += 'Retirada Mensal (R$)' + sep + document.getElementById('retiradaMensal').value + '\n';
-        csv += 'Taxa de aplicação (%)' + sep + document.getElementById('taxaAplicacao').value + '\n';
-        csv += 'Taxa de Juros Anual (%)' + sep + document.getElementById('taxaAnual').value + '\n';
-        csv += 'Período' + sep + document.getElementById('periodoMeses').value + ' ' + document.getElementById('periodoUnidade').value + '\n';
-        csv += 'Alíquota de IR (%)' + sep + document.getElementById('aliquotaIR').value + '\n\n';
-
-        csv += 'RESUMO FINAL\n';
-        csv += 'Total Investido' + sep + document.getElementById('resTotalInvestido').innerText.replace('R$', '').trim() + '\n';
-        csv += 'Montante Bruto' + sep + document.getElementById('resMontanteBruto').innerText.replace('R$', '').trim() + '\n';
-        csv += 'Rendimento Bruto' + sep + document.getElementById('resRendimentoBruto').innerText.replace('R$', '').trim() + '\n';
-        csv += 'Imposto de Renda' + sep + document.getElementById('resIR').innerText.replace('R$', '').trim() + '\n';
-        csv += 'Rendimento Líquido' + sep + document.getElementById('resRendimentoLiquido').innerText.replace('R$', '').trim() + '\n';
-        csv += 'Montante Líquido' + sep + document.getElementById('resMontanteLiquido').innerText.replace('R$', '').trim() + '\n\n';
-
-        csv += 'EVOLUÇÃO MÊS A MÊS\n';
-        csv += ['Mês', 'Aporte', 'Retirada', 'Juros (Bruto)', 'Alíquota IR', 'IR Descontado', 'Juros (Líquido)', 'Total Acumulado', 'Total Líquido'].join(sep) + '\n';
-        
-        const tabela = document.querySelector('#tabelaEvolucao tbody');
-        for (let row of tabela.rows) {
-            let colunas = [];
-            for (let cell of row.cells) {
-                // Remove o R$ e mantém a formatação pt-BR (vírgula como decimal) para compatibilidade com Excel
-                let valor = cell.innerText.replace('R$', '').trim();
-                colunas.push(valor);
-            }
-            csv += colunas.join(sep) + '\n';
+            });
         }
 
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'simulador_renda_' + new Date().toLocaleDateString('pt-BR').replace(/\//g, '-') + '.csv';
-        a.click();
-        window.URL.revokeObjectURL(url);
-    }
-</script>
+        function exportarExcel() {
+            const sep = ';'; // Separador ideal para Excel em português (Brasil)
+            let csv = '\ufeff'; // Adiciona o BOM para garantir suporte a UTF-8 (acentos e R$) no Excel
+
+            csv += 'SIMULADOR DE RENDA\n';
+            csv += 'Data: ' + new Date().toLocaleDateString('pt-BR') + '\n\n';
+
+            csv += 'PARÂMETROS DA SIMULAÇÃO\n';
+            csv += 'Valor Inicial (R$)' + sep + document.getElementById('valorInicial').value + '\n';
+            csv += 'Aporte Mensal (R$)' + sep + document.getElementById('aporteMensal').value + '\n';
+            csv += 'Retirada Mensal (R$)' + sep + document.getElementById('retiradaMensal').value + '\n';
+            csv += 'Taxa de aplicação (%)' + sep + document.getElementById('taxaAplicacao').value + '\n';
+            csv += 'Taxa de Juros Anual (%)' + sep + document.getElementById('taxaAnual').value + '\n';
+            csv += 'Período' + sep + document.getElementById('periodoMeses').value + ' ' + document.getElementById('periodoUnidade').value + '\n';
+            csv += 'Alíquota de IR (%)' + sep + document.getElementById('aliquotaIR').value + '\n\n';
+
+            csv += 'RESUMO FINAL\n';
+            csv += 'Total Investido' + sep + document.getElementById('resTotalInvestido').innerText.replace('R$', '').trim() + '\n';
+            csv += 'Montante Bruto' + sep + document.getElementById('resMontanteBruto').innerText.replace('R$', '').trim() + '\n';
+            csv += 'Rendimento Bruto' + sep + document.getElementById('resRendimentoBruto').innerText.replace('R$', '').trim() + '\n';
+            csv += 'Imposto de Renda' + sep + document.getElementById('resIR').innerText.replace('R$', '').trim() + '\n';
+            csv += 'Rendimento Líquido' + sep + document.getElementById('resRendimentoLiquido').innerText.replace('R$', '').trim() + '\n';
+            csv += 'Montante Líquido' + sep + document.getElementById('resMontanteLiquido').innerText.replace('R$', '').trim() + '\n\n';
+
+            csv += 'EVOLUÇÃO MÊS A MÊS\n';
+            csv += ['Mês', 'Aporte', 'Retirada', 'Juros (Bruto)', 'Alíquota IR', 'IR Descontado', 'Juros (Líquido)', 'Total Acumulado', 'Total Líquido'].join(sep) + '\n';
+
+            const tabela = document.querySelector('#tabelaEvolucao tbody');
+            for (let row of tabela.rows) {
+                let colunas = [];
+                for (let cell of row.cells) {
+                    // Remove o R$ e mantém a formatação pt-BR (vírgula como decimal) para compatibilidade com Excel
+                    let valor = cell.innerText.replace('R$', '').trim();
+                    colunas.push(valor);
+                }
+                csv += colunas.join(sep) + '\n';
+            }
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'simulador_renda_' + new Date().toLocaleDateString('pt-BR').replace(/\//g, '-') + '.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+    </script>
 
     <div class="page-footer">
-        <p style="font-size: 0.78em; font-weight: 500; color: #94a3b8; max-width: 750px; margin: 0 auto 12px; line-height: 1.5; text-align: center;">
-            ⚠️ <strong>Aviso Legal:</strong> As simulações e informações apresentadas neste site possuem fins puramente informativos e de consulta. Não constituem, sob qualquer aspecto, recomendação, indicação ou assessoria de investimentos ou aplicações financeiras. O usuário deve ter total atenção e cautela ao realizar seus investimentos.
+        <p
+            style="font-size: 0.78em; font-weight: 500; color: #94a3b8; max-width: 750px; margin: 0 auto 12px; line-height: 1.5; text-align: center;">
+            ⚠️ <strong>Aviso Legal:</strong> As simulações e informações apresentadas neste site possuem fins puramente
+            informativos e de consulta. Não constituem, sob qualquer aspecto, recomendação, indicação ou assessoria de
+            investimentos ou aplicações financeiras. O usuário deve ter total atenção e cautela ao realizar seus
+            investimentos.
         </p>
         ® RRB 2026
     </div>
 </body>
+
 </html>
